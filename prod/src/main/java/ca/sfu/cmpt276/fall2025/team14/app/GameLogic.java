@@ -25,7 +25,7 @@ public final class GameLogic {
     // ----------------------- FIELDS -----------------------
 
     // map file name for different levels
-    private static final String[] LEVELS = {"tutorial", "level1", "level2", "level3"};
+    private static final String[] LEVELS = {"tutorial"};  // "level1", "level2", "level3"};
     private static int currentLevelIndex = 0;
 
     // start time in seconds
@@ -100,7 +100,7 @@ public final class GameLogic {
         Game.world().loadEnvironment(LEVELS[currentLevelIndex]);
     }
 
-    private static void restartLevel() {
+    public static void restartLevel() {
         // stop player movement
         Player.instance().stopMovement();
 
