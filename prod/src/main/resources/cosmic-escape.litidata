@@ -14,7 +14,7 @@
    <tileset firstgid="1813" source="tsx/props-and-items.tsx"/>
    <tileset firstgid="2341" source="tsx/kb-letters-and-symbols.tsx"/>
    <tileset firstgid="2453" source="tsx/kb-extras.tsx"/>
-   <objectgroup id="0" name="teleporter" visible="0">
+   <objectgroup id="0" name="teleporter" visible="1">
     <object id="73" name="teleporter" type="PROP" x="886" y="74" width="21" height="42">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
@@ -48,24 +48,19 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="enemies" visible="0">
-    <object id="75" name="turret" type="CREATURE" x="497" y="256" width="32" height="32">
+   <objectgroup id="0" name="enemies" visible="1">
+    <object id="102" name="turret-spawn" type="SPAWNPOINT" x="496" y="256" width="32" height="32">
      <properties>
-      <property name="addShadow" type="bool" value="true"/>
-      <property name="collision" type="bool" value="true"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="MIDDLE"/>
-      <property name="collisionboxHeight" value="16.0"/>
-      <property name="collisionboxWidth" value="16.0"/>
-      <property name="indestructible" type="bool" value="false"/>
+      <property name="collisionValign" value="DOWN"/>
       <property name="renderType" value="NORMAL"/>
       <property name="spawnDirection" value="DOWN"/>
-      <property name="spritesheetName" value="turret"/>
+      <property name="spawnPivot" value="DIMENSION_CENTER"/>
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="powerups" visible="0">
+   <objectgroup id="0" name="powerups" visible="1">
     <object id="76" name="charm" type="PROP" x="320" y="240" width="16" height="16">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
@@ -131,7 +126,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="doors" visible="0">
+   <objectgroup id="0" name="doors" visible="1">
     <object id="67" type="PROP" x="645" y="416" width="24" height="24">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
@@ -166,7 +161,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="hazards" visible="0">
+   <objectgroup id="0" name="hazards" visible="1">
     <object id="68" name="slime" type="PROP" x="640" y="256" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="false"/>
@@ -279,7 +274,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="walls" visible="0">
+   <objectgroup id="0" name="walls" visible="1">
     <object id="22" name="wall" type="COLLISIONBOX" x="32" y="64" width="128" height="32">
      <properties>
       <property name="collisionAlign" value="CENTER"/>
@@ -721,7 +716,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="emitters" visible="0">
+   <objectgroup id="0" name="emitters" visible="1">
     <object id="64" name="radiation" type="EMITTER" x="736" y="320" width="32" height="32">
      <properties>
       <property name="collisionAlign" value="CENTER"/>
@@ -835,7 +830,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="lights" visible="0">
+   <objectgroup id="0" name="lights" visible="1">
     <object id="82" type="LIGHTSOURCE" x="640" y="256" width="64" height="64">
      <properties>
       <property name="collisionAlign" value="CENTER"/>
@@ -851,7 +846,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="shadows" visible="0">
+   <objectgroup id="0" name="shadows" visible="1">
     <object id="84" type="STATICSHADOW" x="40" y="72" width="112" height="40">
      <properties>
       <property name="collisionAlign" value="CENTER"/>
@@ -1041,18 +1036,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="spawns" visible="0">
-    <object id="20" name="enemy-spawn" type="SPAWNPOINT" x="209" y="225" width="32" height="32">
-     <properties>
-      <property name="collisionAlign" value="CENTER"/>
-      <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="renderType" value="NORMAL"/>
-      <property name="spawnDirection" value="DOWN"/>
-      <property name="spawnInfo" value="Enemy Spawn"/>
-      <property name="spawnPivot" value="DIMENSION_CENTER"/>
-     </properties>
-    </object>
+   <objectgroup id="0" name="spawns" visible="1">
     <object id="21" name="player-spawn" type="SPAWNPOINT" x="48" y="112" width="32" height="32">
      <properties>
       <property name="collisionAlign" value="CENTER"/>
@@ -1127,7 +1111,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
    </layer>
-   <objectgroup id="10" name="alien-path" class="PATH" visible="0">
+   <objectgroup id="10" name="alien-path" class="PATH" visible="1">
     <object id="19" name="alien-path" type="PATH" x="224.5" y="240.625" width="0" height="0">
      <polyline points="0,0 0,127"/>
     </object>
@@ -1573,6 +1557,18 @@
      <property name="renderType" value="NORMAL"/>
      <property name="spawnDirection" value="DOWN"/>
      <property name="spritesheetName" value="turret"/>
+    </properties>
+   </object>
+  </blueprint>
+  <blueprint id="0" name="turret-spawn" type="AREA" width="32" height="32">
+   <object id="103" name="turret-spawn" type="SPAWNPOINT" x="0" y="0" width="32" height="32">
+    <properties>
+     <property name="collisionAlign" value="CENTER"/>
+     <property name="collisionType" value="DYNAMIC"/>
+     <property name="collisionValign" value="DOWN"/>
+     <property name="renderType" value="NORMAL"/>
+     <property name="spawnDirection" value="DOWN"/>
+     <property name="spawnPivot" value="DIMENSION_CENTER"/>
     </properties>
    </object>
   </blueprint>

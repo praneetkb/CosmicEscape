@@ -1,0 +1,7 @@
+prod/target/
+
+# IntelliJ / JetBrains IDE configs
+.idea/
+
+# Logs
+*.log
