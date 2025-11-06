@@ -1,7 +1,4 @@
 prod/target/
-
-# IntelliJ / JetBrains IDE configs
-.idea/
-
-# Logs
+.DS_Store
 *.log
+.idea/
