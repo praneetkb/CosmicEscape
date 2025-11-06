@@ -1,4 +1,4 @@
-package ca.sfu.cmpt276.fall2025.team14.audio;
+package ca.sfu.cmpt276.fall2025.team14.utils;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.resources.Resources;
@@ -23,7 +23,7 @@ public final class AudioManager {
     try {
       currentMusic = Resources.sounds().get(path);
       if (currentMusic != null) {
-        Game.audio().getMusicPlayer().setVolume(musicVolume);
+        // Game.audio().getMusicPlayer().setVolume(musicVolume);
         Game.audio().playMusic(currentMusic);
       }
     } catch (Exception ignored) {}
@@ -38,7 +38,7 @@ public final class AudioManager {
     try {
       Sound sfx = Resources.sounds().get(path);
       if (sfx != null) {
-        Game.audio().getSoundPlayer().setVolume(sfxVolume);
+       // Game.audio().getSoundPlayer().setVolume(sfxVolume);
         Game.audio().playSound(sfx);
       }
     } catch (Exception ignored) {}
@@ -46,12 +46,12 @@ public final class AudioManager {
 
   public void setMusicVolume(float v) {
     musicVolume = clamp(v);
-    Game.audio().getMusicPlayer().setVolume(musicVolume);
+    // Game.audio().getMusicPlayer().setVolume(musicVolume);
   }
 
   public void setSfxVolume(float v) {
     sfxVolume = clamp(v);
-    Game.audio().getSoundPlayer().setVolume(sfxVolume);
+    // Game.audio().getSoundPlayer().setVolume(sfxVolume);
   }
 
   private static float clamp(float v) { return Math.max(0, Math.min(1, v)); }

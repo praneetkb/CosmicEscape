@@ -8,16 +8,16 @@ public class CosmicEscape {
 
     public static void main(String[] args) {
 
-        // initialize LITIengine
+        // initialize litiengine
         Game.init(args);
 
         // initialize game logic 
         GameLogic.init();
 
-        // load the first level
-        Game.world().loadEnvironment("level1"); 
-
         // start the game loop
         Game.start();
+
+        // load the first level
+        Game.world().loadEnvironment("level1");
     }
 }
