@@ -9,9 +9,11 @@ import de.gurkenlabs.litiengine.environment.tilemap.IMapObject;
 import de.gurkenlabs.litiengine.environment.tilemap.MapUtilities;
 
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class PathMapObjectLoader extends MapObjectLoader {
 
@@ -37,14 +39,23 @@ public class PathMapObjectLoader extends MapObjectLoader {
             return entities;
         }
 
+        // Get all points along path and reverse
+        List<Point2D> points = new ArrayList<>();
+        double[] arr = new double[6];
+        for(PathIterator it = path.getPathIterator(null); !it.isDone(); it.next())
+        {
+            it.currentSegment(arr);
+            points.add(new Point2D.Double(arr[0], arr[1]));
+        }
+        points = points.reversed();
+
         final Point2D start = new Point2D.Double(mapObject.getLocation().getX(), mapObject.getLocation().getY());
 
-        // Either initialize a new Rat and add it to the entity list, or access an existing instance.
+        // initialize alien on path
         Alien alien = new Alien();
         alien.setLocation(start);
         alien.setMapId(mapObject.getId());
-        // Add a behavior controller to the rat.
-        alien.addController(new AlienController(alien, path));
+        alien.addController(new AlienController(alien, path, points));
         entities.add(alien);
 
         return entities;
