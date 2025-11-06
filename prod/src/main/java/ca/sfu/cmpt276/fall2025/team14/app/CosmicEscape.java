@@ -28,7 +28,7 @@ public class CosmicEscape {
 
         //set title and icon for the window
         Game.window().setTitle("Cosmic Escape");
-        Game.window().setIcon(Resources.images().get("src/main/resources/sprites/icon.png"));
+        Game.window().setIcon(Resources.images().get("sprites/icon.png"));
 
         // Register custom object loaders
         PropMapObjectLoader.registerCustomPropType(Door.class);

@@ -100,7 +100,7 @@ public final class GameLogic {
         Game.world().loadEnvironment(LEVELS[currentLevelIndex]);
     }
 
-    private static void restartLevel() {
+    public static void restartLevel() {
         // stop player movement
         Player.instance().stopMovement();
 
