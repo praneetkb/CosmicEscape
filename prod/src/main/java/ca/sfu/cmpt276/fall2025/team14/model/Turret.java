@@ -5,7 +5,6 @@ import de.gurkenlabs.litiengine.Valign;
 import de.gurkenlabs.litiengine.entities.CollisionInfo;
 import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.EntityInfo;
-import de.gurkenlabs.litiengine.entities.MovementInfo;
 
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
@@ -23,6 +22,8 @@ public class Turret extends Creature implements IUpdateable {
     private boolean rotatingClockwise = true; // current rotation direction
     private double initialRotation;
 
+    private boolean isRotating = true; // Flag to pause rotation for TIMESTOP
+
     public Turret() {
         super("turret");
         this.initialRotation = 0;
@@ -32,29 +33,54 @@ public class Turret extends Creature implements IUpdateable {
     @Override
     public void update() {
 
-        // get time passed since last frame in seconds
-        double deltaTime = Game.loop().getDeltaTime() / 1000.0;
-        double deltaRotation = rotationSpeed * deltaTime;
+        if (this.isRotating) {
+            // get time passed since last frame in seconds
+            double deltaTime = Game.loop().getDeltaTime() / 1000.0;
+            double deltaRotation = rotationSpeed * deltaTime;
 
-        // rotate turret back and forth between min and max angles
-        if (rotatingClockwise) {
-            this.setAngle(this.getAngle() + deltaRotation);
-            if (this.getAngle() >= initialRotation + maxRotation) {
-                this.setAngle(initialRotation + maxRotation);
-                rotatingClockwise = false;
-            }
-        } else {
-            this.setAngle(this.getAngle() - deltaRotation);
-            if (this.getAngle() <= initialRotation + minRotation) {
-                this.setAngle(initialRotation + minRotation);
-                rotatingClockwise = true;
+            // rotate turret back and forth between min and max angles
+            if (rotatingClockwise) {
+                this.setAngle(this.getAngle() + deltaRotation);
+                if (this.getAngle() >= initialRotation + maxRotation) {
+                    this.setAngle(initialRotation + maxRotation);
+                    rotatingClockwise = false;
+                }
+            } else {
+                this.setAngle(this.getAngle() - deltaRotation);
+                if (this.getAngle() <= initialRotation + minRotation) {
+                    this.setAngle(initialRotation + minRotation);
+                    rotatingClockwise = true;
+                }
             }
         }
+        // --- END MODIFICATION ---
 
-        // check for collision with player. If yes then instant death and restart
+        // --- MODIFIED: Collision check now respects power-ups ---
+        // This check is also in GameLogic, but modifying it here provides defence-in-depth
+        // and respects the original structure.
         Player player = Player.instance();
         if (this.getCollisionBox().intersects(player.getCollisionBox())) {
-            GameLogic.restartLevel();
+            
+            if (player.isInvisible()) {
+                // Player is invisible, do nothing
+            } else if (player.hasAlienCharm()) {
+                // Player has a charm, consume it and blink
+                player.useAlienCharm();
+            } else {
+                // Player is caught
+                GameLogic.restartLevel();
+            }
         }
+        // --- END MODIFICATION ---
     }
+
+    // --- NEW METHOD FOR POWER-UPS ---
+    /**
+     * Called by GameLogic to pause or unpause the turret's rotation.
+     * @param rotating true to resume rotation, false to pause.
+     */
+    public void setRotating(boolean rotating) {
+        this.isRotating = rotating;
+    }
+    // --- END NEW METHOD ---
 }

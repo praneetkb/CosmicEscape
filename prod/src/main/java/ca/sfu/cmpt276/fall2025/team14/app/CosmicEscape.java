@@ -1,6 +1,14 @@
 package ca.sfu.cmpt276.fall2025.team14.app;
 
+// --- Import the new power-up classes ---
+import ca.sfu.cmpt276.fall2025.team14.model.AlienCharm;
 import ca.sfu.cmpt276.fall2025.team14.model.Door;
+import ca.sfu.cmpt276.fall2025.team14.model.Invisibility;
+import ca.sfu.cmpt276.fall2025.team14.model.Jetpack;
+// (Powerup.java is no longer registered directly)
+import ca.sfu.cmpt276.fall2025.team14.model.Timestop;
+// --- End imports ---
+
 import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
 import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
 import de.gurkenlabs.litiengine.Game;
@@ -32,6 +40,14 @@ public class CosmicEscape {
 
         // Register custom object loaders
         PropMapObjectLoader.registerCustomPropType(Door.class);
+
+        // Register all the specific power-up types
+        PropMapObjectLoader.registerCustomPropType(Jetpack.class);
+        PropMapObjectLoader.registerCustomPropType(Invisibility.class);
+        PropMapObjectLoader.registerCustomPropType(Timestop.class);
+        PropMapObjectLoader.registerCustomPropType(AlienCharm.class);
+  
+
         Environment.registerMapObjectLoader(new PathMapObjectLoader());
 
         // initialize game logic
@@ -44,4 +60,3 @@ public class CosmicEscape {
         Game.start();
     }
 }
-
