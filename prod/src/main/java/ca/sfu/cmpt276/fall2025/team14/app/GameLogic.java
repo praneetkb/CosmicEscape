@@ -1,9 +1,6 @@
 package ca.sfu.cmpt276.fall2025.team14.app;
 
-import ca.sfu.cmpt276.fall2025.team14.model.Alien;
-import ca.sfu.cmpt276.fall2025.team14.model.Door;
-import ca.sfu.cmpt276.fall2025.team14.model.Player;
-import ca.sfu.cmpt276.fall2025.team14.model.Turret;
+import ca.sfu.cmpt276.fall2025.team14.model.*;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.ICollisionEntity;
@@ -17,6 +14,7 @@ import de.gurkenlabs.litiengine.resources.Resources;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.List;
 
@@ -81,14 +79,17 @@ public final class GameLogic {
 
     private static void handleCollisions() {
 
+        Rectangle2D playerBox = Player.instance().getCollisionBox();
+
         for (ICollisionEntity entity : Game.physics().getCollisionEntities()) {
-            if (Player.instance().getCollisionBox().intersects(entity.getBoundingBox())) {
-                if (entity instanceof Alien || entity instanceof Turret){
+            if (playerBox.intersects(entity.getBoundingBox())) {
+                if (entity instanceof Alien || entity instanceof Turret ||  entity instanceof Vision) {
                     restartLevel();
                 }
-            }
-            if (entity instanceof Door) {
-                //entity.setCollision(false);
+
+                if (entity instanceof Door) {
+                    entity.setCollision(false);
+                }
             }
         }
     }
@@ -100,7 +101,7 @@ public final class GameLogic {
         Game.world().loadEnvironment(LEVELS[currentLevelIndex]);
     }
 
-    private static void restartLevel() {
+    public static void restartLevel() {
         // stop player movement
         Player.instance().stopMovement();
 

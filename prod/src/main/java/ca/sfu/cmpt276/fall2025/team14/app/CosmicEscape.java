@@ -1,6 +1,7 @@
 package ca.sfu.cmpt276.fall2025.team14.app;
 
 import ca.sfu.cmpt276.fall2025.team14.model.Door;
+import ca.sfu.cmpt276.fall2025.team14.model.Vision;
 import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
 import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
 import de.gurkenlabs.litiengine.Game;
@@ -31,6 +32,7 @@ public class CosmicEscape {
         Game.window().setIcon(Resources.images().get("src/main/resources/sprites/icon.png"));
 
         // Register custom object loaders
+        PropMapObjectLoader.registerCustomPropType(Vision.class);
         PropMapObjectLoader.registerCustomPropType(Door.class);
         Environment.registerMapObjectLoader(new PathMapObjectLoader());
 
