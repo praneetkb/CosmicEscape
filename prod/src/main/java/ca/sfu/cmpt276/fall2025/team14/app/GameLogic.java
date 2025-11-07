@@ -69,7 +69,8 @@ public final class GameLogic {
 
 
     private static void update() {
-        // Restart level for debugging
+
+        // restart level for debugging
         Input.keyboard().onKeyPressed(KeyEvent.VK_R, e -> Game.loop().perform(1, GameLogic::restartLevel));
 
         if (Game.world().environment() == null) {
@@ -80,18 +81,19 @@ public final class GameLogic {
     }
 
     private static void handleCollisions() {
+        Player player = Player.instance();
 
         for (ICollisionEntity entity : Game.physics().getCollisionEntities()) {
-            if (Player.instance().getCollisionBox().intersects(entity.getBoundingBox())) {
-                if (entity instanceof Alien || entity instanceof Turret){
-                    restartLevel();
+
+            // check if player collides with enemies
+            if (player.getCollisionBox().intersects(entity.getBoundingBox())) {
+                if (entity instanceof Alien || entity instanceof Turret) {
+                    restartLevel(); // reset level on collision
                 }
-            }
-            if (entity instanceof Door) {
-                //entity.setCollision(false);
             }
         }
     }
+
 
     // ----------- Level Handling -----------
 

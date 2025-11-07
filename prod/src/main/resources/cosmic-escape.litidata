@@ -127,7 +127,7 @@
     </object>
    </objectgroup>
    <objectgroup id="0" name="doors" visible="1">
-    <object id="67" type="PROP" x="645" y="416" width="24" height="24">
+    <object id="67" name="door_button" type="PROP" x="645" y="416" width="24" height="24">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
       <property name="collision" type="bool" value="true"/>
@@ -142,6 +142,14 @@
       <property name="rotationSprite" value="NONE"/>
       <property name="spritesheetName" value="door_button"/>
      </properties>
+     <animations>
+                 <animation name="up">
+                     <frame index="1"/>
+                 </animation>
+                 <animation name="pressed">
+                     <frame index="0"/>
+                 </animation>
+             </animations>
     </object>
     <object id="83" name="door" type="PROP" x="640" y="352" width="32" height="32">
      <properties>
@@ -159,6 +167,14 @@
       <property name="scaling" type="bool" value="false"/>
       <property name="spritesheetName" value="door"/>
      </properties>
+     <animations>
+                 <animation name="closed">
+                     <frame index="0"/>
+                 </animation>
+                 <animation name="open">
+                     <frame index="11"/>
+                 </animation>
+             </animations>
     </object>
    </objectgroup>
    <objectgroup id="0" name="hazards" visible="1">
@@ -1184,6 +1200,9 @@
   </sprite>
   <sprite width="24" height="24" imageformat="PNG" name="prop-door_button">
    <image>iVBORw0KGgoAAAANSUhEUgAAADAAAAAYCAYAAAC8/X7cAAAAiklEQVR4Xu2VwQmAMBAErcl2LdEilAgnMvjLTkDMwnwi7GQ/ZllmZmZmfpF9XY8k7NfDC/TCfjWUp6BHCaVp6IuHwjT0xUNhGvrioTCNJrJ6iSoxuwtdYKMP2F7OUrTuIQOMEdX7/QFGeVESk2tAg/JeKLK4B1i0XynPUtRb4wsEx7N7iIDfe6neE9jLvpzhMQC6AAAAAElFTkSuQmCC</image>
+  </sprite>
+  <sprite width="32" height="32" imageformat="PNG" name="prop-button_pressed">
+     <image>iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+kLBwICOuAmhhwAAABmSURBVFjDY2AYBaNgFIyCUTAKRsEoGGDAiEvitZHRf2paJHruHCPRDqC25fgcwUgvy3E5gmmg08CoAzAcsIGGlm0gNgQ20MlyBgYGBhZSNdClIJpNo6yYSkw5QCtHpOIoCUfBKAAA2PIXhL2jaq8AAAAASUVORK5CYII=</image>
   </sprite>
   <sprite width="16" height="16" imageformat="PNG" name="prop-invisibility">
    <image>iVBORw0KGgoAAAANSUhEUgAAAQAAAAAQCAYAAAD506FJAAADTElEQVR4Xu3aMW4TURAG4FwhfSo3dMQoVahT00Uu4xjkPgVKu7JpOAISh+AQlPTIZ+AQj53n3exmZjxv/rcoWaEZabQrxPeEtPHvmbBnZ1FRUVFRUVFRVZVSOkeb+QXazF+hzfwN2szfos38Fm3mH9FmvkF7Zv4BbebF8yk189doM3+B9thPruV6l1j/fLq/333t79/d7T/0971t/zHnNZ5c5xeVPodAe72q9DkE2utNpc8h0F5vK33+IWqv20qfQ6C9Plb6HALttan0zUz8Q6XPIZCmP7/rSp9DoL1eVPqnEKjxvX1+wN3uz+V697s74Mflev/9eMD+c/vnm3zA/Zf3bzf7N/0haRwAoCebxgGA+0UaBwDuaRq4meBpGhh+gHBP3yZDAOCepoEhAHBP08DwAcR9MwM/BADuaRqY+vyGAMA9TQNDAOA+h0CtLwbAYfXx12G1+WYdkIwAKHmyyQgAhzcDwOHNAHB4MwAc3gwAhzcDwOHNAHB48wP8Qv5kADi8GQAObwaAw5sB4PBmAJS8GQAtTv0Bh9WnLT+gt+lEAJQ8uc6rAeDwcgXAvFwBMC9XAMzLFQDzcgXAvFwBMN/MxKsB4PByBcC8XAEwL1cAzMsVAPC9VQ/o8LMDqMcH0N8nm5QA8HqySQkAwKsTAODVCQDw6gQAeHUCALw6AQBenQAAT9/Ar+1FAABenQAAr04AgFcnAMCrE4DXRwBEAEQATH9+/18ALIERIikB4PHkOi8CwOljBTh6EQBOHyvA0U99fiIAnH6+KwAdsHT+EiGdCACPJ5tOBIDTqxMA4NUJAPDqBAB4dQIAvDoBAF6dAABP38Cv7dUAcHp1AgC8OgEAXp0AAK9OAF5fDADPfyMkIwBKnmwyAsDhzQBweDMAHN4MAIc3A8DhzQBweDMAHN78AL+QPxkADm8GgMObAeDwZgA4vBkAJS8DYGg64HifDzje5wO6+96mcQAAnlzn40WgOi9XAMzLFQDzzUz8EACYlysA5uUKgHm5AmBergCA7+0/qXT8Joea+QXazItXfUvNvHjVt9TMi1dFS828eNW31MyLV31LzXyD9sw8fZNDzbx4PqVmXrzqW2rmxau+pR77qKioqKioqCis/gIB5SCfT175TwAAAABJRU5ErkJggg==</image>

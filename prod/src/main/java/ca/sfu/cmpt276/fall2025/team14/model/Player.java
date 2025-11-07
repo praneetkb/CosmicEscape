@@ -17,6 +17,7 @@ import static de.gurkenlabs.litiengine.Align.CENTER;
 @EntityInfo(width = 16, height = 16)
 @MovementInfo(velocity = 150)
 @CollisionInfo(collisionBoxWidth = 12, collisionBoxHeight = 12, collision = true, align = CENTER, valign = Valign.MIDDLE)
+
 public class Player extends Creature implements IUpdateable {
 
     private static Player instance;
