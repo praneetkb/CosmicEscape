@@ -155,9 +155,7 @@ public final class GameLogic {
         Game.world().reset(Resources.maps().get(LEVELS[currentLevelIndex]));
         Game.world().loadEnvironment(LEVELS[currentLevelIndex]);
     }
-
-    // --- NEW METHODS FOR POWER-UPS ---
-
+    
     /**
      * Applies the effect of a collected power-up.
      * @param powerup The Powerup entity collided with.
@@ -207,5 +205,4 @@ public final class GameLogic {
             turret.setRotating(!paused); // setRotating(true) means it rotates
         }
     }
-    // --- END NEW METHODS ---
 }

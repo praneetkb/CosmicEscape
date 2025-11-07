@@ -25,18 +25,36 @@ public class Player extends Creature implements IUpdateable {
 
     private IMovementController movementController;
 
+    /**
+     * Flag indicating if the player is currently under the effect of the Invisibility power-up.
+     */
     private boolean isInvisible = false;
+
+    /**
+     * Flag indicating if the player is currently holding an Alien Charm.
+     */
     private boolean hasAlienCharm = false;
 
-    // Get default velocity from the annotation
+    /**
+     * The player's default movement speed, read from the {@link MovementInfo} annotation.
+     */
     private final float defaultVelocity = this.getVelocity().get();
+
+    /**
+     * The increased movement speed when the Jetpack power-up is active.
+     */
     private final float jetpackVelocity = defaultVelocity * 1.5f; // 1.5x speed boost
 
-    // Power-up durations (in milliseconds)
-    private final int JETPACK_DURATION = 5000; // 5 seconds
+    /**
+     * Duration for the Jetpack power-up in milliseconds.
+     */
+    private final int JETPACK_DURATION = 10000; // 10 seconds
+
+    /**
+     * Duration for the Invisibility power-up in milliseconds.
+     */
     private final int INVISIBILITY_DURATION = 5000; // 5 seconds
-    // Timestop duration is managed in GameLogic
-    // Alien Charm is single-use
+
 
     public static Player instance() {
         if (instance == null) {
@@ -63,12 +81,17 @@ public class Player extends Creature implements IUpdateable {
 
     }
 
+    /**
+     * Makes the player model "blink" (disappear and reappear).
+     * This is an existing method modified to support power-ups.
+     */
     public void blink() {
         this.setVisible(false);
 
         // hide player for 200 ms and show again. This is for the first and second enemy collision
         Game.loop().perform(200, () -> {
-            // Only show if not invisible
+            // Only make the player visible again if they are not under the
+            // effect of the Invisibility power-up.
             if (!this.isInvisible) {
                 this.setVisible(true);
             }
@@ -90,12 +113,12 @@ public class Player extends Creature implements IUpdateable {
         return this.movementController;
     }
 
-    // --- NEW METHODS FOR POWER-UPS ---
-
     /**
-     * Applies the effect of a collected power-up.
-     * Called by GameLogic when a collision with a Powerup prop occurs.
-     * @param type The type of power-up collected.
+     * Applies the effect of a collected power-up to the player.
+     * This method is called by {@link ca.sfu.cmpt276.fall2025.team14.app.GameLogic}
+     * when a player-powerup collision is detected.
+     *
+     * @param type The {@link PowerUpType} of the collected power-up.
      */
     public void applyPowerUp(PowerUpType type) {
         if (type == null) return;
@@ -104,11 +127,11 @@ public class Player extends Creature implements IUpdateable {
             case JETPACK:
                 // Apply speed boost
                 this.getVelocity().setBaseValue(this.jetpackVelocity);
-                
-                // Set timer to remove boost
+
+                // Set a timer to remove the speed boost after the duration
                 Game.loop().perform(JETPACK_DURATION, () -> {
-                    // Check if another jetpack was picked up in the meantime
-                    // Only reset to default if the current value is still the jetpack velocity
+                    // Check if another jetpack was picked up in the meantime.
+                    // Only reset to default if the current velocity is still the jetpack velocity.
                     if (this.getVelocity().get() == this.jetpackVelocity) {
                         this.getVelocity().setBaseValue(this.defaultVelocity);
                     }
@@ -118,25 +141,27 @@ public class Player extends Creature implements IUpdateable {
                 this.isInvisible = true;
                 this.setVisible(false); // Make player model invisible
 
-                // Set timer to become visible again
+                // Set a timer to become visible again
                 Game.loop().perform(INVISIBILITY_DURATION, () -> {
                     this.isInvisible = false;
                     this.setVisible(true);
                 });
                 break;
             case TIMESTOP:
-                // This is handled globally by GameLogic, but we could add a player visual cue here
+                // This power-up is handled globally by GameLogic,
+                // as it affects all enemies, not just the player.
                 break;
             case ALIEN_CHARM:
                 this.hasAlienCharm = true;
-                // You could add a visual indicator to the HUD here
+                // A visual indicator could be added to the HUD here
                 break;
         }
     }
 
     /**
      * Checks if the player is currently invisible.
-     * @return true if invisible, false otherwise.
+     *
+     * @return true if the Invisibility power-up is active, false otherwise.
      */
     public boolean isInvisible() {
         return this.isInvisible;
@@ -144,37 +169,42 @@ public class Player extends Creature implements IUpdateable {
 
     /**
      * Checks if the player is currently holding an Alien Charm.
-     * @return true if holding a charm, false otherwise.
+     *
+     * @return true if the player has an Alien Charm, false otherwise.
      */
     public boolean hasAlienCharm() {
         return this.hasAlienCharm;
     }
 
     /**
-     * Consumes the Alien Charm. Called when the player is caught by an enemy.
+     * Consumes the player's Alien Charm.
+     * This is called by {@link ca.sfu.cmpt276.fall2025.team14.app.GameLogic}
+     * when the player is caught by an enemy but has a charm.
      */
     public void useAlienCharm() {
         this.hasAlienCharm = false;
-        // Add a visual cue, reuse blink to show the charm was used
+        // Use the blink effect as a visual cue that the charm was used
         this.blink();
     }
 
     /**
-     * Resets all active power-up states.
-     * Called by GameLogic when the level restarts.
+     * Resets all active power-up effects on the player.
+     * This is called by {@link ca.sfu.cmpt276.fall2025.team14.app.GameLogic}
+     * when the level is restarted.
      */
     public void resetPowerUps() {
-        // Reset velocity
+        // Reset velocity to default
         this.getVelocity().setBaseValue(this.defaultVelocity);
-        
+
         // Reset visibility
         this.isInvisible = false;
         this.setVisible(true);
 
         // Reset charm
         this.hasAlienCharm = false;
-        
-        // Active timers in Game.loop() are cleared automatically when the environment is reloaded.
+
+        // Note: All active timers in Game.loop() are cleared automatically
+        // when the environment is reloaded, so we don't need to manually cancel them.
     }
 
 }

@@ -22,6 +22,10 @@ public class Turret extends Creature implements IUpdateable {
     private boolean rotatingClockwise = true; // current rotation direction
     private double initialRotation;
 
+    /**
+     * Flag to control the turret's rotation.
+     * Can be set to false by GameLogic to pause the turret during a TIMESTOP power-up.
+     */
     private boolean isRotating = true; // Flag to pause rotation for TIMESTOP
 
     public Turret() {
@@ -30,6 +34,12 @@ public class Turret extends Creature implements IUpdateable {
         this.setAngle(initialRotation);
     }
 
+    /**
+     * The main update loop for the Turret.
+     * This has been modified to:
+     * 1. Respect the `isRotating` flag (for the TIMESTOP power-up).
+     * 2. Check for Player power-ups (INVISIBILITY, ALIEN_CHARM) before restarting the level.
+     */
     @Override
     public void update() {
 
@@ -53,9 +63,7 @@ public class Turret extends Creature implements IUpdateable {
                 }
             }
         }
-        // --- END MODIFICATION ---
 
-        // --- MODIFIED: Collision check now respects power-ups ---
         // This check is also in GameLogic, but modifying it here provides defence-in-depth
         // and respects the original structure.
         Player player = Player.instance();
@@ -68,13 +76,12 @@ public class Turret extends Creature implements IUpdateable {
                 player.useAlienCharm();
             } else {
                 // Player is caught
+                // check for collision with player. If yes then instant death and restart (Original Comment)
                 GameLogic.restartLevel();
             }
         }
-        // --- END MODIFICATION ---
     }
 
-    // --- NEW METHOD FOR POWER-UPS ---
     /**
      * Called by GameLogic to pause or unpause the turret's rotation.
      * @param rotating true to resume rotation, false to pause.
@@ -82,5 +89,4 @@ public class Turret extends Creature implements IUpdateable {
     public void setRotating(boolean rotating) {
         this.isRotating = rotating;
     }
-    // --- END NEW METHOD ---
 }
