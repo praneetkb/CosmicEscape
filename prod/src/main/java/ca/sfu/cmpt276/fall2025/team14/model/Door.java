@@ -24,7 +24,8 @@ public class Door extends Prop implements IUpdateable {
         if (!open) {
             open = true;
             this.setCollision(false); // allow player to pass
-            this.animations().play("open");
+            System.out.println("[Door] opening at " + this.getLocation()); // for debugging
+            this.animations().play("open"); // defined in litidata
         }
     }
 
@@ -32,7 +33,8 @@ public class Door extends Prop implements IUpdateable {
         if (open) {
             open = false;
             this.setCollision(true); // block player
-            this.animations().play("closed"); // back to closed
+            System.out.println("[Door] closing at " + this.getLocation()); // for debugging
+            this.animations().play("closed"); // defined in litidata
         }
     }
 

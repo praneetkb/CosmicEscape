@@ -1,0 +1,44 @@
+Fri Nov 07 10:35:53 PST 2025 Main Update Loop threw an exception:
+de.gurkenlabs.litiengine.resources.ResourceLoadException: javax.imageio.IIOException: Can't get input stream from URL!
+	at de.gurkenlabs.litiengine.resources.ResourcesContainer.loadResource(ResourcesContainer.java:372)
+	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1724)
+	at de.gurkenlabs.litiengine.resources.ResourcesContainer.get(ResourcesContainer.java:256)
+	at de.gurkenlabs.litiengine.resources.ResourcesContainer.get(ResourcesContainer.java:191)
+	at ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen.render(MainMenuScreen.java:32)
+	at de.gurkenlabs.litiengine.graphics.RenderComponent.renderScreen(RenderComponent.java:213)
+	at de.gurkenlabs.litiengine.graphics.RenderComponent.renderGraphics(RenderComponent.java:166)
+	at de.gurkenlabs.litiengine.graphics.RenderComponent.render(RenderComponent.java:144)
+	at de.gurkenlabs.litiengine.GameLoop.process(GameLoop.java:93)
+	at de.gurkenlabs.litiengine.UpdateLoop.run(UpdateLoop.java:57)
+Caused by: javax.imageio.IIOException: Can't get input stream from URL!
+	at java.desktop/javax.imageio.ImageIO.read(ImageIO.java:1363)
+	at de.gurkenlabs.litiengine.resources.Images.load(Images.java:48)
+	at de.gurkenlabs.litiengine.resources.Images.load(Images.java:12)
+	at de.gurkenlabs.litiengine.resources.ResourcesContainer.loadResource(ResourcesContainer.java:370)
+	... 9 more
+Caused by: java.io.FileNotFoundException: /Users/PraneetKaur/ProjectTeam14/background (No such file or directory)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:185)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:139)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:109)
+	at java.base/sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:86)
+	at java.base/sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:183)
+	at java.base/java.net.URL.openStream(URL.java:1263)
+	at java.desktop/javax.imageio.ImageIO.read(ImageIO.java:1361)
+	... 12 more
+
+====Runtime Information====
+Operating System: Mac OS X
+	Architecture: aarch64
+	Version: 26.0.1
+Memory:
+	Max heap size: 4.0 GiB
+	Current heap size: 258.0 MiB
+	Heap used: 117.2 MiB
+	Free heap: 140.8 MiB
+Java Version: OpenJDK Runtime Environment 25.0.1+8-27 
+	Vendor: Oracle Corporation
+Uptime: PT0.617S
+Screens: 1
+	Screen 0: 1470x956@60hz
+

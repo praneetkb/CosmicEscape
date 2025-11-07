@@ -2,6 +2,7 @@ package ca.sfu.cmpt276.fall2025.team14.app;
 
 import ca.sfu.cmpt276.fall2025.team14.model.Door;
 import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen;
 import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
@@ -38,7 +39,11 @@ public class CosmicEscape {
         GameLogic.init();
 
         // add screens
+        Game.screens().add(new MainMenuScreen());
         Game.screens().add(new InGameScreen());
+
+        // show menu first
+        Game.screens().display("MainMenu");
 
         // start the game loop
         Game.start();

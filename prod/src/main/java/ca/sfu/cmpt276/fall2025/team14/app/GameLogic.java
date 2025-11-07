@@ -5,6 +5,7 @@ import ca.sfu.cmpt276.fall2025.team14.model.Door;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import ca.sfu.cmpt276.fall2025.team14.model.Turret;
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.ICollisionEntity;
 import de.gurkenlabs.litiengine.entities.Spawnpoint;
@@ -78,6 +79,16 @@ public final class GameLogic {
         }
 
         handleCollisions();
+
+        // to ensure buttons and doors get their update method called each frame
+        for (ICollisionEntity entity : Game.physics().getCollisionEntities()) {
+            if (entity instanceof Door door) {
+                ((IUpdateable) door).update();
+            }
+            if (entity instanceof Button button) {
+                ((IUpdateable) button).update(); // this is because it is getting confused with the AWT update
+            }
+        }
     }
 
     private static void handleCollisions() {

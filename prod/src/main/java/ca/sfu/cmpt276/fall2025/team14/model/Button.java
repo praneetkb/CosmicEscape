@@ -29,7 +29,13 @@ public class Button extends Prop implements IUpdateable, IRenderable {
     private final BufferedImage buttonPressedImage;
 
     public Button(Door door) {
-        super("prop-button");
+        super("prop-door_button");
+
+        // for debugging - to check if spritesheet is found
+        System.out.println("Sprite name: " + this.getSpritesheetName());
+        System.out.println("Sprite exists: " + Resources.spritesheets().contains(this.getSpritesheetName()));
+
+
         this.linkedDoor = door;
 
         // Load images from resources/sprites/
@@ -39,17 +45,25 @@ public class Button extends Prop implements IUpdateable, IRenderable {
 
     @Override
     public void update() {
+
+        System.out.println("Button update running: " + this.getMapId()); // for debugging
+
         Player player = Player.instance();
 
         if (player.getCollisionBox().intersects(this.getCollisionBox())) {
             if (!pressed) {
                 pressed = true;
+                System.out.println("[Button] pressed at " + this.getLocation()); // for debugging
                 linkedDoor.open();
+                // play the pressed animation defined in litidata
+                this.animations().play("pressed");
             }
         } else {
             if (pressed) {
                 pressed = false;
+                System.out.println("[Button] released at " + this.getLocation()); // for debugging
                 linkedDoor.close();
+                this.animations().play("up"); // also in litidata
             }
         }
     }
