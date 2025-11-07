@@ -102,7 +102,7 @@ public final class GameLogic {
         for (ICollisionEntity entity : Game.physics().getCollisionEntities()) {
 
             // check if player collides with...
-            if (player.getCollisionBox().intersects(entity.getBoundingBox())) {
+             if (player.getBoundingBox().intersects(entity.getBoundingBox())) {
                 
                 // ...Enemies (Alien or Turret)
                 if (entity instanceof Alien || entity instanceof Turret) {
@@ -155,7 +155,7 @@ public final class GameLogic {
         Game.world().reset(Resources.maps().get(LEVELS[currentLevelIndex]));
         Game.world().loadEnvironment(LEVELS[currentLevelIndex]);
     }
-    
+
     /**
      * Applies the effect of a collected power-up.
      * @param powerup The Powerup entity collided with.

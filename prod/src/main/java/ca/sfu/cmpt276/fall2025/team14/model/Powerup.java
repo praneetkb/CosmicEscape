@@ -16,7 +16,7 @@ import static de.gurkenlabs.litiengine.Align.CENTER;
  * based on the "type" property set in the Tiled map editor.
  */
 @EntityInfo(width = 16, height = 16)
-@CollisionInfo(collisionBoxWidth = 16, collisionBoxHeight = 16, collision = true, align = CENTER, valign = Valign.MIDDLE)
+@CollisionInfo(collisionBoxWidth = 14, collisionBoxHeight = 14, collision = true, align = CENTER, valign = Valign.MIDDLE)
 public abstract class Powerup extends Prop implements IUpdateable {
 
     /**
