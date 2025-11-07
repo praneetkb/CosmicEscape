@@ -9,9 +9,6 @@ import de.gurkenlabs.litiengine.entities.EntityInfo;
 import de.gurkenlabs.litiengine.entities.MovementInfo;
 import de.gurkenlabs.litiengine.input.KeyboardEntityController;
 import de.gurkenlabs.litiengine.physics.IMovementController;
-
-import java.awt.*;
-
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
 @EntityInfo(width = 16, height = 16)

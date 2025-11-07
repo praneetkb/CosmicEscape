@@ -15,5 +15,4 @@ public class AlienController extends StateController<Alien> {
         this.followPathState = new FollowPathState(entity, path, points);
         setState(followPathState);
     }
-
 }

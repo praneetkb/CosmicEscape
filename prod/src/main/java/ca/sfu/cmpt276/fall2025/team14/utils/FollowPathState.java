@@ -17,8 +17,8 @@ public class FollowPathState extends EntityState<Creature> {
 
     public FollowPathState(final Creature entity, final Path2D path, List<Point2D> points) {
         super("FOLLOW_PATH", entity, Game.world().environment());
-        this.path = path;
-        this.points = points;
+        this.path = path; // Initial path
+        this.points = points; // Reverse path
         for (Point2D point : points) {
             path.lineTo(point.getX(), point.getY());
         }
@@ -27,12 +27,12 @@ public class FollowPathState extends EntityState<Creature> {
 
     @Override
     public void perform() {
-
+        // Initiate path finding
         if (!started) {
             navigator.navigate(path);
             this.started = true;
         }
-
+        // Reverse when at end of path
         if (!navigator.isNavigating()) {
             navigator.stop();
             navigator.navigate(path);

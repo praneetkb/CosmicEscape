@@ -24,7 +24,7 @@ public class PathMapObjectLoader extends MapObjectLoader {
 
     @Override
     public Collection<IEntity> load(Environment environment, IMapObject mapObject) {
-
+        // Get path
         Collection<IEntity> entities = new ArrayList<>();
         if (!mapObject.getType().equals("PATH")
                 || !mapObject.getName().equals("alien-path")
@@ -32,13 +32,11 @@ public class PathMapObjectLoader extends MapObjectLoader {
                 || mapObject.getPolyline().getPoints().isEmpty()) {
             return entities;
         }
-
         // Convert the mapObject's polyline to a Path2D object.
         final Path2D path = MapUtilities.convertPolyshapeToPath(mapObject);
         if (path == null) {
             return entities;
         }
-
         // Get all points along path and reverse
         List<Point2D> points = new ArrayList<>();
         double[] arr = new double[6];
@@ -48,10 +46,9 @@ public class PathMapObjectLoader extends MapObjectLoader {
             points.add(new Point2D.Double(arr[0], arr[1]));
         }
         points = points.reversed();
-
+        // Get starting point
         final Point2D start = new Point2D.Double(mapObject.getLocation().getX(), mapObject.getLocation().getY());
-
-        // initialize alien on path
+        // Initialize new alien on path
         Alien alien = new Alien();
         alien.setLocation(start);
         alien.setMapId(mapObject.getId());

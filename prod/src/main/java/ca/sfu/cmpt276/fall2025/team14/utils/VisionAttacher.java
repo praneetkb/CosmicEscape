@@ -19,23 +19,20 @@ public final class VisionAttacher {
         final Direction d = enemy.getFacingDirection();
         final double enemyX = enemy.getX(), enemyY = enemy.getY(), enemyW = enemy.getWidth(), enemyH = enemy.getHeight();
         final double visionW = Vision.DEFAULT_WIDTH, visionH = Vision.DEFAULT_HEIGHT;
-
-        // swap sizes for left or right since sprite is 16x32
+        // Swap sizes for left or right since sprite is 16x32
         if (d == Direction.LEFT || d == Direction.RIGHT) {
             vision.setSize(visionH, visionW);
         } else {
             vision.setSize(visionW, visionH);
         }
-
-        // set location based on enemy
+        // Set location based on enemy
         switch (d) {
             case UP ->    vision.setLocation(enemyX + (enemyW - visionW) / 2, enemyY - visionH);
             case DOWN ->  vision.setLocation(enemyX + (enemyW - visionW) / 2, enemyY + enemyH);
             case LEFT ->  vision.setLocation(enemyX - visionH, enemyY + (enemyH - visionW) / 2);
             case RIGHT -> vision.setLocation(enemyX + enemyW,enemyY + (enemyH - visionW) / 2);
         }
-
-        // set rotation based on direction enemy is facing
+        // Set rotation based on direction enemy is facing
         switch (d) {
             case UP ->    vision.setSpriteRotation(Rotation.NONE);
             case RIGHT -> vision.setSpriteRotation(Rotation.ROTATE_90);

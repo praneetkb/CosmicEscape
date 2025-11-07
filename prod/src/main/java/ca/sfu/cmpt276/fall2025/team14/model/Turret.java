@@ -17,11 +17,13 @@ public class Turret extends Creature implements IUpdateable {
 
     public Turret() {
         super("turret");
+        // Attach vision
         VisionAttacher.attach(this, vision);
     }
 
     @Override
     public void update() {
+        // Sync vision with current facing direction
         VisionAttacher.syncVision(this, vision);
     }
 }

@@ -21,20 +21,21 @@ public class DoorAnimationController extends PropAnimationController<Door> {
 
     @Override
     public BufferedImage getCurrentImage() {
-
         BufferedImage image = null;
-
+        // Set sprite based on state
         if (this.getEntity().hasCollision()) {
+            // Set animation to closed
             image = Resources.spritesheets().get("prop-door_closed").getImage();
         } else {
-            this.getEntity().setCollision(true);
+            // Get each individual frame in animation and return
             if (tick % frameCount == 0) {
+                // Increment index of sprite sheet every 12 frames
                 index++;
             }
             image = Resources.spritesheets().get("prop-door").getSprite(index);
             tick++;
         }
-
+        // Final open state
         if (index >= 12) {
             image = Resources.spritesheets().get("prop-door_open").getImage();
             this.getEntity().setCollision(false);

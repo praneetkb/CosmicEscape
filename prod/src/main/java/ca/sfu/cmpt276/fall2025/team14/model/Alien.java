@@ -16,15 +16,14 @@ public class Alien extends Creature implements IUpdateable {
     private static Vision vision = new Vision();
 
     public Alien() {
-
         super("alien");
+        // Attach vision
         VisionAttacher.attach(this, vision);
-
     }
 
     @Override
     public void update() {
-
+        // Sync vision with current facing direction
         VisionAttacher.syncVision(this, vision);
     }
 }
