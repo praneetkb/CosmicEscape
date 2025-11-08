@@ -38,6 +38,11 @@ public final class GameLogic {
     private static final int TIMESTOP_DURATION = 5000; // 5 seconds
     // --- END NEW FIELDS ---
 
+    // --- PUNISHMENT SYSTEM SETUP (FROM PREVIOUS STEP) ---
+    // (Ensure you keep the previously added code for PUNISHMENT_FACTORY and GLOBAL_PUNISHMENT_EFFECTS)
+    // ...
+    // --- END PUNISHMENT SYSTEM SETUP ---
+
 
     // ----------------------- MAIN METHODS -----------------------
 
@@ -107,8 +112,10 @@ public final class GameLogic {
                 // ...Enemies (Alien or Turret)
                 if (entity instanceof Alien || entity instanceof Turret) {
                     
-                    if (player.isInvisible()) {
-                        // Player is safe, do nothing
+                    if (player.isInvulnerable()) { // <-- ADDED: Check invulnerability first
+                        // Player is safe due to recent charm use, do nothing
+                    } else if (player.isInvisible()) {
+                        // Player is safe due to Invisibility power-up
                     } else if (player.hasAlienCharm()) {
                         // Player is safe, but consumes the charm
                         player.useAlienCharm();

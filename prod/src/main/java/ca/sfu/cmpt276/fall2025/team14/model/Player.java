@@ -34,6 +34,11 @@ public class Player extends Creature implements IUpdateable {
      * Flag indicating if the player is currently holding an Alien Charm.
      */
     private boolean hasAlienCharm = false;
+    
+    /**
+     * Flag indicating if the player is currently invulnerable (e.g., after using Alien Charm). // <-- ADDED
+     */
+    private boolean isInvulnerable = false; // <-- ADDED
 
     /**
      * The player's default movement speed, read from the {@link MovementInfo} annotation.
@@ -54,6 +59,11 @@ public class Player extends Creature implements IUpdateable {
      * Duration for the Invisibility power-up in milliseconds.
      */
     private final int INVISIBILITY_DURATION = 5000; // 5 seconds
+    
+    /**
+     * Duration for the temporary invulnerability after using Alien Charm in milliseconds. // <-- ADDED
+     */
+    private final int CHARM_INVULNERABILITY_DURATION = 2000; //make the play invurnerable for 2 seconds after consuming Alien Charm
 
 
     public static Player instance() {
@@ -177,12 +187,28 @@ public class Player extends Creature implements IUpdateable {
     }
 
     /**
+     * Checks if the player is currently invulnerable. // <-- ADDED
+     *
+     * @return true if the player is invulnerable, false otherwise.
+     */
+    public boolean isInvulnerable() { // <-- ADDED
+        return this.isInvulnerable;
+    }
+
+    /**
      * Consumes the player's Alien Charm.
      * This is called by {@link ca.sfu.cmpt276.fall2025.team14.app.GameLogic}
      * when the player is caught by an enemy but has a charm.
      */
     public void useAlienCharm() {
         this.hasAlienCharm = false;
+        
+        // Apply brief invulnerability to prevent immediate double-kill // <-- ADDED
+        this.isInvulnerable = true; // <-- ADDED
+        Game.loop().perform(CHARM_INVULNERABILITY_DURATION, () -> { // <-- ADDED
+            this.isInvulnerable = false; // <-- ADDED
+        }); // <-- ADDED
+
         // Use the blink effect as a visual cue that the charm was used
         this.blink();
     }
@@ -199,6 +225,9 @@ public class Player extends Creature implements IUpdateable {
         // Reset visibility
         this.isInvisible = false;
         this.setVisible(true);
+
+        // Reset invulnerability // <-- ADDED
+        this.isInvulnerable = false; // <-- ADDED
 
         // Reset charm
         this.hasAlienCharm = false;
