@@ -1,6 +1,7 @@
 package ca.sfu.cmpt276.fall2025.team14.model;
 
 import de.gurkenlabs.litiengine.IUpdateable;
+import de.gurkenlabs.litiengine.entities.AnimationInfo;
 import de.gurkenlabs.litiengine.entities.CollisionInfo;
 import de.gurkenlabs.litiengine.entities.Prop;
 import de.gurkenlabs.litiengine.graphics.ImageRenderer;
@@ -13,6 +14,7 @@ import de.gurkenlabs.litiengine.resources.Resources;
 
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
+@AnimationInfo(spritePrefix = "prop-button")
 @CollisionInfo(
         collision = true,
         collisionBoxWidth = 16,

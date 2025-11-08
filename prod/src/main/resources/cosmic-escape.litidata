@@ -21,9 +21,9 @@
       <property name="collision" type="bool" value="true"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="collisionboxHeight" value="42.0"/>
-      <property name="collisionboxWidth" value="21.0"/>
+      <property name="collisionValign" value="MIDDLE"/>
+      <property name="collisionboxHeight" value="40.0"/>
+      <property name="collisionboxWidth" value="19.0"/>
       <property name="indestructible" type="bool" value="true"/>
       <property name="material" value="UNDEFINED"/>
       <property name="renderType" value="NORMAL"/>
@@ -67,9 +67,9 @@
       <property name="collision" type="bool" value="true"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="collisionboxHeight" value="16.0"/>
-      <property name="collisionboxWidth" value="16.0"/>
+      <property name="collisionValign" value="MIDDLE"/>
+      <property name="collisionboxHeight" value="14.0"/>
+      <property name="collisionboxWidth" value="14.0"/>
       <property name="indestructible" type="bool" value="false"/>
       <property name="material" value="UNDEFINED"/>
       <property name="renderType" value="NORMAL"/>
@@ -83,9 +83,9 @@
       <property name="collision" type="bool" value="true"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="collisionboxHeight" value="16.0"/>
-      <property name="collisionboxWidth" value="16.0"/>
+      <property name="collisionValign" value="MIDDLE"/>
+      <property name="collisionboxHeight" value="14.0"/>
+      <property name="collisionboxWidth" value="14.0"/>
       <property name="indestructible" type="bool" value="false"/>
       <property name="material" value="UNDEFINED"/>
       <property name="renderType" value="NORMAL"/>
@@ -99,9 +99,9 @@
       <property name="collision" type="bool" value="true"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="collisionboxHeight" value="16.0"/>
-      <property name="collisionboxWidth" value="16.0"/>
+      <property name="collisionValign" value="MIDDLE"/>
+      <property name="collisionboxHeight" value="14.0"/>
+      <property name="collisionboxWidth" value="14.0"/>
       <property name="indestructible" type="bool" value="false"/>
       <property name="material" value="UNDEFINED"/>
       <property name="renderType" value="NORMAL"/>
@@ -115,9 +115,9 @@
       <property name="collision" type="bool" value="true"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="collisionboxHeight" value="16.0"/>
-      <property name="collisionboxWidth" value="16.0"/>
+      <property name="collisionValign" value="MIDDLE"/>
+      <property name="collisionboxHeight" value="14.0"/>
+      <property name="collisionboxWidth" value="14.0"/>
       <property name="indestructible" type="bool" value="false"/>
       <property name="material" value="UNDEFINED"/>
       <property name="renderType" value="NORMAL"/>
@@ -126,7 +126,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="doors" visible="1">
+   <objectgroup id="0" name="doors" visible="0">
     <object id="67" name="door_button" type="PROP" x="645" y="416" width="24" height="24">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
@@ -180,7 +180,7 @@
      </properties>
     </object>
    </objectgroup>
-   <objectgroup id="0" name="hazards" visible="0">
+   <objectgroup id="0" name="hazards" visible="1">
     <object id="68" name="slime" type="PROP" x="640" y="256" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="false"/>
@@ -280,23 +280,6 @@
       <property name="spritesheetName" value="radation"/>
      </properties>
     </object>
-    <object id="71" name="laser" type="PROP" x="712" y="224" width="56" height="32">
-     <properties>
-      <property name="addShadow" type="bool" value="false"/>
-      <property name="collision" type="bool" value="true"/>
-      <property name="collisionAlign" value="CENTER"/>
-      <property name="collisionType" value="DYNAMIC"/>
-      <property name="collisionValign" value="DOWN"/>
-      <property name="collisionboxHeight" value="32.0"/>
-      <property name="collisionboxWidth" value="56.0"/>
-      <property name="indestructible" type="bool" value="true"/>
-      <property name="material" value="UNDEFINED"/>
-      <property name="renderType" value="NORMAL"/>
-      <property name="rotationSprite" value="NONE"/>
-      <property name="scaling" type="bool" value="true"/>
-      <property name="spritesheetName" value="lasers"/>
-     </properties>
-    </object>
     <object id="103" name="radiation" type="PROP" x="736" y="320" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
@@ -311,6 +294,23 @@
       <property name="renderType" value="NORMAL"/>
       <property name="rotationSprite" value="NONE"/>
       <property name="spritesheetName" value="cloud"/>
+     </properties>
+    </object>
+    <object id="107" name="laser" type="PROP" x="712" y="224" width="56" height="32">
+     <properties>
+      <property name="addShadow" type="bool" value="false"/>
+      <property name="collision" type="bool" value="true"/>
+      <property name="collisionAlign" value="CENTER"/>
+      <property name="collisionType" value="DYNAMIC"/>
+      <property name="collisionValign" value="DOWN"/>
+      <property name="collisionboxHeight" value="32.0"/>
+      <property name="collisionboxWidth" value="56.0"/>
+      <property name="indestructible" type="bool" value="true"/>
+      <property name="material" value="UNDEFINED"/>
+      <property name="renderType" value="NORMAL"/>
+      <property name="rotationSprite" value="NONE"/>
+      <property name="scaling" type="bool" value="true"/>
+      <property name="spritesheetName" value="lasers"/>
      </properties>
     </object>
    </objectgroup>

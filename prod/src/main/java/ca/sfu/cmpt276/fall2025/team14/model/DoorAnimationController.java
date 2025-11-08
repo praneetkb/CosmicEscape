@@ -1,9 +1,5 @@
 package ca.sfu.cmpt276.fall2025.team14.model;
 
-import de.gurkenlabs.litiengine.Game;
-import de.gurkenlabs.litiengine.graphics.Spritesheet;
-import de.gurkenlabs.litiengine.graphics.animation.Animation;
-import de.gurkenlabs.litiengine.graphics.animation.IEntityAnimationController;
 import de.gurkenlabs.litiengine.graphics.animation.PropAnimationController;
 import de.gurkenlabs.litiengine.resources.Resources;
 
@@ -23,7 +19,7 @@ public class DoorAnimationController extends PropAnimationController<Door> {
     public BufferedImage getCurrentImage() {
         BufferedImage image = null;
         // Set sprite based on state
-        if (this.getEntity().hasCollision()) {
+        if (!this.getEntity().isOpen()) {
             // Set animation to closed
             image = Resources.spritesheets().get("prop-door_closed").getImage();
         } else {

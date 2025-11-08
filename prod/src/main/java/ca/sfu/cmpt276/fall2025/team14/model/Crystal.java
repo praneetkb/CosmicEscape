@@ -8,7 +8,7 @@ import de.gurkenlabs.litiengine.entities.Prop;
 public class Crystal extends Prop implements IUpdateable {
 
     public Crystal() {
-        super("prop-crystal");
+        super("crystal");
     }
 
     @Override

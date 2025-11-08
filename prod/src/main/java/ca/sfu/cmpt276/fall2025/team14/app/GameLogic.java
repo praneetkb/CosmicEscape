@@ -9,8 +9,6 @@ import ca.sfu.cmpt276.fall2025.team14.model.Turret;
 import ca.sfu.cmpt276.fall2025.team14.model.Teleporter;
 import ca.sfu.cmpt276.fall2025.team14.model.*;
 import de.gurkenlabs.litiengine.Game;
-import de.gurkenlabs.litiengine.IUpdateable;
-import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.ICollisionEntity;
 import de.gurkenlabs.litiengine.entities.Spawnpoint;
 import de.gurkenlabs.litiengine.environment.Environment;
@@ -34,10 +32,7 @@ public final class GameLogic {
     private static int currentLevelIndex = 0;
     private static int remainingTime = 120; // start time in seconds
     private static long lastTimeUpdate = System.currentTimeMillis(); // timer counter
-    private static int remainingCrystals = 3; // we start with 3 crystals for tutorial level
-
-    // start time in seconds
-    private static int remainingTime = 120;
+    private static int remainingCrystals = 1; // we start with 1 crystal for tutorial level
 
     // --- NEW FIELDS FOR POWER-UPS ---
     private static boolean isTimeStopped = false;
@@ -51,6 +46,17 @@ public final class GameLogic {
 
 
     // ----------------------- MAIN METHODS -----------------------
+
+    // getters for HUD
+    public static int getRemainingCrystals() {
+
+        return remainingCrystals;
+    }
+
+    public static int getRemainingTime() {
+
+        return remainingTime;
+    }
 
     public static void init() {
         // Add default game logic for when a level is loaded
@@ -101,16 +107,6 @@ public final class GameLogic {
         // Handle collisions
         handleCollisions();
 
-        // to ensure buttons and doors get their update method called each frame
-        for (ICollisionEntity entity : Game.physics().getCollisionEntities()) {
-            if (entity instanceof Door door) {
-                ((IUpdateable) door).update();
-            }
-            if (entity instanceof Button button) {
-                ((IUpdateable) button).update(); // this is because it is getting confused with the AWT update
-            }
-        }
-
         // timer countdown for every second
         long now = System.currentTimeMillis();
         if (now - lastTimeUpdate >= 1000) {
@@ -130,74 +126,47 @@ public final class GameLogic {
         for (ICollisionEntity entity : Game.physics().getCollisionEntities()) {
             if (playerBox.intersects(entity.getBoundingBox())) {
                 // Restart level on any enemy collision
-                if (entity instanceof Alien || entity instanceof Turret ||  entity instanceof Vision) {
-                    restartLevel();
-                }
-
-                // TO DO: Check other collision entities (door, powerups, etc.)
-                if (entity instanceof Door) {
-                    entity.setCollision(false);
-                }
-            }
-        }
-    }
-            }
-
-            // for crystal collection
-            if (player.getCollisionBox().intersects(entity.getBoundingBox())) {
-                if (entity instanceof Crystal crystal) {
-                    Game.world().environment().remove(crystal);
-                    remainingCrystals--;
-            // check if player collides with...
-             if (player.getBoundingBox().intersects(entity.getBoundingBox())) {
-
-                // ...Enemies (Alien or Turret)
-                if (entity instanceof Alien || entity instanceof Turret) {
-
-                    if (player.isInvulnerable()) { // <-- ADDED: Check invulnerability first
+                if (entity instanceof Alien || entity instanceof Turret || entity instanceof Vision) {
+                    // ...Enemies (Alien or Turret)
+                    if (Player.instance().isInvulnerable()) { // <-- ADDED: Check invulnerability first
                         // Player is safe due to recent charm use, do nothing
-                    } else if (player.isInvisible()) {
+                    } else if (Player.instance().isInvisible()) {
                         // Player is safe due to Invisibility power-up
-                    } else if (player.hasAlienCharm()) {
+                    } else if (Player.instance().hasAlienCharm()) {
                         // Player is safe, but consumes the charm
-                        player.useAlienCharm();
+                        Player.instance().useAlienCharm();
                     } else {
                         // Player is caught
                         restartLevel();
                     }
-
-                // ...Powerups
-                } else if (entity instanceof Powerup) {
+                }
+                // TO DO: Check other collision entities (door, powerups, etc.)
+                if (entity instanceof Door) {
+                    ((Door) entity).open();
+                }
+                // teleporter
+                if (entity instanceof Teleporter) {
+                    // teleporter will open only if player collides and all crystals are collected
+                    if (getRemainingCrystals() == 0) {
+                        System.out.println("Level complete!");
+                        // nextLevel(); --> will add later
+                    }
+                }
+                // for crystal collection
+                if (entity instanceof Crystal) {
+                    Game.world().environment().remove(entity);
+                    remainingCrystals--;
+                }
+                // Powerups
+                if (entity instanceof Powerup) {
                     Powerup powerup = (Powerup) entity;
                     applyPowerUpEffect(powerup);
                     // Remove the powerup from the world after it's collected
                     Game.world().environment().remove(powerup);
                 }
             }
-
-            // teleporter
-            if (player.getCollisionBox().intersects(entity.getBoundingBox())) {
-                if (entity instanceof Teleporter teleporter) {
-                    // teleporter will open only if player collides and all crystals are collected
-                    if (GameLogic.getRemainingCrystals() == 0 &&
-                            player.getCollisionBox().intersects(entity.getBoundingBox())) {
-                        System.out.println("Level complete!");
-                        // nextLevel(); --> will add later
-                    }
-                }
-            }
-
-
-    // getters for HUD
-    public static int getRemainingCrystals() {
-        return remainingCrystals;
+        }
     }
-
-    public static int getRemainingTime() {
-        return remainingTime;
-    }
-
-
     // ----------- Level Handling -----------
 
     private static void loadLevel() {
@@ -210,7 +179,6 @@ public final class GameLogic {
     public static void restartLevel() {
         // Stop player movement
         Player.instance().stopMovement();
-
         // --- NEW: Reset power-up states ---
         Player.instance().resetPowerUps();
         if (isTimeStopped) {
@@ -218,7 +186,6 @@ public final class GameLogic {
             isTimeStopped = false;
             pauseEnemies(false);
         }
-
         // Fade in
         Game.window().getRenderComponent().fadeIn(500);
         // Reset environment
@@ -272,7 +239,8 @@ public final class GameLogic {
 
         // Pause/unpause all Turrets
         for (Turret turret : Game.world().environment().getEntities(Turret.class)) {
-            turret.setRotating(!paused); // setRotating(true) means it rotates
+            // TO DO: Once turret rotation implemented
+            //turret.setRotating(!paused); // setRotating(true) means it rotates
         }
     }
 }

@@ -1,11 +1,13 @@
 package ca.sfu.cmpt276.fall2025.team14.app;
 
+import ca.sfu.cmpt276.fall2025.team14.model.*;
 import ca.sfu.cmpt276.fall2025.team14.model.Door;
 import ca.sfu.cmpt276.fall2025.team14.model.Vision;
 import ca.sfu.cmpt276.fall2025.team14.model.Invisibility;
 import ca.sfu.cmpt276.fall2025.team14.model.Jetpack;
 import ca.sfu.cmpt276.fall2025.team14.model.Timestop;
 import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen;
 import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
@@ -35,13 +37,15 @@ public class CosmicEscape {
         Game.window().setIcon(Resources.images().get("sprites/icon.png"));
 
         // Register custom object loaders
+        PropMapObjectLoader.registerCustomPropType(Button.class);
         PropMapObjectLoader.registerCustomPropType(Vision.class);
         PropMapObjectLoader.registerCustomPropType(Door.class);
+        PropMapObjectLoader.registerCustomPropType(Crystal.class);
+        PropMapObjectLoader.registerCustomPropType(Teleporter.class);
         PropMapObjectLoader.registerCustomPropType(Jetpack.class);
         PropMapObjectLoader.registerCustomPropType(Invisibility.class);
         PropMapObjectLoader.registerCustomPropType(Timestop.class);
         PropMapObjectLoader.registerCustomPropType(AlienCharm.class);
-
         Environment.registerMapObjectLoader(new PathMapObjectLoader());
 
         // initialize game logic
@@ -52,7 +56,7 @@ public class CosmicEscape {
         Game.screens().add(new InGameScreen());
 
         // show menu first
-        Game.screens().display("MainMenu");
+        Game.screens().display("MAIN-MENU");
 
         // start the game loop
         Game.start();

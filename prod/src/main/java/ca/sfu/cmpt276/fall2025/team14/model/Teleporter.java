@@ -9,7 +9,7 @@ import de.gurkenlabs.litiengine.entities.Prop;
 public class Teleporter extends Prop implements IUpdateable {
 
     public Teleporter() {
-        super("prop-teleporter");
+        super("teleporter");
         this.setCollision(true);
     }
 

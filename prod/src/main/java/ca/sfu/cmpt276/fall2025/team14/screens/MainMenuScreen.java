@@ -14,7 +14,7 @@ public class MainMenuScreen extends GameScreen {
     private Font mainFont;
 
     public MainMenuScreen() {
-        super("MainMenu");
+        super("MAIN-MENU");
     }
 
     @Override
@@ -53,17 +53,19 @@ public class MainMenuScreen extends GameScreen {
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(0, 0, width, height);
 
-        // for "title" text
-        g.setColor(Color.WHITE);
-        g.setFont(mainFont.deriveFont(48f));
-        int titleWidth = g.getFontMetrics().stringWidth(title);
-        g.drawString(title, (width - titleWidth) / 2, height / 3);
+        // for title image
+        Game.graphics().renderImage(g, Resources.spritesheets().get("logo.png").getImage().getScaledInstance(width, height, 1), 0, 0);
+//        g.setColor(Color.WHITE);
+//        g.setFont(mainFont.deriveFont(48f));
+//        int titleWidth = g.getFontMetrics().stringWidth(title);
+//        g.drawString(title, (width - titleWidth) / 2, height / 3);
 
         // for "start the game" text
         String startText = "Press ENTER to Start";
+        g.setColor(Color.WHITE);
         g.setFont(mainFont.deriveFont(28f));
         int startWidth = g.getFontMetrics().stringWidth(startText);
-        g.drawString(startText, (width - startWidth) / 2, height / 2);
+        g.drawString(startText, (width - startWidth) / 2, height - 100);
     }
 
     protected void onKeyPressed(KeyEvent event) {
