@@ -1,59 +1,111 @@
-package ca.sfu.cmpt276.fall2025.team14.audio;
+package ca.sfu.cmpt276.fall2025.team14.utils;
 
-import de.gurkenlabs.litiengine.Game;
-import de.gurkenlabs.litiengine.resources.Resources;
-import de.gurkenlabs.litiengine.sound.Sound;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
- * Controls background music and sound effects for Cosmic Escape.
- * Compatible with LITIENGINE 0.8.0.
+ * Handles all in-game audio: background music and sound effects.
+ * Uses pure Java Sound API (javax.sound.sampled) so it works on any JDK.
  */
-public final class AudioManager {
-  private static final AudioManager INSTANCE = new AudioManager();
-  private float musicVolume = 0.6f;
-  private float sfxVolume = 0.8f;
-  private Sound currentMusic;
+public class AudioManager {
 
-  private AudioManager() {}
+    private Clip backgroundMusicClip;
+    private Clip deathClip;
+    private Clip explosionClip;
+    private Clip pickupClip;
+    private Clip teleportClip;
 
-  public static AudioManager get() { return INSTANCE; }
+    public AudioManager() {
+        try {
+            backgroundMusicClip = loadClip("/music/space-theme.wav");
+            deathClip = loadClipWithVolume("/sfx/death.wav", 6.0f);
+            explosionClip = loadClipWithVolume("/sfx/explosion.wav", 4.0f);
+            pickupClip = loadClip("/sfx/pickup.wav");
+            teleportClip = loadClip("/sfx/teleport.wav");
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-  public void playMusic(String path) {
-    stopMusic();
-    try {
-      currentMusic = Resources.sounds().get(path);
-      if (currentMusic != null) {
-        Game.audio().getMusicPlayer().setVolume(musicVolume);
-        Game.audio().playMusic(currentMusic);
-      }
-    } catch (Exception ignored) {}
-  }
+    /** Plays background music on loop until stopped. */
+    public void playBackgroundMusic() {
+        if (backgroundMusicClip != null) {
+            backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
 
-  public void stopMusic() {
-    try { Game.audio().stopMusic(); } catch (Exception ignored) {}
-    currentMusic = null;
-  }
+    /** Stops background music if it’s playing. */
+    public void stopBackgroundMusic() {
+        if (backgroundMusicClip != null && backgroundMusicClip.isRunning()) {
+            backgroundMusicClip.stop();
+        }
+    }
 
-  public void playSfx(String path) {
-    try {
-      Sound sfx = Resources.sounds().get(path);
-      if (sfx != null) {
-        Game.audio().getSoundPlayer().setVolume(sfxVolume);
-        Game.audio().playSound(sfx);
-      }
-    } catch (Exception ignored) {}
-  }
+    /** Plays the death sound. */
+    public void playDeathSound() {
+        playSound(deathClip);
+    }
 
-  public void setMusicVolume(float v) {
-    musicVolume = clamp(v);
-    Game.audio().getMusicPlayer().setVolume(musicVolume);
-  }
+    /** Plays the explosion sound. */
+    public void playExplosionSound() {
+        playSound(explosionClip);
+    }
 
-  public void setSfxVolume(float v) {
-    sfxVolume = clamp(v);
-    Game.audio().getSoundPlayer().setVolume(sfxVolume);
-  }
+    /** Plays the pickup sound (resets if already playing). */
+    public void playPickupSound() {
+        alwaysPlaySound(pickupClip);
+    }
 
-  private static float clamp(float v) { return Math.max(0, Math.min(1, v)); }
+    /** Plays the teleport sound (resets if already playing). */
+    public void playTeleportSound() {
+        alwaysPlaySound(teleportClip);
+    }
+
+    // --------------------------------------------------------------------
+    // Helper methods
+    // --------------------------------------------------------------------
+
+    private Clip loadClip(String resourcePath)
+            throws UnsupportedAudioFileException, IOException, LineUnavailableException, URISyntaxException {
+
+        File soundFile = new File(getClass().getResource(resourcePath).toURI());
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioStream);
+        return clip;
+    }
+
+    private Clip loadClipWithVolume(String resourcePath, float volumeBoost)
+            throws UnsupportedAudioFileException, IOException, LineUnavailableException, URISyntaxException {
+
+        File soundFile = new File(getClass().getResource(resourcePath).toURI());
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioStream);
+
+        FloatControl gain = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gain.setValue(gain.getValue() + volumeBoost);
+        return clip;
+    }
+
+    /** Plays the clip only if it’s not already running. */
+    private void playSound(Clip clip) {
+        if (clip != null && !clip.isRunning()) {
+            clip.setFramePosition(0);
+            clip.start();
+        }
+    }
+
+    /** Always restarts the clip from the beginning. */
+    private void alwaysPlaySound(Clip clip) {
+        if (clip != null) {
+            clip.setFramePosition(0);
+            clip.start();
+        }
+    }
 }
 
