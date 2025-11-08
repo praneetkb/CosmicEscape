@@ -1,0 +1,43 @@
+
+*~
+*.swp
+
+# VSCode
+.vscode
+.classpath
+.project
+.settings/
+
+# MacOS
+.DS_Store
+
+# Config files
+config.properties
+
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+crash.txt

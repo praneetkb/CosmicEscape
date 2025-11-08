@@ -1,0 +1,65 @@
+package ca.sfu.cmpt276.fall2025.team14.app;
+
+import ca.sfu.cmpt276.fall2025.team14.model.*;
+import ca.sfu.cmpt276.fall2025.team14.model.Door;
+import ca.sfu.cmpt276.fall2025.team14.model.Vision;
+import ca.sfu.cmpt276.fall2025.team14.model.Invisibility;
+import ca.sfu.cmpt276.fall2025.team14.model.Jetpack;
+import ca.sfu.cmpt276.fall2025.team14.model.Timestop;
+import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen;
+import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.environment.PropMapObjectLoader;
+import de.gurkenlabs.litiengine.resources.Resources;
+
+public class CosmicEscape {
+
+    public static void main(String[] args) {
+        // set meta information about the game
+        Game.info().setName("Cosmic Escape");
+        Game.info().setVersion("v1.0.0");
+        Game.info().setDescription("A top-down 2D escape game! Watch out for the aliens!");
+
+        // initialize LITIengine
+        Game.init(args);
+
+        // set base render scale
+        Game.graphics().setBaseRenderScale(4f);
+        Game.config().graphics().setEnableResolutionScale(true);
+
+        // load resources from utiLITI file
+        Resources.load("cosmic-escape.litidata");
+
+        //set title and icon for the window
+        Game.window().setTitle("Cosmic Escape");
+        Game.window().setIcon(Resources.images().get("sprites/icon.png"));
+
+        // Register custom object loaders
+        PropMapObjectLoader.registerCustomPropType(Button.class);
+        PropMapObjectLoader.registerCustomPropType(Vision.class);
+        PropMapObjectLoader.registerCustomPropType(Door.class);
+        PropMapObjectLoader.registerCustomPropType(Crystal.class);
+        PropMapObjectLoader.registerCustomPropType(Teleporter.class);
+        PropMapObjectLoader.registerCustomPropType(Jetpack.class);
+        PropMapObjectLoader.registerCustomPropType(Invisibility.class);
+        PropMapObjectLoader.registerCustomPropType(Timestop.class);
+        PropMapObjectLoader.registerCustomPropType(AlienCharm.class);
+        Environment.registerMapObjectLoader(new PathMapObjectLoader());
+
+        // initialize game logic
+        GameLogic.init();
+
+        // add screens
+        Game.screens().add(new MainMenuScreen());
+        Game.screens().add(new InGameScreen());
+
+        // show menu first
+        Game.screens().display("MAIN-MENU");
+
+        // start the game loop
+        Game.start();
+    }
+}
+
