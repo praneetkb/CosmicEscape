@@ -26,8 +26,6 @@ public class Player extends Creature implements IUpdateable {
             instance = new Player();
         }
         return instance;
-
-
     }
 
     private Player() {

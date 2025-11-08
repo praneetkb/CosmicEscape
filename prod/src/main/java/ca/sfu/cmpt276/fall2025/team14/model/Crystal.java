@@ -4,16 +4,14 @@ import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.AnimationInfo;
 import de.gurkenlabs.litiengine.entities.Prop;
 
-@AnimationInfo(spritePrefix = "crystal")
+@AnimationInfo(spritePrefix = "prop-crystal")
 public class Crystal extends Prop implements IUpdateable {
 
     public Crystal() {
-
-        super("crystal");
+        super("prop-crystal");
     }
 
     @Override
     public void update() {
-
     }
 }

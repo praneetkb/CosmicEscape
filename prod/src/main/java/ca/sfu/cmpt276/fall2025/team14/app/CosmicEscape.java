@@ -3,6 +3,7 @@ package ca.sfu.cmpt276.fall2025.team14.app;
 import ca.sfu.cmpt276.fall2025.team14.model.Door;
 import ca.sfu.cmpt276.fall2025.team14.model.Vision;
 import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen;
 import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
@@ -29,7 +30,7 @@ public class CosmicEscape {
 
         //set title and icon for the window
         Game.window().setTitle("Cosmic Escape");
-        Game.window().setIcon(Resources.images().get("src/main/resources/sprites/icon.png"));
+        Game.window().setIcon(Resources.images().get("sprites/icon.png"));
 
         // Register custom object loaders
         PropMapObjectLoader.registerCustomPropType(Vision.class);
@@ -40,9 +41,14 @@ public class CosmicEscape {
         GameLogic.init();
 
         // add screens
+        Game.screens().add(new MainMenuScreen());
         Game.screens().add(new InGameScreen());
+
+        // show menu first
+        Game.screens().display("MainMenu");
 
         // start the game loop
         Game.start();
     }
 }
+
