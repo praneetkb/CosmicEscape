@@ -30,8 +30,6 @@ public class Player extends Creature implements IUpdateable {
             instance = new Player();
         }
         return instance;
-
-
     }
 
     private Player() {
@@ -48,13 +46,6 @@ public class Player extends Creature implements IUpdateable {
 //            this.setVelocity(70);
 //        });
 
-    }
-
-    public void blink() {
-        this.setVisible(false);
-
-        // hide player for 200 ms and show again. This is for the first and second enemy collision
-        Game.loop().perform(200, () -> this.setVisible(true));
     }
 
     @Override

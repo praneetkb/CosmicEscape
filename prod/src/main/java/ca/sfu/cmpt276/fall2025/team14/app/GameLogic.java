@@ -4,6 +4,7 @@ import ca.sfu.cmpt276.fall2025.team14.model.Alien;
 import ca.sfu.cmpt276.fall2025.team14.model.Door;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import ca.sfu.cmpt276.fall2025.team14.model.Turret;
+import ca.sfu.cmpt276.fall2025.team14.model.Teleporter;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Creature;
@@ -15,11 +16,13 @@ import de.gurkenlabs.litiengine.graphics.Camera;
 import de.gurkenlabs.litiengine.graphics.LocationLockCamera;
 import de.gurkenlabs.litiengine.input.Input;
 import de.gurkenlabs.litiengine.resources.Resources;
+import ca.sfu.cmpt276.fall2025.team14.model.Crystal;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
+
 
 public final class GameLogic {
 
@@ -28,9 +31,10 @@ public final class GameLogic {
     // map file name for different levels
     private static final String[] LEVELS = {"tutorial"};  // "level1", "level2", "level3"};
     private static int currentLevelIndex = 0;
+    private static int remainingTime = 120; // start time in seconds
+    private static long lastTimeUpdate = System.currentTimeMillis(); // timer counter
+    private static int remainingCrystals = 3; // we start with 3 crystals for tutorial level
 
-    // start time in seconds
-    private static int remainingTime = 120;
 
     // ----------------------- MAIN METHODS -----------------------
 
@@ -59,6 +63,11 @@ public final class GameLogic {
                     Spawnpoint turrets = environment.getSpawnpoint("turret-spawn");
                     if (turrets != null) {
                         turrets.spawn(new Turret());
+                    }
+
+                    Spawnpoint crystal = environment.getSpawnpoint("crystal-spawn");
+                    if (crystal != null) {
+                        crystal.spawn(new Crystal());
                     }
                 }
             }
@@ -89,6 +98,17 @@ public final class GameLogic {
                 ((IUpdateable) button).update(); // this is because it is getting confused with the AWT update
             }
         }
+
+        // timer countdown for every second
+        long now = System.currentTimeMillis();
+        if (now - lastTimeUpdate >= 1000) {
+            remainingTime = Math.max(remainingTime - 1, 0); // to prevent negative time
+            lastTimeUpdate = now;
+
+            if (remainingTime == 0) {
+                restartLevel(); // will add "Game Over" later
+            }
+        }
     }
 
     private static void handleCollisions() {
@@ -102,7 +122,36 @@ public final class GameLogic {
                     restartLevel(); // reset level on collision
                 }
             }
+
+            // for crystal collection
+            if (player.getCollisionBox().intersects(entity.getBoundingBox())) {
+                if (entity instanceof Crystal crystal) {
+                    Game.world().environment().remove(crystal);
+                    remainingCrystals--;
+                }
+            }
+
+            // teleporter
+            if (player.getCollisionBox().intersects(entity.getBoundingBox())) {
+                if (entity instanceof Teleporter teleporter) {
+                    // teleporter will open only if player collides and all crystals are collected
+                    if (GameLogic.getRemainingCrystals() == 0 &&
+                            player.getCollisionBox().intersects(entity.getBoundingBox())) {
+                        System.out.println("Level complete!");
+                        // nextLevel(); --> will add later
+                    }
+                }
+            }
         }
+    }
+
+    // getters for HUD
+    public static int getRemainingCrystals() {
+        return remainingCrystals;
+    }
+
+    public static int getRemainingTime() {
+        return remainingTime;
     }
 
 
