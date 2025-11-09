@@ -1,5 +1,6 @@
 package ca.sfu.cmpt276.fall2025.team14.model;
 
+import ca.sfu.cmpt276.fall2025.team14.utils.ButtonAttacher;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.AnimationInfo;
 import de.gurkenlabs.litiengine.entities.Prop;
@@ -9,6 +10,7 @@ import de.gurkenlabs.litiengine.graphics.animation.IEntityAnimationController;
 public class Door extends Prop implements IUpdateable {
 
     private boolean open = false;
+    private Button button;
 
     public Door() {
         super("door");
@@ -35,8 +37,13 @@ public class Door extends Prop implements IUpdateable {
         }
     }
 
+    public Button getButton() { return button; }
+
     @Override
     public void update() {
+        if (button == null) {
+            button = ButtonAttacher.attach(this);
+        }
     }
 
     // Custom animation controller to handle frame by frame animations for open, opening, closed states

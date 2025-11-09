@@ -1,6 +1,5 @@
 package ca.sfu.cmpt276.fall2025.team14.model;
 
-import de.gurkenlabs.litiengine.Direction;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.Valign;
 import de.gurkenlabs.litiengine.entities.*;
@@ -20,6 +19,6 @@ public class Vision extends Prop implements IUpdateable {
 
     @Override
     public void update() {
-        setCollision(false);
+
     }
 }

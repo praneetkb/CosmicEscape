@@ -38,6 +38,8 @@ public class CosmicEscape {
 
         // Register custom object loaders
         PropMapObjectLoader.registerCustomPropType(Button.class);
+        PropMapObjectLoader.registerCustomPropType(DoorButton.class);
+        PropMapObjectLoader.registerCustomPropType(LaserButton.class);
         PropMapObjectLoader.registerCustomPropType(Vision.class);
         PropMapObjectLoader.registerCustomPropType(Door.class);
         PropMapObjectLoader.registerCustomPropType(Crystal.class);
@@ -56,7 +58,6 @@ public class CosmicEscape {
         Game.screens().add(new InGameScreen());
 
         // show menu first
-        Game.screens().display("MAIN-MENU");
 
         // start the game loop
         Game.start();

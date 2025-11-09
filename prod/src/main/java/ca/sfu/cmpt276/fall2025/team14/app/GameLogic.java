@@ -1,7 +1,7 @@
 package ca.sfu.cmpt276.fall2025.team14.app;
 
 import ca.sfu.cmpt276.fall2025.team14.model.Alien;
-import ca.sfu.cmpt276.fall2025.team14.model.Door;
+import ca.sfu.cmpt276.fall2025.team14.model.Button;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import ca.sfu.cmpt276.fall2025.team14.model.Powerup;
 import ca.sfu.cmpt276.fall2025.team14.model.PowerUpType;
@@ -141,8 +141,8 @@ public final class GameLogic {
                     }
                 }
                 // TO DO: Check other collision entities (door, powerups, etc.)
-                if (entity instanceof Door) {
-                    ((Door) entity).open();
+                if (entity instanceof Button) {
+                    ((Button) entity).pressButton();
                 }
                 // teleporter
                 if (entity instanceof Teleporter) {
