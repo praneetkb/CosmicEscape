@@ -14,7 +14,7 @@
    <tileset firstgid="1813" source="tsx/props-and-items.tsx"/>
    <tileset firstgid="2341" source="tsx/kb-letters-and-symbols.tsx"/>
    <tileset firstgid="2453" source="tsx/kb-extras.tsx"/>
-   <objectgroup id="0" name="teleporter" visible="0">
+   <objectgroup id="0" name="teleporter" visible="1">
     <object id="73" name="teleporter" type="PROP" x="886" y="74" width="21" height="42">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
@@ -183,7 +183,7 @@
     <object id="68" name="slime" type="PROP" x="640" y="256" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="false"/>
-      <property name="collision" type="bool" value="true"/>
+      <property name="collision" type="bool" value="false"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
       <property name="collisionValign" value="DOWN"/>
@@ -199,7 +199,7 @@
     <object id="69" name="slime" type="PROP" x="672" y="256" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="false"/>
-      <property name="collision" type="bool" value="true"/>
+      <property name="collision" type="bool" value="false"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
       <property name="collisionValign" value="DOWN"/>
@@ -215,7 +215,7 @@
     <object id="70" name="slime" type="PROP" x="640" y="288" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="false"/>
-      <property name="collision" type="bool" value="true"/>
+      <property name="collision" type="bool" value="false"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
       <property name="collisionValign" value="DOWN"/>
@@ -231,7 +231,7 @@
     <object id="80" name="radiation" type="PROP" x="736" y="320" width="32" height="32">
      <properties>
       <property name="addShadow" type="bool" value="true"/>
-      <property name="collision" type="bool" value="true"/>
+      <property name="collision" type="bool" value="false"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
       <property name="collisionValign" value="DOWN"/>
@@ -278,10 +278,10 @@
       <property name="spritesheetName" value="cloud"/>
      </properties>
     </object>
-    <object id="107" name="laser" type="PROP" x="712" y="224" width="56" height="32">
+    <object id="107" name="lasers" type="PROP" x="712" y="224" width="56" height="32">
      <properties>
       <property name="addShadow" type="bool" value="false"/>
-      <property name="collision" type="bool" value="true"/>
+      <property name="collision" type="bool" value="false"/>
       <property name="collisionAlign" value="CENTER"/>
       <property name="collisionType" value="DYNAMIC"/>
       <property name="collisionValign" value="DOWN"/>
