@@ -18,8 +18,12 @@ public class DoorAnimationController extends PropAnimationController<Door> {
     @Override
     public BufferedImage getCurrentImage() {
         BufferedImage image = null;
+        // default to closed
+        if(this.getEntity().getButton() == null) {
+            return image = Resources.spritesheets().get("prop-door_closed").getImage();
+        }
         // Set sprite based on state
-        if (!this.getEntity().isOpen()) {
+        if (!this.getEntity().getButton().isPressed()) {
             // Set animation to closed
             image = Resources.spritesheets().get("prop-door_closed").getImage();
         } else {
