@@ -8,6 +8,7 @@ import ca.sfu.cmpt276.fall2025.team14.model.Jetpack;
 import ca.sfu.cmpt276.fall2025.team14.model.Timestop;
 import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
 import ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.WinScreen;
 import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.environment.Environment;
@@ -31,6 +32,7 @@ public class CosmicEscape {
 
         // load resources from utiLITI file
         Resources.load("cosmic-escape.litidata");
+        Resources.spritesheets().load("sprites/scrolling_bg.png", 960,540);
 
         //set title and icon for the window
         Game.window().setTitle("Cosmic Escape");
@@ -40,14 +42,18 @@ public class CosmicEscape {
         PropMapObjectLoader.registerCustomPropType(Button.class);
         PropMapObjectLoader.registerCustomPropType(DoorButton.class);
         PropMapObjectLoader.registerCustomPropType(LaserButton.class);
-        PropMapObjectLoader.registerCustomPropType(Vision.class);
         PropMapObjectLoader.registerCustomPropType(Door.class);
         PropMapObjectLoader.registerCustomPropType(Crystal.class);
         PropMapObjectLoader.registerCustomPropType(Teleporter.class);
         PropMapObjectLoader.registerCustomPropType(Jetpack.class);
         PropMapObjectLoader.registerCustomPropType(Invisibility.class);
         PropMapObjectLoader.registerCustomPropType(Timestop.class);
+        PropMapObjectLoader.registerCustomPropType(Punishment.class);
+        PropMapObjectLoader.registerCustomPropType(Lasers.class);
+        PropMapObjectLoader.registerCustomPropType(Slime.class);
+        PropMapObjectLoader.registerCustomPropType(Radiation.class);
         PropMapObjectLoader.registerCustomPropType(AlienCharm.class);
+        PropMapObjectLoader.registerCustomPropType(Vision.class);
         Environment.registerMapObjectLoader(new PathMapObjectLoader());
 
         // initialize game logic
@@ -56,8 +62,7 @@ public class CosmicEscape {
         // add screens
         Game.screens().add(new MainMenuScreen());
         Game.screens().add(new InGameScreen());
-
-        // show menu first
+        Game.screens().add(new WinScreen());
 
         // start the game loop
         Game.start();

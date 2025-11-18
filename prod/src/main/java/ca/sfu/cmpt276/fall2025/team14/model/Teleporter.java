@@ -14,8 +14,7 @@ public class Teleporter extends Prop implements IUpdateable {
     }
 
     @Override
-    public void update() {
-    }
+    public void update() { }
 
     @Override
     protected IEntityAnimationController<?> createAnimationController() {

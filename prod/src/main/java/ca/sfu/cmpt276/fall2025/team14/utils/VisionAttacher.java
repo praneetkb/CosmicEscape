@@ -1,29 +1,35 @@
 package ca.sfu.cmpt276.fall2025.team14.utils;
 
-import ca.sfu.cmpt276.fall2025.team14.model.Vision;
+import ca.sfu.cmpt276.fall2025.team14.model.*;
 import de.gurkenlabs.litiengine.Direction;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.Rotation;
+import java.awt.geom.Point2D;
 
 public final class VisionAttacher {
 
     private VisionAttacher() {}
 
-    public static void attach(Creature enemy, Vision vision) {
+    public static void attach(Enemy enemy, Vision vision) {
         Game.world().environment().add(vision);
-        syncVision(enemy, vision);
+        vision.setAttachedEnemy(enemy);
     }
 
-    public static void syncVision(Creature enemy, Vision vision) {
-        final Direction d = enemy.getFacingDirection();
-        final double enemyX = enemy.getX(), enemyY = enemy.getY(), enemyW = enemy.getWidth(), enemyH = enemy.getHeight();
-        final double visionW = Vision.DEFAULT_WIDTH, visionH = Vision.DEFAULT_HEIGHT;
+    public static void syncAlienVision(Creature enemy, Vision vision) {
+        // Get enemy and vision information
+        Direction d = enemy.getFacingDirection();
+        double enemyX = enemy.getX(), enemyY = enemy.getY(), enemyW = enemy.getWidth(), enemyH = enemy.getHeight();
+        double visionW = Vision.getDefaultWidth(),  visionH = Vision.getDefaultHeight();
         // Swap sizes for left or right since sprite is 16x32
         if (d == Direction.LEFT || d == Direction.RIGHT) {
             vision.setSize(visionH, visionW);
+            vision.setCollisionBoxHeight(visionW - 2);
+            vision.setCollisionBoxWidth(visionH - 2);
         } else {
             vision.setSize(visionW, visionH);
+            vision.setCollisionBoxHeight(visionH - 2);
+            vision.setCollisionBoxWidth(visionW - 2);
         }
         // Set location based on enemy
         switch (d) {
@@ -40,4 +46,19 @@ public final class VisionAttacher {
             case LEFT ->  vision.setSpriteRotation(Rotation.ROTATE_270);
         }
     }
+
+    public static void syncTurretVision(Turret turret, Vision vision, double degUp) {
+        // Radius from turret center
+        double r = 24.0;
+        // Convert Java AWT degree based
+        double aRight = degUp - 90.0;
+        // convert to radians
+        double rad = Math.toRadians(aRight);
+        Point2D c = turret.getCenter();
+        double cx = c.getX() + r * Math.cos(rad);
+        double cy = c.getY() + r * Math.sin(rad);
+        // Set location
+        vision.setLocation(cx - vision.getWidth() / 2.0, cy - vision.getHeight() / 2.0);
+    }
+
 }

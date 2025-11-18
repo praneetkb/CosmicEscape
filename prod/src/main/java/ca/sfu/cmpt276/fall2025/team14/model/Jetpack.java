@@ -18,7 +18,7 @@ public class Jetpack extends Powerup {
      * to create an instance of this class.
      */
     public Jetpack() {
-        super("prop-jetpack");
+        super("jetpack");
     }
 
     /**
