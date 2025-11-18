@@ -11,6 +11,8 @@
 # MacOS
 .DS_Store
 
+.idea/
+
 # Config files
 config.properties
 

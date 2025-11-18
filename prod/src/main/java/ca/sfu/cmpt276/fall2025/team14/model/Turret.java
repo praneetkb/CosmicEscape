@@ -11,10 +11,29 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
+import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
+import de.gurkenlabs.litiengine.Game;
+
+/**
+ * The {@code Turret} class represents a stationary enemy in the game that can rotate
+ * within a limited angle range and detect players using its {@link Vision} component.
+ * <p>
+ * This class extends {@link Creature} and implements {@link IUpdateable}, allowing
+ * it to perform continuous updates at every tick of the game.
+ * </p>
+ *
+ * <p>
+ * The turret can rotate back and forth between a minimum and maximum angle.
+ * If the player is caught, a collision with the {@link Player} occurs and the game restarts via {@link GameLogic#restartLevel()}.
+ * </p>
+ *
+ */
+
 @EntityInfo(width = 16, height = 16)
 @CollisionInfo(collisionBoxWidth = 12, collisionBoxHeight =12, collision = true, align = CENTER, valign = Valign.MIDDLE)
 public class Turret extends Enemy {
 
+    /** The vision area attached to the turret. */
     private final Vision vision;
     // Rotation config (UP-based degrees)
     private static final double DEFAULT_DEG_PER_SEC = 30;
@@ -35,6 +54,9 @@ public class Turret extends Enemy {
     private final Line2D.Double losLeft   = new Line2D.Double();
     private final Line2D.Double losRight  = new Line2D.Double();
 
+    /**
+     * Constructs a new {@code Turret} and attaches a vision to it.
+     */
     public Turret() {
         super("turret");
         // Attach vision
