@@ -8,6 +8,7 @@ import de.gurkenlabs.litiengine.resources.Resources;
 public class Button extends Prop implements IUpdateable {
 
     private boolean pressed = false;
+    private Door linkedDoor; // added for unit tests
 
     public Button(String spritesheetName) {
         //for debugging
@@ -20,12 +21,30 @@ public class Button extends Prop implements IUpdateable {
     @Override
     public void update() {
         if (pressed) {
-            setCollision(false);
+            this.setCollision(false);
         }
+    }
+
+    // connect door and button - added for unit tests
+    public void setLinkedDoor(Door door) {
+        this.linkedDoor = door;
     }
 
     public void pressButton() {
         pressed = true;
+
+        if (linkedDoor != null) {
+            linkedDoor.open();
+        }
+    }
+
+    // added for unit tests
+    public void releaseButton() {
+        pressed = false;
+
+        if (linkedDoor != null) {
+            linkedDoor.close();
+        }
     }
 
     public boolean isPressed() {
