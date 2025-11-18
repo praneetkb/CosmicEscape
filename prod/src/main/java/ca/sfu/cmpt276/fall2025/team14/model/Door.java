@@ -17,10 +17,12 @@ public class Door extends Prop implements IUpdateable {
         this.setCollision(true); // door blocks player initially
     }
 
+    // already there before - also used by unit test
     public boolean isOpen() {
         return open;
     }
 
+    // already there before - also used by unit test
     public void open() {
         if (!open) {
             open = true;
@@ -29,6 +31,7 @@ public class Door extends Prop implements IUpdateable {
         }
     }
 
+    // already there before - also used by unit test
     public void close() {
         if (open) {
             open = false;

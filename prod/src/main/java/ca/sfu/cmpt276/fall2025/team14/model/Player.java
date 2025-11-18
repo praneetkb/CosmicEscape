@@ -62,7 +62,7 @@ public class Player extends Creature implements IUpdateable {
     private final int CHARM_INVULNERABILITY_DURATION = 2000; //make the play invurnerable for 2 seconds after consuming Alien Charm
 
 
-    public static Player instance() {
+    public static Player getInstance() {
         if (instance == null) {
             instance = new Player();
         }
