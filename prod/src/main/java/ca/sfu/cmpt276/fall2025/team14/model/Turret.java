@@ -1,12 +1,14 @@
 package ca.sfu.cmpt276.fall2025.team14.model;
 
 import ca.sfu.cmpt276.fall2025.team14.utils.VisionAttacher;
-import de.gurkenlabs.litiengine.IUpdateable;
+import de.gurkenlabs.litiengine.Direction;
+import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.Valign;
 import de.gurkenlabs.litiengine.entities.CollisionInfo;
-import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.EntityInfo;
-
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
 import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
@@ -28,27 +30,29 @@ import de.gurkenlabs.litiengine.Game;
  */
 
 @EntityInfo(width = 16, height = 16)
-@CollisionInfo(collisionBoxWidth = 14, collisionBoxHeight = 14, collision = true, align = CENTER, valign = Valign.MIDDLE)
-
-public class Turret extends Creature implements IUpdateable {
+@CollisionInfo(collisionBoxWidth = 12, collisionBoxHeight =12, collision = true, align = CENTER, valign = Valign.MIDDLE)
+public class Turret extends Enemy {
 
     /** The vision area attached to the turret. */
-    private static Vision vision = new Vision();
+    private final Vision vision;
+    // Rotation config (UP-based degrees)
+    private static final double DEFAULT_DEG_PER_SEC = 30;
+    private double degPerSec = DEFAULT_DEG_PER_SEC;
+    private double minRotation = 1;
+    private double maxRotation = 360;
+    private boolean clockwise = true;
+    private Direction lastDir = Direction.UP;
+    private double hysteresisDeg = 12.0;
 
-    /** The rotation speed of the turret in degrees per second. */
-    private double rotationSpeed = 90; // degrees per second
+    // Runtime state
+    private double currentDegree = minRotation;
 
-    /** The minimum rotation offset (in degrees) relative to the turret’s initial rotation. */
-    private double minRotation = -45;  // min angle from start rotation
-
-    /** The maximum rotation offset (in degrees) relative to the turret’s initial rotation. */
-    private double maxRotation = 45;   // max angle from start rotation
-
-    /** Indicates whether the turret is currently rotating clockwise. */
-    private boolean rotatingClockwise = true; // current rotation direction
-
-    /** Stores the turret’s initial rotation angle when spawned. */
-    private double initialRotation;
+    // LOS rays
+    private static final double EDGE_OFFSET_DEG = 14.0;
+    private static final double LOS_LEN = 10.0 + 32.0;
+    private final Line2D.Double losCenter = new Line2D.Double();
+    private final Line2D.Double losLeft   = new Line2D.Double();
+    private final Line2D.Double losRight  = new Line2D.Double();
 
     /**
      * Constructs a new {@code Turret} and attaches a vision to it.
@@ -56,38 +60,79 @@ public class Turret extends Creature implements IUpdateable {
     public Turret() {
         super("turret");
         // Attach vision
+        vision = new Vision();
         VisionAttacher.attach(this, vision);
     }
 
     @Override
     public void update() {
-        // Sync vision with current facing direction
-        VisionAttacher.syncVision(this, vision);
-
-//        // TO DO: ROTATE TURRET
-//        // get time passed since last frame in seconds
-//        double deltaTime = Game.loop().getDeltaTime() / 1000.0;
-//        double deltaRotation = rotationSpeed * deltaTime;
-//
-//        // rotate turret back and forth between min and max angles
-//        if (rotatingClockwise) {
-//            this.setAngle(this.getAngle() + deltaRotation);
-//            if (this.getAngle() >= initialRotation + maxRotation) {
-//                this.setAngle(initialRotation + maxRotation);
-//                rotatingClockwise = false;
-//            }
-//        } else {
-//            this.setAngle(this.getAngle() - deltaRotation);
-//            if (this.getAngle() <= initialRotation + minRotation) {
-//                this.setAngle(initialRotation + minRotation);
-//                rotatingClockwise = true;
-//            }
-//        }
-//
-//        // check for collision with player. If yes then instant death and restart
-//        Player player = Player.instance();
-//        if (this.getCollisionBox().intersects(player.getCollisionBox())) {
-//            GameLogic.restartLevel();
-//        }
+        // Frame-rate independent sweep on a linear axis
+        final double dt = Game.loop().getDeltaTime() / 1000.0;
+        double step = degPerSec * dt * (clockwise ? +1.0 : -1.0);
+        double next = currentDegree + step;
+        if (next > maxRotation) { double o = next - maxRotation; next = maxRotation - o; clockwise = false; }
+        if (next < minRotation) { double o = minRotation - next; next = minRotation + o; clockwise = true;  }
+        currentDegree = next;
+        // Sync vision sprite to current rotation
+        VisionAttacher.syncTurretVision(this, vision, currentDegree);
+        // Calculate base degree rotation for rays
+        final Point2D c = this.getCenter();
+        final double theta = Math.toRadians(currentDegree - 90.0);
+        final double ux = Math.cos(theta), uy = Math.sin(theta);
+        final double off = Math.toRadians(EDGE_OFFSET_DEG);
+        // center ray
+        final double sx = c.getX(), sy = c.getY();
+        double ex = sx + ux * LOS_LEN, ey = sy + uy * LOS_LEN;
+        losCenter.setLine(sx, sy, ex, ey);
+        // left edge (+14°)
+        double uxL = Math.cos(theta + off), uyL = Math.sin(theta + off);
+        double exL = sx + uxL * LOS_LEN,     eyL = sy + uyL * LOS_LEN;
+        losLeft.setLine(sx, sy, exL, eyL);
+        // right edge (-14°)
+        double uxR = Math.cos(theta - off), uyR = Math.sin(theta - off);
+        double exR = sx + uxR * LOS_LEN,     eyR = sy + uyR * LOS_LEN;
+        losRight.setLine(sx, sy, exR, eyR);
+        // Set sprite rotation based on degree
+        setDirection();
     }
+
+    private void setDirection() {
+        // Normalize degrees
+        double deg = currentDegree;
+        while (deg < 0) deg += 360.0;
+        while (deg >= 360.0) deg -= 360.0;
+        // Quadrants
+        final double h = hysteresisDeg;
+        final double U_R = 45.0, R_D = 135.0, D_L = 225.0, L_U = 315.0;
+        // Get direction
+        Direction next = lastDir;
+        final boolean inRIGHT = (deg >= U_R + h && deg < R_D - h);
+        final boolean inDOWN  = (deg >= R_D + h && deg < D_L - h);
+        final boolean inLEFT  = (deg >= D_L + h && deg < L_U - h);
+        final boolean inUP    = (deg >= L_U + h || deg <= U_R - h);
+        switch (lastDir) {
+            case UP    -> next = inRIGHT ? Direction.RIGHT : inLEFT ? Direction.LEFT : Direction.UP;
+            case RIGHT -> next = inDOWN  ? Direction.DOWN  : inUP   ? Direction.UP   : Direction.RIGHT;
+            case DOWN  -> next = inLEFT  ? Direction.LEFT  : inRIGHT? Direction.RIGHT: Direction.DOWN;
+            case LEFT  -> next = inUP    ? Direction.UP    : inDOWN ? Direction.DOWN : Direction.LEFT;
+        }
+        // Set direction
+        if (next != lastDir) { setFacingDirection(next); lastDir = next; }
+    }
+
+    @Override
+    public boolean playerInLos() {
+        Rectangle2D playerCB = Player.instance().getCollisionBox();
+        return losCenter.intersects(playerCB) || losLeft.intersects(playerCB) || losRight.intersects(playerCB);
+    }
+
+    public static double getDefaultDegPerSec() { return DEFAULT_DEG_PER_SEC; }
+    public double getDegPerSec() { return degPerSec; }
+    public void setDegPerSec(double degPerSec) { this.degPerSec = degPerSec; }
+    public double getMinRotation() { return minRotation; }
+    public void setMinRotation(double minRotation) { this.minRotation = minRotation; }
+    public double getMaxRotation() { return maxRotation; }
+    public void setMaxRotation(double maxRotation) { this.maxRotation = maxRotation; }
+    public double getCurrentDegree() { return currentDegree; }
+    public void setCurrentDegree(double currentDegree) { this.currentDegree = currentDegree; }
 }
