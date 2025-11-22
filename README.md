@@ -1,10 +1,15 @@
-# ProjectTeam14
-Team Members:<br />
-Gonzales,	Michael	mga150@sfu.ca<br />
-Tatla,	Jugraj	jst21@sfu.ca<br />
-Bhasin,	Praneet kaur	pkb19@sfu.ca<br />
-Wang,	Zihan	zwa171@sfu.ca<br />
-Dalsaniya,	Palash	pjd5@sfu.ca<br />
+# Cosmic Escape
+
+**Team 14 - CMPT 276 Fall 2025**
+
+A 2D top-down game built using **LitiEngine**.
+
+## Team Members
+* **Gonzales, Michael** - mga150@sfu.ca
+* **Tatla, Jugraj** - jst21@sfu.ca
+* **Bhasin, Praneet Kaur** - pkb19@sfu.ca
+* **Wang, Zihan** - zwa171@sfu.ca
+* **Dalsaniya, Palash** - pjd5@sfu.ca
 
 ## Prerequisites
 To build and run this project, ensure you have the following installed:
