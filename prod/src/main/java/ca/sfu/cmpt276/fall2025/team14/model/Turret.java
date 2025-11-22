@@ -143,6 +143,14 @@ public class Turret extends Enemy {
         return DEFAULT_DEG_PER_SEC;
     }
 
+    public Vision getVision() {
+        return vision;
+    }
+
+    public Line2D.Double getLosCenter() {
+        return losCenter;
+    }
+
     public double getDegPerSec() {
         return degPerSec;
     }

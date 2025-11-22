@@ -1,6 +1,16 @@
 package ca.sfu.cmpt276.fall2025.team14;
 
-// integration tests for interactions between components
+import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
+import ca.sfu.cmpt276.fall2025.team14.model.*;
+import de.gurkenlabs.litiengine.Game;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/*
+INTEGRATION TESTS
+These tests check interactions between multiple components.
+*/
 
 public class IntegrationTests {
 
@@ -12,12 +22,12 @@ public class IntegrationTests {
         Button button = new Button("door-btn");
 
         assertFalse(door.isOpen()); // door should start closed
-        assertFalse(button.isPressed()); // button should start unpressed
+        assertFalse(button.pressed()); // button should start unpressed
 
         button.pressButton();
 
         // pressing button should open the door
-        if (button.isPressed()) {
+        if (button.pressed()) {
             door.open();
         }
 
@@ -25,7 +35,7 @@ public class IntegrationTests {
 
         // release button and close the door
         button.releaseButton();
-        if (!button.isPressed()) {
+        if (!button.pressed()) {
             door.close();
         }
 
@@ -43,12 +53,12 @@ public class IntegrationTests {
         // initially laser is active and button unpressed
         assertNotNull(laser);
         assertNotNull(button);
-        assertFalse(button.isPressed());
+        assertFalse(button.pressed());
 
         button.pressButton();
 
         // pressing button disables laser
-        if (button.isPressed()) {
+        if (button.pressed()) {
             Game.world().environment().remove(laser); // laser stops
         }
 
@@ -56,7 +66,7 @@ public class IntegrationTests {
         assertFalse(Game.world().environment().contains(laser));
 
         button.releaseButton();
-        assertFalse(button.isPressed()); // button should return to unpressed after release
+        assertFalse(button.pressed()); // button should return to unpressed after release
     }
 
     // crystal and game logic (crystal collection)
@@ -94,7 +104,7 @@ public class IntegrationTests {
 
         // player should be invisible now
         Invisibility invis = new Invisibility();
-        GameLogic.applyPowerUpEffect(invis);
+        GameLogic.TestApplyPowerup(invis);
         assertTrue(player.isInvisible());
 
         // alien should not be able to detect player now
@@ -125,7 +135,7 @@ public class IntegrationTests {
         double turretY = turret.getY();
 
         // ensure timestop is not active initially
-        GameLogic.isTimeStopped(false);
+        GameLogic.setTimeStopped(false);
 
         // update enemies without timestop - positions will change
         alien.update();
@@ -133,7 +143,7 @@ public class IntegrationTests {
 
         // collect timestop power-up
         Timestop timestop = new Timestop();
-        GameLogic.applyPowerUpEffect(timestop);
+        GameLogic.TestApplyPowerup(timestop);
         assertTrue(GameLogic.isTimeStopped());
 
         // update enemies again - they should not move
@@ -147,7 +157,7 @@ public class IntegrationTests {
         assertEquals(turretY, turret.getY(), "Turret Y position should not change during timestop");
 
         // reset
-        GameLogic.isTimeStopped(false);
+        GameLogic.setTimeStopped(false);
     }
 
     // alien charm power up
@@ -170,7 +180,7 @@ public class IntegrationTests {
 
         // player gets alien charm
         AlienCharm charm = new AlienCharm();
-        GameLogic.applyPowerUpEffect(charm);
+        GameLogic.TestApplyPowerup(charm);
         assertTrue(player.hasAlienCharm());
 
         // collision with charm - player should not be caught
@@ -204,7 +214,7 @@ public class IntegrationTests {
         player.setLocation(teleporter.getX(), teleporter.getY());
 
         // trigger collision
-        GameLogic.handleCollisions();
+        GameLogic.testHandleCollisions();
 
         // level should increase
         assertEquals(initialLevel + 1, GameLogic.getCurrentLevelIndex());
@@ -223,7 +233,7 @@ public class IntegrationTests {
         int initialLevel = GameLogic.getCurrentLevelIndex();
 
         // Trigger update
-        GameLogic.update();
+        GameLogic.testUpdate();
 
         // level should restart - current level should remain the same and should be reloaded
         assertEquals(initialLevel, GameLogic.getCurrentLevelIndex());
@@ -247,7 +257,7 @@ public class IntegrationTests {
         GameLogic.getEnvironment().add(alien);
 
         int initialLevel = GameLogic.getCurrentLevelIndex();
-        GameLogic.handleCollisions();
+        GameLogic.testHandleCollisions();
 
         // collision should trigger level restart
         assertEquals(initialLevel, GameLogic.getCurrentLevelIndex());

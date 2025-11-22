@@ -124,6 +124,10 @@ public class Player extends Creature implements IUpdateable {
         hasAlienCharm = false;
     }
 
+    public static Player instance() {
+        return instance;
+    }
+
     public static float getPlayerDefaultVelocity() { return PLAYER_DEFAULT_VELOCITY; }
 
     public void setInvisible(boolean invisible) { isInvisible = invisible; }

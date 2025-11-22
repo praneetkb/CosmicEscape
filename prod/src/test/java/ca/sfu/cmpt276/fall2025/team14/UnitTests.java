@@ -1,7 +1,10 @@
 package ca.sfu.cmpt276.fall2025.team14;
 
+import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.*;
 import org.junit.jupiter.api.Test;
+import java.awt.geom.Line2D;
+import static de.gurkenlabs.litiengine.physics.Collision.STATIC;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
@@ -32,11 +35,11 @@ public class UnitTests {
     @Test
     public void testButtonState() {
         Button b = new Button("dummy");
-        assertFalse(b.isPressed()); // should start unpressed
+        assertFalse(b.pressed()); // should start unpressed
         b.pressButton();
-        assertTrue(b.isPressed()); // should be pressed
+        assertTrue(b.pressed()); // should be pressed
         b.releaseButton();
-        assertFalse(b.isPressed()); // should return to unpressed
+        assertFalse(b.pressed()); // should return to unpressed
     }
 
     // door button collision change
@@ -66,7 +69,7 @@ public class UnitTests {
         laser.update(); // attach button
         Button button = laser.getButton();
 
-        assertFalse(button.isPressed());
+        assertFalse(button.pressed());
     }
 
     // laser button toggle (pressed and unpressed)
@@ -78,11 +81,11 @@ public class UnitTests {
 
         // press button
         button.pressButton();
-        assertTrue(button.isPressed());
+        assertTrue(button.pressed());
 
         // release button
         button.releaseButton();
-        assertFalse(button.isPressed());
+        assertFalse(button.pressed());
     }
 
     // player singleton
@@ -116,7 +119,7 @@ public class UnitTests {
     public void testTeleporterCrystalsRemaining() {
         Teleporter t = new Teleporter();
 
-        t.tryOpen(remainingCrystals = 3, timeRemaining = 1); // any value > 0 would work
+        t.tryOpen(3, 1); // any value > 0 would work
 
         assertFalse(t.isOpen()); // must stay closed if crystals still remain
         assertTrue(t.hasCollision()); // collision must remain on when closed
@@ -138,7 +141,7 @@ public class UnitTests {
     public void testTeleporterConditionsMet() {
         Teleporter t = new Teleporter();
 
-        t.tryOpen(remainingCrystals = 0, timeRemaining = 1); // any value > 0 would work
+        t.tryOpen(0, 1); // any value > 0 would work
 
         assertTrue(t.isOpen()); // should open when all crystals are collected and time remains
         assertFalse(t.hasCollision()); // collision must be off when teleporter opens
@@ -168,7 +171,7 @@ public class UnitTests {
 
     // when player is caught by turret - found in LOS
     @Test
-    public void testPlayerDetectedInLOS() {
+    public void testPlayerDetectedInLOSTurret() {
         Turret turret = new Turret();
         Player player = Player.instance();
 
@@ -186,7 +189,7 @@ public class UnitTests {
 
     // player is not caught by turret
     @Test
-    public void testPlayerNotInLOS() {
+    public void testPlayerNotInLOSTurret() {
         Turret turret = new Turret();
         Player player = Player.instance();
 
@@ -207,7 +210,7 @@ public class UnitTests {
 
     // when player is caught by alien - found in LOS
     @Test
-    public void testPlayerDetectedInLOS() {
+    public void testPlayerDetectedInLOSAlien() {
         Alien alien = new Alien();
         Player player = Player.instance();
 
@@ -222,7 +225,7 @@ public class UnitTests {
 
     // player not caught by alien
     @Test
-    public void testPlayerNotInLOS() {
+    public void testPlayerNotInLOSAlien() {
         Alien alien = new Alien();
         Player player = Player.instance();
 
@@ -240,7 +243,7 @@ public class UnitTests {
         Alien alien = new Alien();
 
         Player player = Player.instance();
-        player.setCollisionType(Collision.STATIC);
+        player.setCollisionType(STATIC);
 
         assertTrue(alien.canCollideWith(player));
     }
@@ -291,10 +294,10 @@ public class UnitTests {
         Player p = Player.instance();
         Slime slime = new Slime();
 
-        GameLogic.applyPunishmentEffect(slime);
+        GameLogic.TestApplyPunishment(slime);
 
         // player should be slowed
-        assertEquals(20, p.getVelocity().getBaseValue());
+        assertEquals(20, p.getVelocity().getBase().intValue());;
         assertTrue(GameLogic.isInSlime());
     }
 
@@ -303,7 +306,7 @@ public class UnitTests {
     public void testLaserCollision() {
         Lasers laser = new Lasers();
 
-        GameLogic.applyPunishmentEffect(laser);
+        GameLogic.TestApplyPunishment(laser);
 
         // check that the game state has reset to INGAME (after restart)
         assertEquals(GameLogic.GameState.INGAME, GameLogic.getState());
@@ -315,7 +318,7 @@ public class UnitTests {
         Player player = Player.instance();
         player.resetPowerUps(); // make sure player starts visible
 
-        assertFalse(player.isInvisible();
+        assertFalse(player.isInvisible());
 
         // simulate effect
         player.setInvisible(true);
@@ -350,14 +353,15 @@ public class UnitTests {
     public void testTimestop() {
         // timestop should not be active initially
         assertFalse(GameLogic.isTimeStopped());
-        Timestop timestop = new Timestop();
-        GameLogic.applyPowerUpEffect(timestop);
 
-        // should be active after collecting
+        Timestop timestop = new Timestop();
+        GameLogic.TestApplyPowerup(timestop);
+
+        // should be active
         assertTrue(GameLogic.isTimeStopped());
 
-        // should be deactivated
-        GameLogic.isTimeStopped(false);
+        // deactivate
+        GameLogic.setTimeStopped(false);
         assertFalse(GameLogic.isTimeStopped());
     }
 
@@ -370,7 +374,7 @@ public class UnitTests {
         player.setHasAlienCharm(false);
         assertFalse(player.hasAlienCharm());
         AlienCharm charm = new AlienCharm();
-        GameLogic.applyPowerUpEffect(charm);
+        GameLogic.TestApplyPowerup(charm);
         assertTrue(player.hasAlienCharm());
         player.setHasAlienCharm(false);
         assertFalse(player.hasAlienCharm());

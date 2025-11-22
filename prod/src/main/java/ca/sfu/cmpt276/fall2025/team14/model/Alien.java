@@ -44,6 +44,10 @@ public class Alien extends Enemy {
         return playerCB.intersects(vision.getBoundingBox());
     }
 
+    public Vision getVision() {
+        return vision;
+    }
+
     public static float getDefaultVelocity() {
 
         return ALIEN_DEFAULT_VELOCITY;
