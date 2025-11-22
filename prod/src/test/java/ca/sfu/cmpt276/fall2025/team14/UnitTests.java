@@ -16,7 +16,7 @@ public class UnitTests {
     @Test
     public void testDoorInitialState() {
         Door d = new Door();
-        assertFalse(d.isOpen(), "Door should start closed");
+        assertFalse(d.isOpen());
     }
 
     // door collision toggle (open and close)
@@ -24,20 +24,20 @@ public class UnitTests {
     public void testDoorToggle() {
         Door d = new Door();
         d.open();
-        assertTrue(d.isOpen(), "Door should be opened after calling open()");
+        assertTrue(d.isOpen()); // should be opened after calling open()
         d.close();
-        assertFalse(d.isOpen(), "Door should be closed after calling close()");
+        assertFalse(d.isOpen()); // should be closed
     }
 
     // door button state - initial and toggle (pressed and unpressed)
     @Test
     public void testButtonState() {
         Button b = new Button("dummy");
-        assertFalse(b.isPressed(), "Button should start unpressed");
+        assertFalse(b.isPressed()); // should start unpressed
         b.pressButton();
-        assertTrue(b.isPressed(), "Button should be pressed after pressButton()");
+        assertTrue(b.isPressed()); // should be pressed
         b.releaseButton();
-        assertFalse(b.isPressed(), "Button should return to unpressed after releaseButton()");
+        assertFalse(b.isPressed()); // should return to unpressed
     }
 
     // door button collision change
@@ -46,18 +46,18 @@ public class UnitTests {
         Button b = new Button("dummy");
         b.pressButton();
         b.update();
-        assertFalse(b.hasCollision(), "When pressed, button collision should turn off");
+        assertFalse(b.hasCollision()); // when pressed, button collision should turn off
     }
 
     // laser intial state
     @Test
     public void testLaserInitialState() {
         Lasers laser = new Lasers();
-        assertNotNull(laser, "Laser should be on");
+        assertNotNull(laser); // should be on
 
-        // update to attach button
+        // update - to attach button
         laser.update();
-        assertNotNull(laser.getButton(), "Laser button should be attached after update");
+        assertNotNull(laser.getButton());
     }
 
     // laser button initial state - should start unpressed
@@ -67,7 +67,7 @@ public class UnitTests {
         laser.update(); // attach button
         Button button = laser.getButton();
 
-        assertFalse(button.isPressed(), "Laser button should start unpressed");
+        assertFalse(button.isPressed());
     }
 
     // laser button toggle (pressed and unpressed)
@@ -79,11 +79,11 @@ public class UnitTests {
 
         // press button
         button.pressButton();
-        assertTrue(button.isPressed(), "Laser button should be pressed after pressButton()");
+        assertTrue(button.isPressed());
 
         // release button
         button.releaseButton();
-        assertFalse(button.isPressed(), "Laser button should return to unpressed after releaseButton()");
+        assertFalse(button.isPressed());
     }
 
     // player singleton
@@ -91,25 +91,25 @@ public class UnitTests {
     public void testPlayerSingleton() {
         Player p1 = Player.getInstance();
         Player p2 = Player.getInstance();
-        assertSame(p1, p2, "Player.getInstance() must always return same instance");
+        assertSame(p1, p2); // must always return same instance
     }
 
     // crystal initial state and collection
     @Test
     public void testCrystalCollection() {
         Crystal c = new Crystal();
-        assertFalse(c.isCollected(), "Crystal should start as not collected in the beginning");
+        assertFalse(c.isCollected()); // should start as not collected
 
         c.collect();
-        assertTrue(c.isCollected(), "Crystal should be collected when collect() is called");
+        assertTrue(c.isCollected()); // should be collected
     }
 
     // teleporter - initial state and collision
     @Test
     public void testTeleporterState() {
         Teleporter t = new Teleporter();
-        assertFalse(t.isOpen(), "Teleporter should be closed at the start");
-        assertTrue(t.hasCollision(), "Teleporter should have collision when closed");
+        assertFalse(t.isOpen()); // should be closed at the start
+        assertTrue(t.hasCollision()); //  should have collision when closed
     }
 
     // teleporter condition 1 to open - check crystals
@@ -119,8 +119,8 @@ public class UnitTests {
 
         t.tryOpen(remainingCrystals = 3, timeRemaining = 1); // any value > 0 would work
 
-        assertFalse(t.isOpen(), "Teleporter must stay closed if crystals still remain");
-        assertTrue(t.hasCollision(), "Collision must remain on when closed");
+        assertFalse(t.isOpen()); // must stay closed if crystals still remain
+        assertTrue(t.hasCollision()); // collision must remain on when closed
     }
 
     // teleporter condition 2 to open - within time limit
@@ -130,8 +130,8 @@ public class UnitTests {
 
         t.tryOpen(0, 0); // no time left
 
-        assertFalse(t.isOpen(), "Teleporter must stay closed if time is over");
-        assertTrue(t.hasCollision(), "Collision must remain on when closed");
+        assertFalse(t.isOpen()); // must stay closed if time is over
+        assertTrue(t.hasCollision()); // collision must remain on when closed
     }
 
     // teleporter - both conditions met
@@ -141,8 +141,8 @@ public class UnitTests {
 
         t.tryOpen(remainingCrystals = 0, timeRemaining = 1); // any value > 0 would work
 
-        assertTrue(t.isOpen(), "Teleporter should open when all crystals are collected and time remains");
-        assertFalse(t.hasCollision(), "Collision must be off when teleporter opens");
+        assertTrue(t.isOpen()); // should open when all crystals are collected and time remains
+        assertFalse(t.hasCollision()); // collision must be off when teleporter opens
     }
 
     // turret - check if it has vision attached
@@ -310,5 +310,70 @@ public class UnitTests {
         assertEquals(GameLogic.GameState.INGAME, GameLogic.getState());
     }
 
-    // powerups
+    // invisibility powerup on player
+    @Test
+    public void testPlayerBecomesInvisible() {
+        Player player = Player.instance();
+        player.resetPowerUps(); // make sure player starts visible
+
+        assertFalse(player.isInvisible();
+
+        // simulate effect
+        player.setInvisible(true);
+        assertTrue(player.isInvisible()); // player should be invisible after collecting the powerup
+
+        // reset
+        player.resetPowerUps();
+        assertFalse(player.isInvisible()); // player should be visible after reset
+    }
+
+    // jetpack powerup on player
+    @Test
+    public void testJetpack() {
+        Player player = Player.instance();
+        player.resetPowerUps(); // ensure default speed of player
+        float defaultSpeed = Player.getPlayerDefaultVelocity();
+
+        assertEquals(defaultSpeed, player.getVelocity().get());
+
+        // simulate effect
+        float boostedSpeed = defaultSpeed * 1.5f; // same as GameLogic
+        player.getVelocity().setBaseValue(boostedSpeed);
+        assertEquals(boostedSpeed, player.getVelocity().get()); // player speed should increase
+
+        // Reset
+        player.resetPowerUps();
+        assertEquals(defaultSpeed, player.getVelocity().get()); // default after reset
+    }
+
+    // timestop power up
+    @Test
+    public void testTimestop() {
+        // timestop should not be active initially
+        assertFalse(GameLogic.isTimeStopped());
+        Timestop timestop = new Timestop();
+        GameLogic.applyPowerUpEffect(timestop);
+
+        // should be active after collecting
+        assertTrue(GameLogic.isTimeStopped());
+
+        // should be deactivated
+        GameLogic.isTimeStopped(false);
+        assertFalse(GameLogic.isTimeStopped());
+    }
+
+    // alien charm powerup
+    @Test
+    public void testAlienCharm() {
+        Player player = Player.instance();
+
+        // ensure player does not have alien charm initially
+        player.setHasAlienCharm(false);
+        assertFalse(player.hasAlienCharm());
+        AlienCharm charm = new AlienCharm();
+        GameLogic.applyPowerUpEffect(charm);
+        assertTrue(player.hasAlienCharm());
+        player.setHasAlienCharm(false);
+        assertFalse(player.hasAlienCharm());
+    }
 }
