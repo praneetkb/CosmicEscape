@@ -3,6 +3,8 @@ package ca.sfu.cmpt276.fall2025.team14;
 import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.*;
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.resources.Resources;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.awt.geom.Line2D;
@@ -18,8 +20,12 @@ public class UnitTests {
 
     @BeforeAll
     public static void setupEngine() {
-        Game.init();     // initialize Game.loop(), world(), input(), etc.
-        Game.start();
+
+        System.setProperty("sun.java2d.opengl", "false");
+        System.setProperty("java.awt.headless", "true");
+
+        GameLogic.TEST_MODE = true;
+        GameLogic.initForTests();
     }
 
     // door initial state - should be closed

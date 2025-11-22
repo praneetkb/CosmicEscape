@@ -33,6 +33,7 @@ public final class GameLogic {
         WIN
     }
     private static GameState STATE = GameState.MENU;
+    public static boolean TEST_MODE = false; // for tests
 
     // ----------------------- FIELDS -----------------------
 
@@ -77,6 +78,19 @@ public final class GameLogic {
     // ----------------------- MAIN METHODS -----------------------
 
     // ----------- Initialization -----------
+
+    // for tests only
+    public static void initForTests() {
+
+        // Create player instance manually
+        Player player = Player.getInstance();
+        player.setLocation(0, 0);
+        player.resetPowerUps();
+
+        // set game state
+        setState(GameState.INGAME);
+    }
+
 
     public static void init() {
         // Add levels

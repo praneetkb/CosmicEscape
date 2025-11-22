@@ -22,23 +22,39 @@ These tests check interactions between multiple components.
 public class IntegrationTests {
 
     @BeforeAll
-    public static void setupEngine() throws Exception {
+    public static void setupEngine() {
+
+        System.setProperty("sun.java2d.opengl", "false");
+        System.setProperty("java.awt.headless", "true");
+
+        GameLogic.TEST_MODE = true;
+        GameLogic.initForTests();
+    }
+
+    /*
+    @BeforeAll
+    public static void setupEngine() {
+
+        // to avoid opening a new window
+        System.setProperty("java.awt.headless", "true");
 
         Game.init();
-        Game.start();
-        Resources.load("cosmic-escape.litidata");
 
-        Environment env = new Environment("maps/tutorial.tmx");
+        Resources.load(Game.class.getResource("/cosmic-escape.litidata"));
+        GameLogic.init();
+
+        Environment env = new Environment(Resources.maps().get("maps/tsx/level1.tmx"));
         Game.world().loadEnvironment(env);
 
         // Initialize player in the level
         Player player = Player.getInstance();
-        player.setLocation(100, 100); // spawn
+        player.setLocation(0, 0); // spawn
         player.resetPowerUps();       // ensure player starts visible
 
         // Set the game state to INGAME
         GameLogic.setState(GameLogic.GameState.INGAME);
     }
+*/
 
     // door button and door interaction
     @Test
@@ -72,7 +88,7 @@ public class IntegrationTests {
     @Test
     public void testLaserButtonTurnsOffLaser() {
 
-        Lasers laser = Game.world().environment().get(Lasers.class, "laser1");
+        Lasers laser = Game.world().environment().get(Lasers.class, "prop-lasers");
         laser.update(); // attaches the button
         Button button = laser.getButton();
         assertNotNull(button);
@@ -136,7 +152,7 @@ public class IntegrationTests {
 
         // alien should not be able to detect player now
         alien.update();
-        assertFalse(alien.playerInLos());
+        assertFalse(alien.playerInLos()); // TEST NOT WORKING - GAME LOGIC ERROR!
 
         // reset player visibility
         player.resetPowerUps();
@@ -247,7 +263,7 @@ public class IntegrationTests {
         GameLogic.testHandleCollisions();
 
         // level should increase
-        assertEquals(initialLevel + 1, GameLogic.getCurrentLevelIndex());
+        assertEquals(initialLevel + 1, GameLogic.getCurrentLevelIndex()); // TEST NOT WORKING - GAME LOGIC ERROR!
     }
 
     // testing restart level when time is over
@@ -275,13 +291,9 @@ public class IntegrationTests {
 
         Alien alien = new Alien();
         alien.setLocation(200, 200);
-        Game.world().environment().add(alien);
 
         Player player = Player.getInstance();
         player.setLocation(200, 200); // same position as enemy
-
-        // add enemy to environment
-        GameLogic.getEnvironment().add(alien);
 
         int initialLevel = GameLogic.getCurrentLevelIndex();
         GameLogic.testHandleCollisions();
