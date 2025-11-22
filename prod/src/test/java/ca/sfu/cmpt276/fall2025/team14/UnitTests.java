@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
-
 unit tests for features -
 these tests check single components in isolation without any dependencies.
 */
