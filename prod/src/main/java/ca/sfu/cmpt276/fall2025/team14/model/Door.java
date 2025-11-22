@@ -7,9 +7,10 @@ import de.gurkenlabs.litiengine.entities.Prop;
 import de.gurkenlabs.litiengine.graphics.animation.IEntityAnimationController;
 
 @AnimationInfo(spritePrefix = "prop-door")
+
 public class Door extends Prop implements IUpdateable {
 
-    private boolean open = false;
+    private boolean isOpen = false;
     private Button button;
 
     public Door() {
@@ -40,18 +41,21 @@ public class Door extends Prop implements IUpdateable {
         }
     }
 
-    public Button getButton() { return button; }
-
     @Override
     public void update() {
+        // Attaching button in update
         if (button == null) {
             button = ButtonAttacher.attach(this);
         }
     }
 
-    // Custom animation controller to handle frame by frame animations for open, opening, closed states
     @Override
     protected IEntityAnimationController<?> createAnimationController() {
+        // Custom animation controller to handle frame by frame animations for open, opening, closed states
         return new DoorAnimationController(this);
+    }
+
+    public Button getButton() {
+        return button;
     }
 }

@@ -30,6 +30,5 @@ public class Crystal extends Prop implements IUpdateable {
     }
 
     @Override
-    public void update() {
-    }
+    public void update() { }
 }

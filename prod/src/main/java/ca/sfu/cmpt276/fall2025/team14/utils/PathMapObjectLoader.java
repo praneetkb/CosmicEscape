@@ -7,7 +7,6 @@ import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.environment.MapObjectLoader;
 import de.gurkenlabs.litiengine.environment.tilemap.IMapObject;
 import de.gurkenlabs.litiengine.environment.tilemap.MapUtilities;
-
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
@@ -18,7 +17,6 @@ import java.util.List;
 public class PathMapObjectLoader extends MapObjectLoader {
 
     public PathMapObjectLoader() {
-
         super("PATH");
     }
 
@@ -45,9 +43,14 @@ public class PathMapObjectLoader extends MapObjectLoader {
             it.currentSegment(arr);
             points.add(new Point2D.Double(arr[0], arr[1]));
         }
-        points = points.reversed();
+        // Close path if pixel distance < 5
+        if (points.getFirst().distance(points.getLast()) < 5) {
+            points.add(points.getFirst());
+        } else {
+            points = points.reversed();
+        }
         // Get starting point
-        final Point2D start = new Point2D.Double(mapObject.getLocation().getX(), mapObject.getLocation().getY());
+        final Point2D start = new Point2D.Double(points.getLast().getX(), points.getLast().getY());
         // Initialize new alien on path
         Alien alien = new Alien();
         alien.setLocation(start);

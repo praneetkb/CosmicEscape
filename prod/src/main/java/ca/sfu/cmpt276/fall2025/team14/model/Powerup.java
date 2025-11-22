@@ -5,7 +5,6 @@ import de.gurkenlabs.litiengine.Valign;
 import de.gurkenlabs.litiengine.entities.CollisionInfo;
 import de.gurkenlabs.litiengine.entities.EntityInfo;
 import de.gurkenlabs.litiengine.entities.Prop;
-
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
 /**

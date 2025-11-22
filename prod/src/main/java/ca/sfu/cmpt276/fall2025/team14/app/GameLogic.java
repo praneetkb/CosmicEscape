@@ -438,5 +438,4 @@ public final class GameLogic {
     public static void setState(GameState state) {
         GameLogic.STATE = state;
     }
-
 }

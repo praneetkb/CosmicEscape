@@ -3,24 +3,19 @@ package ca.sfu.cmpt276.fall2025.team14.model;
 import de.gurkenlabs.litiengine.IUpdateable;
 import de.gurkenlabs.litiengine.entities.Prop;
 import de.gurkenlabs.litiengine.graphics.animation.IEntityAnimationController;
-import de.gurkenlabs.litiengine.resources.Resources;
 
 public class Button extends Prop implements IUpdateable {
 
-    private boolean pressed = false;
+    private boolean isPressed = false;
     private Door linkedDoor; // added for unit tests
 
     public Button(String spritesheetName) {
-        //for debugging
         super("");
-        // for debugging - to check if spritesheet is found
-//        System.out.println("Sprite name: " + this.getSpritesheetName());
-//        System.out.println("Sprite exists: " + Resources.spritesheets().contains(this.getSpritesheetName()));
     }
 
     @Override
     public void update() {
-        if (pressed) {
+        if (isPressed) {
             this.setCollision(false);
         }
     }
@@ -31,7 +26,8 @@ public class Button extends Prop implements IUpdateable {
     }
 
     public void pressButton() {
-        pressed = true;
+        isPressed = true;
+        setCollision(false);
 
         if (linkedDoor != null) {
             linkedDoor.open();
@@ -40,20 +36,19 @@ public class Button extends Prop implements IUpdateable {
 
     // added for unit tests
     public void releaseButton() {
-        pressed = false;
+        isPressed = false;
 
         if (linkedDoor != null) {
             linkedDoor.close();
         }
     }
 
-    public boolean isPressed() {
-        return pressed;
+    public boolean pressed() {
+        return isPressed;
     }
 
     @Override
     protected IEntityAnimationController<?> createAnimationController() {
-
         return new ButtonAnimationController(this);
     }
 }
