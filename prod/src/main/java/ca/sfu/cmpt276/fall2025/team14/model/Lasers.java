@@ -29,4 +29,9 @@ public class Lasers extends Punishment{
             Game.world().environment().remove(this);
         }
     }
+
+    // getter for testing
+    public Button getButton() {
+        return button;
+    }
 }
