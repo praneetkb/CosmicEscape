@@ -5,3 +5,49 @@ Tatla,	Jugraj	jst21@sfu.ca<br />
 Bhasin,	Praneet kaur	pkb19@sfu.ca<br />
 Wang,	Zihan	zwa171@sfu.ca<br />
 Dalsaniya,	Palash	pjd5@sfu.ca<br />
+
+## Prerequisites
+To build and run this project, ensure you have the following installed:
+* **Java Development Kit (JDK):** Version 25 (as specified in `pom.xml`) or a compatible version.
+* **Maven:** Apache Maven build tool.
+
+## Building the Project
+Navigate to the project root directory (where the `pom.xml` file is located) in your terminal or command prompt and run:
+
+```
+mvn clean package
+```
+This command cleans previous builds and compiles the code.
+
+## Running the Game
+Option 1: Using Maven (Command Line)
+
+Ensure you are in the project root directory.
+
+```
+mvn exec:java "-Dexec.mainClass=ca.sfu.cmpt276.fall2025.team14.app.CosmicEscape"
+```
+
+Option 2: Using an IDE (VSCode/IntelliJ/Others)
+1. Open the project folder in your IDE.
+2. Wait for the Maven project to sync/import dependencies.
+3. Navigate to src/main/java/ca/sfu/cmpt276/fall2025/team14/app/CosmicEscape.java.
+4. Right-click the file or find the Run button (often a play icon) next to the main method and select Run.
+
+## Testing
+**Automated Tests (Unit & Integration)**
+
+This project uses JUnit 5 for automated testing. To run all unit and integration tests and generate a Jacoco coverage report:
+```
+mvn test
+```
+
+The coverage report can be found in target/site/jacoco/index.html after the tests complete.
+
+**Manual Testing / Gameplay Verification**
+
+To manually test the game mechanics and features:
+1. Run the game using one of the methods above.
+2. Tutorial Level: Upon starting, the game defaults to the Tutorial Level.
+    * This level is designed for learning the game power-ups and hazards.
+    * It can also be used for testing purposes as it provides a controlled environment to verify mechanics without the immediate difficulty of later levels
