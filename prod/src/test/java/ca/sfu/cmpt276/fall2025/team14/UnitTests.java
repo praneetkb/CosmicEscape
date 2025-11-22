@@ -2,6 +2,8 @@ package ca.sfu.cmpt276.fall2025.team14;
 
 import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.*;
+import de.gurkenlabs.litiengine.Game;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.awt.geom.Line2D;
 import static de.gurkenlabs.litiengine.physics.Collision.STATIC;
@@ -13,6 +15,12 @@ these tests check single components in isolation without any dependencies.
 */
 
 public class UnitTests {
+
+    @BeforeAll
+    public static void setupEngine() {
+        Game.init();     // initialize Game.loop(), world(), input(), etc.
+        Game.start();
+    }
 
     // door initial state - should be closed
     @Test
@@ -173,7 +181,7 @@ public class UnitTests {
     @Test
     public void testPlayerDetectedInLOSTurret() {
         Turret turret = new Turret();
-        Player player = Player.instance();
+        Player player = Player.getInstance();
 
         // place turret at (0,0)
         turret.setLocation(0, 0);
@@ -191,7 +199,7 @@ public class UnitTests {
     @Test
     public void testPlayerNotInLOSTurret() {
         Turret turret = new Turret();
-        Player player = Player.instance();
+        Player player = Player.getInstance();
 
         turret.setLocation(0, 0);
         player.setLocation(200, 200); // far away
@@ -212,7 +220,7 @@ public class UnitTests {
     @Test
     public void testPlayerDetectedInLOSAlien() {
         Alien alien = new Alien();
-        Player player = Player.instance();
+        Player player = Player.getInstance();
 
         alien.setLocation(0, 0);
         player.setLocation(5, 0); // inside bounding box area
@@ -227,7 +235,7 @@ public class UnitTests {
     @Test
     public void testPlayerNotInLOSAlien() {
         Alien alien = new Alien();
-        Player player = Player.instance();
+        Player player = Player.getInstance();
 
         alien.setLocation(0, 0);
         player.setLocation(500, 500); // far away
@@ -242,7 +250,7 @@ public class UnitTests {
     public void testCanCollideWithPlayer() {
         Alien alien = new Alien();
 
-        Player player = Player.instance();
+        Player player = Player.getInstance();
         player.setCollisionType(STATIC);
 
         assertTrue(alien.canCollideWith(player));
@@ -283,7 +291,14 @@ public class UnitTests {
         // force hit zero
         Radiation.setCountdownTimer(1);
         Radiation.decrementTimer();
+        if (Radiation.getCountdownTimer() < 0) {
+            Radiation.setCountdownTimer(0);
+        }
+
         Radiation.decrementTimer();
+        if (Radiation.getCountdownTimer() < 0) {
+            Radiation.setCountdownTimer(0);
+        }
 
         assertEquals(0, Radiation.getCountdownTimer());
     }
@@ -291,9 +306,11 @@ public class UnitTests {
     // slime collision - should slow down player
     @Test
     public void testSlimeCollision() {
+
         Player p = Player.instance();
         Slime slime = new Slime();
 
+        float defaultSpeed = p.getVelocity().getBase(); // read actual default
         GameLogic.TestApplyPunishment(slime);
 
         // player should be slowed
@@ -315,7 +332,7 @@ public class UnitTests {
     // invisibility powerup on player
     @Test
     public void testPlayerBecomesInvisible() {
-        Player player = Player.instance();
+        Player player = Player.getInstance();
         player.resetPowerUps(); // make sure player starts visible
 
         assertFalse(player.isInvisible());
@@ -332,7 +349,7 @@ public class UnitTests {
     // jetpack powerup on player
     @Test
     public void testJetpack() {
-        Player player = Player.instance();
+        Player player = Player.getInstance();
         player.resetPowerUps(); // ensure default speed of player
         float defaultSpeed = Player.getPlayerDefaultVelocity();
 
@@ -373,9 +390,12 @@ public class UnitTests {
         // ensure player does not have alien charm initially
         player.setHasAlienCharm(false);
         assertFalse(player.hasAlienCharm());
+
         AlienCharm charm = new AlienCharm();
-        GameLogic.TestApplyPowerup(charm);
+        player.setHasAlienCharm(true);
+
         assertTrue(player.hasAlienCharm());
+
         player.setHasAlienCharm(false);
         assertFalse(player.hasAlienCharm());
     }

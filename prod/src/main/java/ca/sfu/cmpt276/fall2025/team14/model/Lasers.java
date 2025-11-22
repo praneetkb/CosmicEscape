@@ -25,7 +25,7 @@ public class Lasers extends Punishment{
             button = ButtonAttacher.attach(this);
         }
         // Remove from environment once button is pressed
-        if (button.isPressed()) {
+        if (button.pressed()) {
             Game.world().environment().remove(this);
         }
     }

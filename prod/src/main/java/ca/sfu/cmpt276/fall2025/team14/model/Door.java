@@ -20,13 +20,13 @@ public class Door extends Prop implements IUpdateable {
 
     // already there before - also used by unit test
     public boolean isOpen() {
-        return open;
+        return isOpen;
     }
 
     // already there before - also used by unit test
     public void open() {
-        if (!open) {
-            open = true;
+        if (!isOpen) {
+            isOpen = true;
             this.setCollision(false); // allow player to pass
             System.out.println("[Door] opening at " + this.getLocation()); // for debugging
         }
@@ -34,8 +34,8 @@ public class Door extends Prop implements IUpdateable {
 
     // already there before - also used by unit test
     public void close() {
-        if (open) {
-            open = false;
+        if (isOpen) {
+            isOpen = false;
             this.setCollision(true); // block player
             System.out.println("[Door] closing at " + this.getLocation()); // for debugging
         }

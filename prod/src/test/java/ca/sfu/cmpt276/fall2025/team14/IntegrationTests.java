@@ -3,7 +3,14 @@ package ca.sfu.cmpt276.fall2025.team14;
 import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.*;
 import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.environment.tilemap.IMap;
+import de.gurkenlabs.litiengine.resources.Resources;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import de.gurkenlabs.litiengine.environment.Environment;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,6 +20,25 @@ These tests check interactions between multiple components.
 */
 
 public class IntegrationTests {
+
+    @BeforeAll
+    public static void setupEngine() throws Exception {
+
+        Game.init();
+        Game.start();
+        Resources.load("cosmic-escape.litidata");
+
+        Environment env = new Environment("maps/tutorial.tmx");
+        Game.world().loadEnvironment(env);
+
+        // Initialize player in the level
+        Player player = Player.getInstance();
+        player.setLocation(100, 100); // spawn
+        player.resetPowerUps();       // ensure player starts visible
+
+        // Set the game state to INGAME
+        GameLogic.setState(GameLogic.GameState.INGAME);
+    }
 
     // door button and door interaction
     @Test
@@ -46,9 +72,10 @@ public class IntegrationTests {
     @Test
     public void testLaserButtonTurnsOffLaser() {
 
-        Lasers laser = new Lasers();
-        laser.update(); // ensures button is attached
+        Lasers laser = Game.world().environment().get(Lasers.class, "laser1");
+        laser.update(); // attaches the button
         Button button = laser.getButton();
+        assertNotNull(button);
 
         // initially laser is active and button unpressed
         assertNotNull(laser);
@@ -196,7 +223,11 @@ public class IntegrationTests {
     // teleporter should allow player to go to next level
     @Test
     public void testPlayerTeleporterInteraction() {
-        Player player = Player.instance();
+        Teleporter teleporter = new Teleporter();
+        Player player = Player.getInstance();
+        player.setLocation(teleporter.getX(), teleporter.getY()); // position player on teleporter
+        teleporter.update(); // ensure teleporter checks collisions
+
 
         // reset level to first
         GameLogic.setState(GameLogic.GameState.INGAME);
@@ -205,8 +236,7 @@ public class IntegrationTests {
         // reset player position
         player.setLocation(0, 0);
 
-        // create a teleporter and open it
-        Teleporter teleporter = new Teleporter();
+        // open teleporter
         teleporter.tryOpen(0, 3);
         assertTrue(teleporter.isOpen());
 
@@ -243,15 +273,12 @@ public class IntegrationTests {
     @Test
     public void testRestartLevelOnEnemyCollision() {
 
-        // set game state to INGAME
-        GameLogic.setState(GameLogic.GameState.INGAME);
-
-        // create an enemy at player location
-        Player player = Player.instance();
-        player.setLocation(0, 0);
-
         Alien alien = new Alien();
-        alien.setLocation(0, 0); // same location for collision
+        alien.setLocation(200, 200);
+        Game.world().environment().add(alien);
+
+        Player player = Player.getInstance();
+        player.setLocation(200, 200); // same position as enemy
 
         // add enemy to environment
         GameLogic.getEnvironment().add(alien);

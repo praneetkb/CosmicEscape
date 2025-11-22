@@ -24,7 +24,7 @@ public class DoorAnimationController extends PropAnimationController<Door> {
             return image = Resources.spritesheets().get("prop-door_closed").getImage();
         }
         // Set sprite based on state
-        if (!d.getButton().isPressed()) {
+        if (!d.getButton().pressed()) {
             // Set animation to closed
             image = Resources.spritesheets().get("prop-door_closed").getImage();
         } else {

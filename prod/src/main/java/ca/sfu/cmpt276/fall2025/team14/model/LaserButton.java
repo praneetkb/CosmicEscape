@@ -23,8 +23,7 @@ public class LaserButton extends Button{
         super.pressButton();
     }
 
-    @Override
     public boolean isPressed() {
-        return super.isPressed();
+        return super.pressed();
     }
 }
