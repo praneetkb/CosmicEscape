@@ -82,7 +82,7 @@ public class UnitTests {
 
     // laser button toggle (pressed and unpressed)
     @Test
-    public void testLaserButtonPressRelease() {
+    public void testLaserButtonToggle() {
         Lasers laser = new Lasers();
         laser.update(); // attach button
         Button button = laser.getButton();
