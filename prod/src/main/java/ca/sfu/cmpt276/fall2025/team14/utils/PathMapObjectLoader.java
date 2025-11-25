@@ -7,22 +7,22 @@ import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.environment.MapObjectLoader;
 import de.gurkenlabs.litiengine.environment.tilemap.IMapObject;
 import de.gurkenlabs.litiengine.environment.tilemap.MapUtilities;
-
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class PathMapObjectLoader extends MapObjectLoader {
 
     public PathMapObjectLoader() {
-
         super("PATH");
     }
 
     @Override
     public Collection<IEntity> load(Environment environment, IMapObject mapObject) {
-
+        // Get path
         Collection<IEntity> entities = new ArrayList<>();
         if (!mapObject.getType().equals("PATH")
                 || !mapObject.getName().equals("alien-path")
@@ -30,21 +30,32 @@ public class PathMapObjectLoader extends MapObjectLoader {
                 || mapObject.getPolyline().getPoints().isEmpty()) {
             return entities;
         }
-
         // Convert the mapObject's polyline to a Path2D object.
         final Path2D path = MapUtilities.convertPolyshapeToPath(mapObject);
         if (path == null) {
             return entities;
         }
-
-        final Point2D start = new Point2D.Double(mapObject.getLocation().getX(), mapObject.getLocation().getY());
-
-        // Either initialize a new Rat and add it to the entity list, or access an existing instance.
+        // Get all points along path and reverse
+        List<Point2D> points = new ArrayList<>();
+        double[] arr = new double[6];
+        for(PathIterator it = path.getPathIterator(null); !it.isDone(); it.next())
+        {
+            it.currentSegment(arr);
+            points.add(new Point2D.Double(arr[0], arr[1]));
+        }
+        // Close path if pixel distance < 5
+        if (points.getFirst().distance(points.getLast()) < 5) {
+            points.add(points.getFirst());
+        } else {
+            points = points.reversed();
+        }
+        // Get starting point
+        final Point2D start = new Point2D.Double(points.getLast().getX(), points.getLast().getY());
+        // Initialize new alien on path
         Alien alien = new Alien();
         alien.setLocation(start);
         alien.setMapId(mapObject.getId());
-        // Add a behavior controller to the rat.
-        alien.addController(new AlienController(alien, path));
+        alien.addController(new AlienController(alien, path, points));
         entities.add(alien);
 
         return entities;
