@@ -20,7 +20,9 @@ To build and run this project, ensure you have the following installed:
 Navigate to the project root directory (where the `pom.xml` file is located) in your terminal or command prompt and run:
 
 ```
-mvn clean package
+mvn clean
+mvn compile
+mvn package
 ```
 This command cleans previous builds and compiles the code.
 
@@ -30,7 +32,7 @@ Option 1: Using Maven (Command Line)
 Ensure you are in the project root directory.
 
 ```
-mvn exec:java "-Dexec.mainClass=ca.sfu.cmpt276.fall2025.team14.app.CosmicEscape"
+java -jar target/cosmic-escape-1.0.0.jar
 ```
 
 Option 2: Using an IDE (VSCode/IntelliJ/Others)
