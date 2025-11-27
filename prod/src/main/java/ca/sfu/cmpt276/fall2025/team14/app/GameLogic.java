@@ -79,19 +79,6 @@ public final class GameLogic {
 
     // ----------- Initialization -----------
 
-    // for tests only
-    public static void initForTests() {
-
-        // Create player instance manually
-        Player player = Player.getInstance();
-        player.setLocation(0, 0);
-        player.resetPowerUps();
-
-        // set game state
-        setState(GameState.INGAME);
-    }
-
-
     public static void init() {
         // Add levels
         LEVELS.add("tutorial");
@@ -432,6 +419,10 @@ public final class GameLogic {
 
     public static int getCurrentLevelIndex() {
         return currentLevelIndex;
+    }
+
+    public static void setCurrentLevelIndex(int currentLevelIndex) {
+        GameLogic.currentLevelIndex = currentLevelIndex;
     }
 
     public static void testHandleCollisions() { handleCollisions(); }
