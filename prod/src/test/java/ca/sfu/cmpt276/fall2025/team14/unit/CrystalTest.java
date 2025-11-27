@@ -1,21 +1,53 @@
 package ca.sfu.cmpt276.fall2025.team14.unit;
 
-import ca.sfu.cmpt276.fall2025.team14.IntegrationTestBase;
-import ca.sfu.cmpt276.fall2025.team14.model.Crystal;
+import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CrystalTest extends IntegrationTestBase {
+public class CrystalTest {
 
-    // test crystal initial state and collection
+    @BeforeEach
+    public void resetState() {
+        GameLogic.setRemainingCrystals(3);
+    }
+
+    // test crystal collection updates game logic
     @Test
-    public void testCrystalCollection() {
-        Crystal c = new Crystal();
-        assertFalse(c.isCollected()); // should start as not collected
+    public void testCrystalCollectionUpdatesGameLogic() {
 
-        c.collect();
-        assertTrue(c.isCollected()); // should be collected
+        GameLogic.setRemainingCrystals(3); // default
+
+        // simulate collecting a crystal
+        GameLogic.decrementCrystalCount();
+
+        assertEquals(2, GameLogic.getRemainingCrystals()); // remaining crystal should decrease by 1
+    }
+
+    // Test collecting multiple crystals
+    @Test
+    public void testMultipleCrystalCollection() {
+        assertEquals(3, GameLogic.getRemainingCrystals());
+
+        // Collect 2 crystals
+        GameLogic.decrementCrystalCount();
+        GameLogic.decrementCrystalCount();
+
+        assertEquals(1, GameLogic.getRemainingCrystals());
+    }
+
+    // Test collecting all crystals
+    @Test
+    public void testAllCrystalsCollected() {
+        GameLogic.setRemainingCrystals(3);
+
+        // Collect all 3
+        GameLogic.decrementCrystalCount();
+        GameLogic.decrementCrystalCount();
+        GameLogic.decrementCrystalCount();
+
+        // Should have 0 remaining (ready for teleporter)
+        assertEquals(0, GameLogic.getRemainingCrystals());
     }
 }

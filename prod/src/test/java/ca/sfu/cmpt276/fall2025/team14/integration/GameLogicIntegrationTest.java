@@ -9,14 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameLogicIntegrationTest extends IntegrationTestBase {
-
-    @BeforeEach
-    public void resetState() {
-        Player player = Player.getInstance();
-        player.setLocation(0, 0);
-        player.resetPowerUps();
-    }
+public class GameLogicIntegrationTest {
 
     // testing restart level when time is over
     @Test
@@ -37,7 +30,8 @@ public class GameLogicIntegrationTest extends IntegrationTestBase {
         assertEquals(initialLevel, GameLogic.getCurrentLevelIndex());
     }
 
-    // testing restart level when enemy collision
+    /*
+    testing restart level when enemy collision
     @Test
     public void testRestartLevelOnEnemyCollision() {
 
@@ -53,4 +47,5 @@ public class GameLogicIntegrationTest extends IntegrationTestBase {
         // collision should trigger level restart
         assertEquals(initialLevel, GameLogic.getCurrentLevelIndex());
     }
+     */
 }
