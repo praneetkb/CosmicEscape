@@ -7,15 +7,6 @@
     <list default="true" id="39716957-d2cc-4819-b5f8-1855e34ef994" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/ca/sfu/cmpt276/fall2025/team14/app/CosmicEscape.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/cosmic-escape.litidata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/maps/tsx/floors-and-walls.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/maps/tsx/kb-extras.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/maps/tsx/kb-letters-and-symbols.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/maps/tsx/props-and-items.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/maps/tutorial.tmx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/sprites/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prod/target/classes/sprites/turret-idle-up.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +218,7 @@
       <workItem from="1763786757909" duration="1634000" />
       <workItem from="1763788464301" duration="13221000" />
       <workItem from="1763802443703" duration="28748000" />
-      <workItem from="1764285861766" duration="15729000" />
+      <workItem from="1764285861766" duration="18466000" />
     </task>
     <servers />
   </component>

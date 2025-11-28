@@ -44,7 +44,7 @@ Option 2: Using an IDE (VSCode/IntelliJ/Others)
 ## Testing
 **Automated Tests (Unit & Integration)**
 
-This project uses JUnit 5 for automated testing. To run all unit and integration tests and generate a Jacoco coverage report:
+This project uses JUnit 5 for automated testing. To run all unit and integration tests and generate a Jacoco coverage report, go to the prod directory and run the following in your terminal:
 ```
 mvn clean test
 mvn jacoco:report
