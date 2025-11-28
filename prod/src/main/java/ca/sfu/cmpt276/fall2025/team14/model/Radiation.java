@@ -55,4 +55,11 @@ public class Radiation extends Punishment{
     public static void stopCountdown() { countdownStarted = false; }
     public static boolean isCountdownStarted() { return countdownStarted; }
     public static int getCountdownTimer() { return countdownTimer; }
+
+    // for tests
+    public static void setCountdownTimer(int countdownTimer) {
+        Radiation.countdownTimer = countdownTimer;
+    }
+
+    public static void decrementTimer() { countdownTimer--; }
 }

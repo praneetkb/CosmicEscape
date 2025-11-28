@@ -33,7 +33,9 @@ import de.gurkenlabs.litiengine.Game;
 @CollisionInfo(collisionBoxWidth = 12, collisionBoxHeight =12, collision = true, align = CENTER, valign = Valign.MIDDLE)
 public class Turret extends Enemy {
 
-    /** The vision area attached to the turret. */
+    /**
+     * The vision area attached to the turret.
+     */
     private final Vision vision;
     // Rotation config (UP-based degrees)
     private static final double DEFAULT_DEG_PER_SEC = 30;
@@ -51,8 +53,8 @@ public class Turret extends Enemy {
     private static final double EDGE_OFFSET_DEG = 14.0;
     private static final double LOS_LEN = 10.0 + 32.0;
     private final Line2D.Double losCenter = new Line2D.Double();
-    private final Line2D.Double losLeft   = new Line2D.Double();
-    private final Line2D.Double losRight  = new Line2D.Double();
+    private final Line2D.Double losLeft = new Line2D.Double();
+    private final Line2D.Double losRight = new Line2D.Double();
 
     /**
      * Constructs a new {@code Turret} and attaches a vision to it.
@@ -70,8 +72,16 @@ public class Turret extends Enemy {
         final double dt = Game.loop().getDeltaTime() / 1000.0;
         double step = degPerSec * dt * (clockwise ? +1.0 : -1.0);
         double next = currentDegree + step;
-        if (next > maxRotation) { double o = next - maxRotation; next = maxRotation - o; clockwise = false; }
-        if (next < minRotation) { double o = minRotation - next; next = minRotation + o; clockwise = true;  }
+        if (next > maxRotation) {
+            double o = next - maxRotation;
+            next = maxRotation - o;
+            clockwise = false;
+        }
+        if (next < minRotation) {
+            double o = minRotation - next;
+            next = minRotation + o;
+            clockwise = true;
+        }
         currentDegree = next;
         // Sync vision sprite to current rotation
         VisionAttacher.syncTurretVision(this, vision, currentDegree);
@@ -86,11 +96,11 @@ public class Turret extends Enemy {
         losCenter.setLine(sx, sy, ex, ey);
         // left edge (+14°)
         double uxL = Math.cos(theta + off), uyL = Math.sin(theta + off);
-        double exL = sx + uxL * LOS_LEN,     eyL = sy + uyL * LOS_LEN;
+        double exL = sx + uxL * LOS_LEN, eyL = sy + uyL * LOS_LEN;
         losLeft.setLine(sx, sy, exL, eyL);
         // right edge (-14°)
         double uxR = Math.cos(theta - off), uyR = Math.sin(theta - off);
-        double exR = sx + uxR * LOS_LEN,     eyR = sy + uyR * LOS_LEN;
+        double exR = sx + uxR * LOS_LEN, eyR = sy + uyR * LOS_LEN;
         losRight.setLine(sx, sy, exR, eyR);
         // Set sprite rotation based on degree
         setDirection();
@@ -107,17 +117,20 @@ public class Turret extends Enemy {
         // Get direction
         Direction next = lastDir;
         final boolean inRIGHT = (deg >= U_R + h && deg < R_D - h);
-        final boolean inDOWN  = (deg >= R_D + h && deg < D_L - h);
-        final boolean inLEFT  = (deg >= D_L + h && deg < L_U - h);
-        final boolean inUP    = (deg >= L_U + h || deg <= U_R - h);
+        final boolean inDOWN = (deg >= R_D + h && deg < D_L - h);
+        final boolean inLEFT = (deg >= D_L + h && deg < L_U - h);
+        final boolean inUP = (deg >= L_U + h || deg <= U_R - h);
         switch (lastDir) {
-            case UP    -> next = inRIGHT ? Direction.RIGHT : inLEFT ? Direction.LEFT : Direction.UP;
-            case RIGHT -> next = inDOWN  ? Direction.DOWN  : inUP   ? Direction.UP   : Direction.RIGHT;
-            case DOWN  -> next = inLEFT  ? Direction.LEFT  : inRIGHT? Direction.RIGHT: Direction.DOWN;
-            case LEFT  -> next = inUP    ? Direction.UP    : inDOWN ? Direction.DOWN : Direction.LEFT;
+            case UP -> next = inRIGHT ? Direction.RIGHT : inLEFT ? Direction.LEFT : Direction.UP;
+            case RIGHT -> next = inDOWN ? Direction.DOWN : inUP ? Direction.UP : Direction.RIGHT;
+            case DOWN -> next = inLEFT ? Direction.LEFT : inRIGHT ? Direction.RIGHT : Direction.DOWN;
+            case LEFT -> next = inUP ? Direction.UP : inDOWN ? Direction.DOWN : Direction.LEFT;
         }
         // Set direction
-        if (next != lastDir) { setFacingDirection(next); lastDir = next; }
+        if (next != lastDir) {
+            setFacingDirection(next);
+            lastDir = next;
+        }
     }
 
     @Override
@@ -126,13 +139,47 @@ public class Turret extends Enemy {
         return losCenter.intersects(playerCB) || losLeft.intersects(playerCB) || losRight.intersects(playerCB);
     }
 
-    public static double getDefaultDegPerSec() { return DEFAULT_DEG_PER_SEC; }
-    public double getDegPerSec() { return degPerSec; }
-    public void setDegPerSec(double degPerSec) { this.degPerSec = degPerSec; }
-    public double getMinRotation() { return minRotation; }
-    public void setMinRotation(double minRotation) { this.minRotation = minRotation; }
-    public double getMaxRotation() { return maxRotation; }
-    public void setMaxRotation(double maxRotation) { this.maxRotation = maxRotation; }
-    public double getCurrentDegree() { return currentDegree; }
-    public void setCurrentDegree(double currentDegree) { this.currentDegree = currentDegree; }
+    public static double getDefaultDegPerSec() {
+        return DEFAULT_DEG_PER_SEC;
+    }
+
+    public Vision getVision() {
+        return vision;
+    }
+
+    public Line2D.Double getLosCenter() {
+        return losCenter;
+    }
+
+    public double getDegPerSec() {
+        return degPerSec;
+    }
+
+    public void setDegPerSec(double degPerSec) {
+        this.degPerSec = degPerSec;
+    }
+
+    public double getMinRotation() {
+        return minRotation;
+    }
+
+    public void setMinRotation(double minRotation) {
+        this.minRotation = minRotation;
+    }
+
+    public double getMaxRotation() {
+        return maxRotation;
+    }
+
+    public void setMaxRotation(double maxRotation) {
+        this.maxRotation = maxRotation;
+    }
+
+    public double getCurrentDegree() {
+        return currentDegree;
+    }
+
+    public void setCurrentDegree(double currentDegree) {
+        this.currentDegree = currentDegree;
+    }
 }

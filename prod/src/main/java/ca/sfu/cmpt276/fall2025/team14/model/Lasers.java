@@ -5,9 +5,11 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.AnimationInfo;
 
 @AnimationInfo(spritePrefix = "prop-lasers")
+
 public class Lasers extends Punishment{
 
     private Button button;
+    private boolean active = true; // track laser state
 
     public Lasers() {
         super("prop-lasers");
@@ -25,8 +27,26 @@ public class Lasers extends Punishment{
             button = ButtonAttacher.attach(this);
         }
         // Remove from environment once button is pressed
-        if (button.isPressed()) {
+        if (button.pressed()) {
             Game.world().environment().remove(this);
+            active = false; // mark inactive - for tests
         }
+    }
+
+    // getter for testing
+    public Button getButton() {
+        return button;
+    }
+
+    public void setButton(Button button) {
+        this.button = button;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

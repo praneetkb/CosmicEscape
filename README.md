@@ -58,3 +58,4 @@ To manually test the game mechanics and features:
 2. Tutorial Level: Upon starting, the game defaults to the Tutorial Level.
     * This level is designed for learning the game power-ups and hazards.
     * It can also be used for testing purposes as it provides a controlled environment to verify mechanics without the immediate difficulty of later levels
+    

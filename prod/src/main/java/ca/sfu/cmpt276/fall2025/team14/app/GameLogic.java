@@ -33,6 +33,7 @@ public final class GameLogic {
         WIN
     }
     private static GameState STATE = GameState.MENU;
+    public static boolean TEST_MODE = false; // for tests
 
     // ----------------------- FIELDS -----------------------
 
@@ -211,7 +212,7 @@ public final class GameLogic {
     private static void collisionHelper(IEntity entity) {
         // Button
         if (entity instanceof Button) {
-            if (!((Button) entity).isPressed()) {
+            if (!((Button) entity).pressed()) {
                 ((Button) entity).pressButton();
                 Game.audio().playSound("button").setVolume(0.5f);
             }
@@ -414,12 +415,60 @@ public final class GameLogic {
     }
 
     // ----------- Getters & Setters -----------
+    // HELPERS FOR TESTING
+
+    public static int getCurrentLevelIndex() {
+        return currentLevelIndex;
+    }
+
+    public static void setCurrentLevelIndex(int currentLevelIndex) {
+        GameLogic.currentLevelIndex = currentLevelIndex;
+    }
+
+    public static void testHandleCollisions() { handleCollisions(); }
+
+    public static void setRemainingTime(int time) { remainingTime = time; }
+
+    public static Environment getEnvironment() { return Game.world().environment(); }
+
+    public static void TestApplyPunishment(Punishment p) {
+        GameLogic.applyPunishmentEffect(p);
+    }
+
+    public static void TestApplyPowerup(Powerup pu) {
+        GameLogic.applyPowerUpEffect(pu);
+    }
+
+    public static boolean isInSlime() {
+        return inSlime;
+    }
+
+    public static boolean isTimeStopped() {
+        return isTimeStopped;
+    }
+
+    public static void setTimeStopped(boolean value) {
+        isTimeStopped = value;
+    }
+
+    public static void testUpdate() {
+        update();
+    }
 
     public static int getRemainingCrystals() { return remainingCrystals; }
+
+    public static void setRemainingCrystals(int value) { remainingCrystals = value; }
+
+    public static void decrementCrystalCount() {
+        remainingCrystals--;
+    }
+
     public static int getRemainingTime() { return remainingTime; }
+
     public static GameState getState() {
         return STATE;
     }
+
     public static void setState(GameState state) {
         GameLogic.STATE = state;
     }

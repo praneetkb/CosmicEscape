@@ -7,6 +7,7 @@ import de.gurkenlabs.litiengine.entities.Prop;
 import de.gurkenlabs.litiengine.graphics.animation.IEntityAnimationController;
 
 @AnimationInfo(spritePrefix = "prop-door")
+
 public class Door extends Prop implements IUpdateable {
 
     private boolean isOpen = false;
@@ -15,6 +16,29 @@ public class Door extends Prop implements IUpdateable {
     public Door() {
         super("door");
         this.setCollision(true); // door blocks player initially
+    }
+
+    // already there before - also used by unit test
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    // already there before - also used by unit test
+    public void open() {
+        if (!isOpen) {
+            isOpen = true;
+            this.setCollision(false); // allow player to pass
+            System.out.println("[Door] opening at " + this.getLocation()); // for debugging
+        }
+    }
+
+    // already there before - also used by unit test
+    public void close() {
+        if (isOpen) {
+            isOpen = false;
+            this.setCollision(true); // block player
+            System.out.println("[Door] closing at " + this.getLocation()); // for debugging
+        }
     }
 
     @Override
@@ -31,23 +55,7 @@ public class Door extends Prop implements IUpdateable {
         return new DoorAnimationController(this);
     }
 
-    public boolean isOpen() {
-        return isOpen;
+    public Button getButton() {
+        return button;
     }
-
-    public void open() {
-        if (!isOpen) {
-            isOpen = true;
-            this.setCollision(false); // allow player to pass
-        }
-    }
-
-    public void close() {
-        if (isOpen) {
-            isOpen = false;
-            this.setCollision(true); // block player
-        }
-    }
-
-    public Button getButton() { return button; }
 }

@@ -15,6 +15,7 @@ import static de.gurkenlabs.litiengine.Align.CENTER;
 @EntityInfo(width = 16, height = 16)
 @MovementInfo(velocity = 60)
 @CollisionInfo(collisionBoxWidth = 12, collisionBoxHeight = 12, collision = true, align = CENTER, valign = Valign.MIDDLE_DOWN)
+
 public class Player extends Creature implements IUpdateable {
 
     /**
@@ -42,14 +43,14 @@ public class Player extends Creature implements IUpdateable {
      */
     private boolean isInvulnerable = false;
 
-    private Player() {
+    protected Player() {
         super("player");
     }
 
     @Override
     public void update() { }
 
-    public static Player instance() {
+    public static Player getInstance() {
         if (instance == null) {
             instance = new Player();
         }
@@ -62,7 +63,7 @@ public class Player extends Creature implements IUpdateable {
     }
 
     @Override
-    protected IMovementController createMovementController() { // overriding to define player's controller
+    protected IMovementController createMovementController() {// overriding to define player's controller
         // setup movement controller
         return new KeyboardEntityController<>(this);
     }
@@ -122,6 +123,10 @@ public class Player extends Creature implements IUpdateable {
 
         // Reset charm
         hasAlienCharm = false;
+    }
+
+    public static Player instance() {
+        return instance;
     }
 
     public static float getPlayerDefaultVelocity() { return PLAYER_DEFAULT_VELOCITY; }
