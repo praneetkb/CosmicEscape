@@ -47,7 +47,7 @@ public class TurretTest extends IntegrationTestBase {
         // place player within LOS in front of turret
         player.setLocation(20, 0);
 
-        turret.setCurrentDegree(0);  // facing right
+        turret.setCurrentDegree(90);  // facing right
         turret.update();
 
         assertTrue(turret.playerInLos());

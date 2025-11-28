@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import static de.gurkenlabs.litiengine.physics.Collision.STATIC;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AlienTest extends IntegrationTestBase {
 
@@ -36,6 +35,8 @@ public class AlienTest extends IntegrationTestBase {
 
         alien.setLocation(0, 0);
         player.setLocation(5, 0); // inside bounding box area
+
+        alien.setFacingDirection(de.gurkenlabs.litiengine.Direction.RIGHT);
 
         // ensure vision sync happens
         alien.update();
