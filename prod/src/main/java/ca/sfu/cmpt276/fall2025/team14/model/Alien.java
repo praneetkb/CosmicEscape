@@ -9,7 +9,7 @@ import java.awt.geom.Rectangle2D;
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
 /**
- * Represents an Alien enemy in the game world.  
+ * Represents an Alien enemy in the game world.
  * Aliens include a vision component that tracks the player's presence
  * within their line of sight, and synchronize that vision with movement
  * and facing direction each frame.
@@ -23,7 +23,7 @@ public class Alien extends Enemy {
     private final Vision vision;
 
     /**
-     * Constructs a new Alien, initializes its vision component,  
+     * Constructs a new Alien, initializes its vision component,
      * adds it to the environment, and synchronizes its positioning.
      */
     public Alien() {
@@ -36,8 +36,8 @@ public class Alien extends Enemy {
     }
 
     /**
-     * Determines collision behavior for the alien.  
-     * Aliens may collide only with the player, ensuring that  
+     * Determines collision behavior for the alien.
+     * Aliens may collide only with the player, ensuring that
      * other entity types are ignored.
      *
      * @param otherEntity the entity attempting to collide with the alien
@@ -51,7 +51,7 @@ public class Alien extends Enemy {
     }
 
     /**
-     * Updates the alien each frame.  
+     * Updates the alien each frame.
      * Ensures the alien's vision remains synchronized with movement
      * and facing direction.
      */
@@ -62,7 +62,7 @@ public class Alien extends Enemy {
     }
 
     /**
-     * Checks whether the player is inside the alien's line of sight.  
+     * Checks whether the player is inside the alien's line of sight.
      * This is determined by checking intersection between the player's
      * collision box and the alien’s vision bounding box.
      *
@@ -83,5 +83,8 @@ public class Alien extends Enemy {
 
         return ALIEN_DEFAULT_VELOCITY;
     }
-}
 
+    public Vision getVision() {
+        return vision;
+    }
+}

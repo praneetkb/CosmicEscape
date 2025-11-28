@@ -44,12 +44,14 @@ Option 2: Using an IDE (VSCode/IntelliJ/Others)
 ## Testing
 **Automated Tests (Unit & Integration)**
 
-This project uses JUnit 5 for automated testing. To run all unit and integration tests and generate a Jacoco coverage report:
+This project uses JUnit 5 for automated testing. To run all unit and integration tests and generate a Jacoco coverage report, go to the prod directory and run the following in your terminal:
 ```
-mvn test
+mvn clean test
+mvn jacoco:report
 ```
 
-The coverage report can be found in target/site/jacoco/index.html after the tests complete.
+The coverage report can be found in target/site/jacoco/index.html after the tests complete. 
+
 
 **Manual Testing / Gameplay Verification**
 
@@ -58,3 +60,4 @@ To manually test the game mechanics and features:
 2. Tutorial Level: Upon starting, the game defaults to the Tutorial Level.
     * This level is designed for learning the game power-ups and hazards.
     * It can also be used for testing purposes as it provides a controlled environment to verify mechanics without the immediate difficulty of later levels
+    

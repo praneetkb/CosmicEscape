@@ -127,7 +127,7 @@ public final class GameLogic {
     private static final int INVISIBILITY_DURATION = 5000; // 5 seconds
 
     /**
-     * Duration for temporary invulnerability granted by Alien Charm.
+     * Duration for the temporary invulnerability after using Alien Charm in milliseconds.
      */
     private static final int CHARM_INVULNERABILITY_DURATION = 2000;
 
@@ -156,7 +156,6 @@ public final class GameLogic {
         LEVELS.add("tutorial");
         LEVELS.add("level1");
         LEVELS.add("level2");
-
         // Add default game logic for when a level is loaded
         Game.world().addListener(new EnvironmentListener() {
             @Override
@@ -180,19 +179,21 @@ public final class GameLogic {
                 if (environment != null) {
                     // Set crystal amounts
                     remainingCrystals = Game.world().environment().getEntities(Crystal.class).size();
-
-                    // Player spawn
+                    //--- Load player and turrets from spawn points when loaded ---
+                    // Aliens are spawned with path, so no need to check
+                    // Player
                     Spawnpoint playerSpawn = environment.getSpawnpoint("player-spawn");
                     if (playerSpawn != null) {
                         playerSpawn.spawn(Player.instance());
                     }
-
-                    // Turret spawns
+                    // Turret
                     for (Spawnpoint spawnpoint : environment.getSpawnpoints()) {
                         if (spawnpoint.getName().equals("turret-spawn")) {
                             Turret turret = new Turret();
+                            // Rotation set in utiLITI
                             double minRot = spawnpoint.getProperties().getDoubleValue("minRotation");
                             double maxRot = spawnpoint.getProperties().getDoubleValue("maxRotation");
+                            // Rotations
                             turret.setMinRotation(minRot);
                             turret.setMaxRotation(maxRot);
                             spawnpoint.spawn(turret);
@@ -204,7 +205,6 @@ public final class GameLogic {
 
         // Attach main update to LITI game loop
         Game.loop().attach(GameLogic::update);
-
         // Pause with Esc key
         Input.keyboard().onKeyReleased(KeyEvent.VK_ESCAPE, e -> {
             if (STATE == GameState.PAUSE || STATE == GameState.INGAME) {
@@ -212,6 +212,7 @@ public final class GameLogic {
             }
         });
     }
+
     // ----------- Main Game Loop -----------
 
     /**
@@ -229,22 +230,21 @@ public final class GameLogic {
         if (Game.world().environment() == null || STATE != GameState.INGAME) {
             return;
         }
-
         // Handle collisions
         handleCollisions();
 
         // Countdown Timer
         if ((!Game.world().environment().getMap().getName().equals("tutorial")) && STATE != GameState.PAUSE) {
+            // timer countdown for every second
             long now = System.currentTimeMillis();
             if (now - lastTimeUpdate >= 1000) {
-                remainingTime = Math.max(remainingTime - 1, 0);
+                remainingTime = Math.max(remainingTime - 1, 0); // to prevent negative time
                 lastTimeUpdate = now;
                 if (remainingTime == 0) {
                     restartLevel();
                 }
             }
         }
-
         // Win condition
         if (currentLevelIndex >= LEVELS.size()) {
             endGame();
@@ -278,10 +278,15 @@ public final class GameLogic {
      * </ul>
      */
     private static void endGame() {
+        // Set game state
         STATE = GameState.WIN;
+        // Detach from loop
         Game.loop().detach(GameLogic::update);
+        // Fade out
         Game.window().getRenderComponent().fadeOut(1000);
+        // Audio cue
         Game.audio().playSound("level-up").setVolume(0.5f);
+        // Transition to game
         Game.loop().perform(1000, () -> Game.screens().display("WIN-SCREEN"));
     }
 
@@ -301,13 +306,12 @@ public final class GameLogic {
         if (Game.world().environment() == null) {
             return;
         }
-
+        // for loop will get every entity and check it against player
         for (IEntity entity : Game.world().environment().getEntities()) {
             boolean isColliding = isCollidingWithPlayer(entity);
-
             // Enemies
             if (entity instanceof Enemy) {
-                if (((Enemy) entity).playerInLos() || isColliding) {
+                if (( (Enemy) entity).playerInLos() || isColliding) {
                     if (!isPlayerProtected()) {
                         restartLevel();
                     }
@@ -315,7 +319,6 @@ public final class GameLogic {
                 }
                 continue;
             }
-
             // All other entities
             if (isColliding) {
                 collisionHelper(entity);
@@ -339,14 +342,14 @@ public final class GameLogic {
     private static void collisionHelper(IEntity entity) {
         // Button
         if (entity instanceof Button) {
-            if (!((Button) entity).pressed()) {
+            if (!((Button) entity).isPressed()) {
                 ((Button) entity).pressButton();
                 Game.audio().playSound("button").setVolume(0.5f);
             }
         }
-
-        // Teleporter
+        // Teleporter (only activated when all crystals collected)
         if (entity instanceof Teleporter) {
+            // teleporter will open only if player collides and all crystals are collected
             if (getRemainingCrystals() == 0 && STATE == GameState.INGAME) {
                 Game.loop().perform(1, () -> {
                     currentLevelIndex++;
@@ -358,20 +361,18 @@ public final class GameLogic {
                 });
             }
         }
-
-        // Crystal
+        // Crystals
         if (entity instanceof Crystal) {
             Game.audio().playSound("crystal-pickup").setVolume(0.5f);
             Game.world().environment().remove(entity);
             remainingCrystals = Game.world().environment().getEntities(Crystal.class).size();
         }
-
         // Powerups
         if (entity instanceof Powerup) {
-            applyPowerUpEffect((Powerup) entity);
+            applyPowerUpEffect((Powerup)  entity);
+            // Remove the powerup from the world after it's collected
             Game.world().environment().remove(entity);
         }
-
         // Punishments
         if (entity instanceof Punishment) {
             applyPunishmentEffect((Punishment) entity);
@@ -392,15 +393,13 @@ public final class GameLogic {
         Player p = Player.instance();
         if (p.isInvulnerable()) return true;
         if (p.isInvisible())    return true;
-
         if (p.hasAlienCharm()) {
             p.setHasAlienCharm(false);
+            // Apply brief invulnerability to prevent immediate double-kill
             p.setInvulnerable(true);
-            Game.loop().perform(CHARM_INVULNERABILITY_DURATION,
-                    () -> p.setInvulnerable(false));
+            Game.loop().perform(CHARM_INVULNERABILITY_DURATION, () -> p.setInvulnerable(false));
             return true;
         }
-
         return false;
     }
 
@@ -431,18 +430,19 @@ public final class GameLogic {
     public static void loadLevel() {
         STATE = GameState.LOADING;
         InGameScreen.pickNewBackground();
-
+        // --- NEW: Reset power-up states ---
         Player.instance().resetPowerUps();
-
         if (isTimeStopped) {
+            // Ensure enemies are unpaused if level restarts during a timestop
             isTimeStopped = false;
             pauseEnemies(false);
         }
-
+        // Fade in
         Game.window().getRenderComponent().fadeIn(1000);
+        // Load environment
         Game.world().loadEnvironment(LEVELS.get(currentLevelIndex));
         remainingTime = TIMER_MAX;
-
+        // Stop player movement
         Player.instance().stopMovement();
         STATE = GameState.INGAME;
     }
@@ -463,8 +463,8 @@ public final class GameLogic {
         Game.world().reset(Resources.maps().get(LEVELS.get(currentLevelIndex)));
         loadLevel();
     }
-    // ----------- Powerups & Punishments -----------
 
+    // ----------- Powerups & Punishments -----------
     /**
      * Applies the gameplay effect of a collected power-up.
      * <p>
@@ -482,41 +482,44 @@ public final class GameLogic {
         if (Game.world().environment() == null) {
             return;
         }
-
+        // Get powerup type
         PowerUpType type = powerup.getType();
-        if (type == null) return;
-
+        if (type == null) return; // Invalid powerup from map
+        // Play audio cue
         Game.audio().playSound("powerup-pickup").setVolume(0.5f);
-
+        // Apply effects
         Player p = Player.instance();
-
         switch (type) {
             case TIMESTOP -> {
-                if (!isTimeStopped) {
+                if (!isTimeStopped) { // Prevent stacking durations
                     isTimeStopped = true;
                     pauseEnemies(true);
 
+                    // Set timer to unpause enemies
                     Game.loop().perform(TIMESTOP_DURATION, () -> {
                         isTimeStopped = false;
                         pauseEnemies(false);
                     });
                 }
             }
-
             case JETPACK -> {
+                // Apply speed boost
                 p.getVelocity().setBaseValue(JETPACK_VELOCITY);
+                // Set a timer to remove the speed boost after the duration
                 Game.loop().perform(JETPACK_DURATION, () -> {
+                    // Check if another jetpack was picked up in the meantime.
+                    // Only reset to default if the current velocity is still the jetpack velocity.
                     if (p.getVelocity().get() == JETPACK_VELOCITY) {
                         p.getVelocity().setBaseValue(Player.getPlayerDefaultVelocity());
                     }
                 });
             }
-
             case INVISIBILITY -> {
+                // Make player invisible
                 p.setInvisible(true);
+                // Set a timer to become visible again
                 Game.loop().perform(INVISIBILITY_DURATION, () -> p.setInvisible(false));
             }
-
             case ALIEN_CHARM -> p.setHasAlienCharm(true);
         }
     }
@@ -537,19 +540,20 @@ public final class GameLogic {
         if (Game.world().environment() == null) {
             return;
         }
-
         // Pause/unpause all Aliens
         for (Alien alien : Game.world().environment().getEntities(Alien.class)) {
+            // Pause animation
             if (paused) alien.animations().getCurrent().pause();
-            else        alien.animations().getCurrent().unpause();
-
+            else alien.animations().getCurrent().unpause();
+            // Stop movement
             alien.setTurnOnMove(!paused);
             alien.getVelocity().setBaseValue(paused ? 0 : Alien.getDefaultVelocity());
         }
 
         // Pause/unpause all Turrets
         for (Turret turret : Game.world().environment().getEntities(Turret.class)) {
-            turret.setDegPerSec(paused ? 0 : Turret.getDefaultDegPerSec());
+            // Animations and movement handled in class
+            turret.setDegPerSec(paused ? 0: Turret.getDefaultDegPerSec());
         }
     }
 
@@ -569,36 +573,30 @@ public final class GameLogic {
         if (Game.world().environment() == null) {
             return;
         }
-
+        // Get punishment type
         PunishmentType type = punishment.getPunishmentType();
         if (type == null) return;
-
+        // Apply punishment
         switch (type) {
             case SLIME -> {
                 inSlime = true;
-                Player.instance().getVelocity().setBaseValue(
-                        inSlime ? 20 : Player.getPlayerDefaultVelocity());
-
+                Player.instance().getVelocity().setBaseValue(inSlime ? 20 : Player.getPlayerDefaultVelocity());
                 Game.loop().perform(500, () -> {
                     if (Game.world().environment().getEntities(Slime.class)
                             .stream()
-                            .noneMatch(GameLogic::isCollidingWithPlayer)) {
+                            .noneMatch(GameLogic::isCollidingWithPlayer)){
                         inSlime = false;
-                        Player.instance().getVelocity().setBaseValue(
-                                Player.getPlayerDefaultVelocity());
+                        Player.instance().getVelocity().setBaseValue(Player.getPlayerDefaultVelocity());
                     }
                 });
             }
-
-            case RADIATION -> {
+            case RADIATION ->  {
                 if (!Radiation.isCountdownStarted()) {
                     Radiation.startCountdown();
                 }
-
                 if (Radiation.getCountdownTimer() <= 0) {
                     restartLevel();
                 }
-
                 Game.loop().perform(500, () -> {
                     if (Game.world().environment().getEntities(Radiation.class)
                             .stream()
@@ -607,7 +605,6 @@ public final class GameLogic {
                     }
                 });
             }
-
             case LASER -> restartLevel();
         }
     }
@@ -615,125 +612,89 @@ public final class GameLogic {
     // ----------- Getters & Setters -----------
     // HELPERS FOR TESTING
 
-    /**
-     * @return the index of the current level being played
-     */
     public static int getCurrentLevelIndex() {
         return currentLevelIndex;
     }
 
-    /**
-     * Sets which level index should be considered “current.”
-     *
-     * @param currentLevelIndex the new index
-     */
     public static void setCurrentLevelIndex(int currentLevelIndex) {
         GameLogic.currentLevelIndex = currentLevelIndex;
     }
 
-    /**
-     * For testing purposes, forces collision detection logic to run.
-     */
     public static void testHandleCollisions() { handleCollisions(); }
 
-    /**
-     * Sets the time remaining on the game timer.
-     *
-     * @param time new remaining time value
-     */
     public static void setRemainingTime(int time) { remainingTime = time; }
 
-    /**
-     * @return the currently loaded environment
-     */
     public static Environment getEnvironment() { return Game.world().environment(); }
 
-    /**
-     * Test helper: directly applies a punishment effect without player collision.
-     *
-     * @param p punishment instance to apply
-     */
     public static void TestApplyPunishment(Punishment p) {
         GameLogic.applyPunishmentEffect(p);
     }
 
-    /**
-     * Test helper: directly applies a power-up effect without player collision.
-     *
-     * @param pu the power-up instance to apply
-     */
     public static void TestApplyPowerup(Powerup pu) {
         GameLogic.applyPowerUpEffect(pu);
     }
 
-    /**
-     * @return whether the player is currently slowed by slime
-     */
     public static boolean isInSlime() {
         return inSlime;
     }
 
-    /**
-     * @return whether the TIMESTOP effect is currently active
-     */
     public static boolean isTimeStopped() {
         return isTimeStopped;
     }
 
-    /**
-     * Sets whether the TIMESTOP effect is considered active.
-     *
-     * @param value new timestop state
-     */
     public static void setTimeStopped(boolean value) {
         isTimeStopped = value;
     }
 
-    /**
-     * Test helper: directly invokes the update loop.
-     */
     public static void testUpdate() {
         update();
     }
 
-    /**
-     * @return number of crystals left to collect in current level
-     */
     public static int getRemainingCrystals() { return remainingCrystals; }
 
-    /**
-     * Sets crystal count directly.
-     *
-     * @param value new count
-     */
     public static void setRemainingCrystals(int value) { remainingCrystals = value; }
 
-    /**
-     * Decreases crystal count by one.
-     */
     public static void decrementCrystalCount() {
         remainingCrystals--;
     }
 
-    /**
-     * @return the remaining time on the level timer
-     */
     public static int getRemainingTime() { return remainingTime; }
 
-    /**
-     * @return current game state
-     */
     public static GameState getState() {
         return STATE;
     }
 
-    /**
-     * Sets the global game state.
-     *
-     * @param state the new game state
-     */
     public static void setState(GameState state) {
         GameLogic.STATE = state;
     }
-}
 
+    public static void testPauseGame() {
+        pauseGame();
+    }
+
+    public static void testEndGame() {
+        endGame();
+    }
+
+    public static void testCollisionHelper(IEntity entity) {
+        collisionHelper(entity);
+    }
+
+    public static boolean testIsPlayerProtected() {
+        return isPlayerProtected();
+    }
+
+    public static void testPauseEnemies(boolean paused) {
+        pauseEnemies(paused);
+    }
+
+    public static void testAddEnemy(IEntity enemy) {
+        if (Game.world().environment() != null) {
+            Game.world().environment().add(enemy);
+        }
+    }
+
+    public static void testRestartLevel() {
+        restartLevel();
+    }
+}

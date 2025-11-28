@@ -6,7 +6,7 @@ import de.gurkenlabs.litiengine.entities.CollisionInfo;
 import static de.gurkenlabs.litiengine.Align.CENTER;
 
 /**
- * A specialized {@link Button} used for laser mechanisms.  
+ * A specialized {@link Button} used for laser mechanisms.
  * Inherits all interaction behavior from the base {@link Button} class
  * while providing its own sprite and collision configuration.
  */
@@ -47,4 +47,3 @@ public class LaserButton extends Button{
         return super.isPressed();
     }
 }
-

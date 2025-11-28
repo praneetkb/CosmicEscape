@@ -48,4 +48,3 @@ public class DoorButton extends Button{
         return super.isPressed();
     }
 }
-

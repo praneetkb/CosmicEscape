@@ -26,7 +26,7 @@ public class Door extends Prop implements IUpdateable {
     }
 
     /**
-     * Updates the door each tick.  
+     * Updates the door each tick.
      * Automatically attaches the corresponding button when first updated.
      */
     @Override
@@ -85,4 +85,3 @@ public class Door extends Prop implements IUpdateable {
      */
     public Button getButton() { return button; }
 }
-

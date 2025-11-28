@@ -34,6 +34,11 @@ public class Button extends Prop implements IUpdateable {
         }
     }
 
+    // connect door and button - added for unit tests
+    public void setLinkedDoor(Door door) {
+        this.linkedDoor = door;
+    }
+
     /**
      * Links this button to a door, typically for unit testing.
      *
@@ -50,6 +55,19 @@ public class Button extends Prop implements IUpdateable {
     public void pressButton() {
         isPressed = true;
         setCollision(false);
+
+        if (linkedDoor != null) {
+            linkedDoor.open();
+        }
+    }
+
+    // added for unit tests
+    public void releaseButton() {
+        isPressed = false;
+
+        if (linkedDoor != null) {
+            linkedDoor.close();
+        }
         if (linkedDoor != null) {
             linkedDoor.open();
         }
@@ -66,12 +84,7 @@ public class Button extends Prop implements IUpdateable {
         }
     }
 
-    /**
-     * Returns whether the button is currently pressed.
-     *
-     * @return true if pressed, otherwise false
-     */
-    public boolean pressed() {
+    public boolean isPressed() {
         return isPressed;
     }
 

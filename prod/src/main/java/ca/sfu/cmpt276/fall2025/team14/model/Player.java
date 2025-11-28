@@ -90,7 +90,7 @@ public class Player extends Creature implements IUpdateable {
      * @return a {@link KeyboardEntityController} that handles directional input
      */
     @Override
-    protected IMovementController createMovementController() {// overriding to define player's controller
+    protected IMovementController createMovementController() { // overriding to define player's controller
         // setup movement controller
         return new KeyboardEntityController<>(this);
     }
@@ -198,4 +198,3 @@ public class Player extends Creature implements IUpdateable {
      */
     public void setInvulnerable(boolean invulnerable) { isInvulnerable = invulnerable; }
 }
-

@@ -13,6 +13,7 @@ import de.gurkenlabs.litiengine.entities.AnimationInfo;
 public class Lasers extends Punishment{
 
     private Button button;
+    private boolean active = true; // track laser state
 
     /**
      * Constructs a new Lasers punishment using the "prop-lasers" spritesheet.
@@ -32,8 +33,8 @@ public class Lasers extends Punishment{
     }
 
     /**
-     * Updates the laser hazard each tick.  
-     * On first update, attaches the corresponding button.  
+     * Updates the laser hazard each tick.
+     * On first update, attaches the corresponding button.
      * When the button is pressed, the lasers remove themselves from the environment.
      */
     @Override
@@ -45,6 +46,7 @@ public class Lasers extends Punishment{
         // Remove from environment once button is pressed
         if (button.isPressed()) {
             Game.world().environment().remove(this);
+            active = false; // mark inactive - for tests
         }
     }
 
@@ -56,5 +58,17 @@ public class Lasers extends Punishment{
     public Button getButton() {
         return button;
     }
-}
 
+    //getters for testing
+    public void setButton(Button button) {
+        this.button = button;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+}

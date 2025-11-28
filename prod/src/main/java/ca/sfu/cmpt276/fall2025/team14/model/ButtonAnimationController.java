@@ -37,7 +37,7 @@ public class ButtonAnimationController extends PropAnimationController<Button> {
         // Set image to pressed/unpressed
         BufferedImage pressedImg = Resources.spritesheets().get(pressed).getImage();
         BufferedImage unpressedImg = Resources.spritesheets().get(unpressed).getImage();
-        image = (b.isPressed() ?  pressedImg : unpressedImg);
+        image = (b.pressed() ?  pressedImg : unpressedImg);
         return image;
     }
 }

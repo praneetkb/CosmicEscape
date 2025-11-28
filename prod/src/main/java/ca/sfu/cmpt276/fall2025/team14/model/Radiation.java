@@ -100,5 +100,12 @@ public class Radiation extends Punishment{
      * @return the remaining countdown time
      */
     public static int getCountdownTimer() { return countdownTimer; }
+
+    // for tests
+    public static void setCountdownTimer(int countdownTimer) {
+        Radiation.countdownTimer = countdownTimer;
+    }
+
+    public static void decrementTimer() { countdownTimer--; }
 }
 
