@@ -3,7 +3,7 @@ package ca.sfu.cmpt276.fall2025.team14;
 import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import de.gurkenlabs.litiengine.Game;
-import de.gurkenlabs.litiengine.resources.Resources; // <--- ADD IMPORT
+import de.gurkenlabs.litiengine.resources.Resources;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import java.io.FileOutputStream;
@@ -21,7 +21,7 @@ public abstract class IntegrationTestBase {
         try {
             System.out.println("Setting up LitiEngine for Testing...");
 
-            // 1. Generate safe config
+            // generate safe config
             Properties props = new Properties();
             props.setProperty("sfx_soundVolume", "0.0");
             props.setProperty("sfx_musicVolume", "0.0");
@@ -32,31 +32,26 @@ public abstract class IntegrationTestBase {
                 props.store(out, "Test Config");
             }
 
-            // 2. Init Engine
+            // initialize engine
             Game.init("-nogui");
 
-            // 3. Configure Engine
             Game.config().client().setExitOnError(false);
             Game.config().sound().setMusicVolume(0);
             Game.config().input().setGamepadSupport(false);
 
-            // --- FIX 1: LOAD GAME RESOURCES ---
-            // This is required so the engine knows what "tutorial" and sprites are.
             Resources.load("cosmic-escape.litidata");
 
-            // 4. Initialize Game Logic
+            // initialize Game Logic
             GameLogic.init();
 
-            // 5. Force Player Creation
+            // create player
             Player.getInstance();
 
-            // --- FIX 2: START LOOP SAFELY ---
-            // Only start the loop if it isn't already running (prevents Thread exceptions)
             if (!Game.hasStarted()) {
                 Game.start();
             }
 
-            // 6. Load Level
+            // load level
             GameLogic.loadLevel(); 
             GameLogic.setState(GameLogic.GameState.INGAME);
             
@@ -64,7 +59,7 @@ public abstract class IntegrationTestBase {
             System.out.println("LitiEngine initialized successfully");
 
         } catch (Throwable t) {
-            System.err.println("!!! FAILED TO INITIALIZE LITIENGINE !!!");
+            System.err.println("Failed to initialize LitiEngine");
             t.printStackTrace(); 
             throw new RuntimeException("Cannot run integration tests without game engine", t);
         }

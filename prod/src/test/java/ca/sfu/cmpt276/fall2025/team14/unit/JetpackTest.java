@@ -2,6 +2,8 @@ package ca.sfu.cmpt276.fall2025.team14.unit;
 
 import ca.sfu.cmpt276.fall2025.team14.IntegrationTestBase;
 import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
+import ca.sfu.cmpt276.fall2025.team14.model.Jetpack;
+import ca.sfu.cmpt276.fall2025.team14.model.PowerUpType;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,13 @@ public class JetpackTest extends IntegrationTestBase {
     public void resetPlayer() {
         Player player = Player.getInstance();
         player.resetPowerUps();
+    }
+
+    // type test
+    @Test
+    public void testJetpackGetType() {
+        Jetpack jetpack = new Jetpack();
+        assertEquals(PowerUpType.JETPACK, jetpack.getType());
     }
 
     // test jetpack powerup on player

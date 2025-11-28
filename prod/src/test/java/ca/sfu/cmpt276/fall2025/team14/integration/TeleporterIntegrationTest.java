@@ -45,19 +45,16 @@ public class TeleporterIntegrationTest extends IntegrationTestBase {
         // place player at teleporter location
         player.setLocation(teleporter.getX(), teleporter.getY());
 
-        // Trigger collision. 
-        // NOTE: In GameLogic, this calls Game.loop().perform(1, ...)
+        // trigger collision
         GameLogic.testHandleCollisions();
 
-        // FIX: Wait for the Game Loop to process the scheduled task
-        // The level change happens in the next engine tick, not immediately.
         try {
             Thread.sleep(200); // Wait 200ms for the loop to catch up
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        // Now check if the level increased
+        // check if the level increased
         assertEquals(initialLevel + 1, GameLogic.getCurrentLevelIndex()); 
     }
 }

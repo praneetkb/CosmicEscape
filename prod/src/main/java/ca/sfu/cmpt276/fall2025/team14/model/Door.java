@@ -55,7 +55,13 @@ public class Door extends Prop implements IUpdateable {
         return new DoorAnimationController(this);
     }
 
+    // helpers for testing
+
     public Button getButton() {
         return button;
+    }
+
+    public void setButton(Button button) {
+        this.button = button;
     }
 }

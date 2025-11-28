@@ -4,6 +4,7 @@ import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.AlienCharm;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import ca.sfu.cmpt276.fall2025.team14.IntegrationTestBase;
+import ca.sfu.cmpt276.fall2025.team14.model.PowerUpType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +21,14 @@ public class AlienCharmTest extends IntegrationTestBase {
         player.resetPowerUps();
     }
 
-    // test alien charm powerup
+    // type check
+    @Test
+    public void testGetType() {
+        AlienCharm charm = new AlienCharm();
+        assertTrue(charm.getType() == PowerUpType.ALIEN_CHARM);
+    }
 
+    // test alien charm powerup
     @Test
     public void testAlienCharm() {
         Player player = Player.getInstance();

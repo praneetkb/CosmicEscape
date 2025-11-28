@@ -472,4 +472,30 @@ public final class GameLogic {
     public static void setState(GameState state) {
         GameLogic.STATE = state;
     }
+
+    public static void testPauseGame() {
+        pauseGame();
+    }
+
+    public static void testEndGame() {
+        endGame();
+    }
+
+    public static void testCollisionHelper(IEntity entity) {
+        collisionHelper(entity);
+    }
+
+    public static boolean testIsPlayerProtected() {
+        return isPlayerProtected();
+    }
+
+    public static void testPauseEnemies(boolean paused) {
+        pauseEnemies(paused);
+    }
+
+    public static void testAddEnemy(IEntity enemy) {
+        if (Game.world().environment() != null) {
+            Game.world().environment().add(enemy);
+        }
+    }
 }

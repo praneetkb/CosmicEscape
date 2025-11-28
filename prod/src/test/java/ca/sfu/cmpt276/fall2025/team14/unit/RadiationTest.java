@@ -17,6 +17,42 @@ public class RadiationTest extends IntegrationTestBase {
         player.resetPowerUps();
     }
 
+    // update should attach ticker only once
+    @Test
+    public void testRadiationTickerAttachesOnlyOnce() {
+        Radiation.stopCountdown();
+        Radiation.setCountdownTimer(Radiation.getCountdownMax());
+
+        Radiation rad = new Radiation();
+
+        // first update should attach ticker
+        rad.update();
+
+        int before = Radiation.getCountdownTimer();
+
+        // countdown not started - should reset timer to max
+        assertEquals(Radiation.getCountdownMax(), before);
+
+        // second update - tickerAttached stays true
+        rad.update();
+
+        // still unchanged (no double attach)
+        assertEquals(Radiation.getCountdownMax(), Radiation.getCountdownTimer());
+    }
+
+    // update should decrement when countdown is running
+    @Test
+    public void testRadiationUpdateDecrementsCountdown() {
+        Radiation.startCountdown();
+        Radiation.setCountdownTimer(10);
+
+        Radiation rad = new Radiation();
+
+        rad.update(); // countdownStarted = true so should decrement
+
+        assertEquals(9, Radiation.getCountdownTimer());
+    }
+
     // radiation countdown (timer) starts on collision
     @Test
     public void testRadiationCountdownStartsOnCollision() {
