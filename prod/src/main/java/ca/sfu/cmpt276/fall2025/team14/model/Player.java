@@ -67,12 +67,13 @@ public class Player extends Creature implements IUpdateable {
      *
      * @return the global {@link Player} instance
      */
-    public static Player getInstance() {
+    public static Player instance() {
         if (instance == null) {
             instance = new Player();
         }
         return instance;
     }
+
 
     /**
      * Creates the player's animation controller responsible for managing sprite animations.
@@ -162,11 +163,14 @@ public class Player extends Creature implements IUpdateable {
     }
 
     /**
-     * Returns the existing player instance without creating a new one.
+     * Returns the existing player instance without creating a new one. For testing purposes.
      *
      * @return the current {@link Player} instance, or null if uninitialized
      */
-    public static Player instance() {
+    public static Player getInstance() {
+        if (instance == null) {
+            instance = new Player();
+        }
         return instance;
     }
 

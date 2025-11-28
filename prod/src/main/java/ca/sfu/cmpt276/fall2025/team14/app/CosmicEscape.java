@@ -76,6 +76,10 @@ public class CosmicEscape {
         Game.screens().add(new InGameScreen());
         Game.screens().add(new WinScreen());
 
+        // Initialize sound
+        Game.config().sound().setMusicVolume(0.5f);
+        Game.config().sound().setSoundVolume(0.5f);
+
         // start the game loop
         Game.start();
     }

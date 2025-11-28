@@ -21,12 +21,12 @@ public class DoorButtonIntegrationTest extends IntegrationTestBase {
         Button button = new Button("door-btn");
 
         assertFalse(door.isOpen()); // door should start closed
-        assertFalse(button.pressed()); // button should start unpressed
+        assertFalse(button.isPressed()); // button should start unpressed
 
         button.pressButton();
 
         // pressing button should open the door
-        if (button.pressed()) {
+        if (button.isPressed()) {
             door.open();
         }
 
@@ -34,7 +34,7 @@ public class DoorButtonIntegrationTest extends IntegrationTestBase {
 
         // release button and close the door
         button.releaseButton();
-        if (!button.pressed()) {
+        if (!button.isPressed()) {
             door.close();
         }
 

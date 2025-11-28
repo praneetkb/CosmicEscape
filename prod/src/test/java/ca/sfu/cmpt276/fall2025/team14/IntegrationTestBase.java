@@ -68,5 +68,6 @@ public abstract class IntegrationTestBase {
     @AfterAll
     public static void cleanup() {
         System.out.println("Integration tests complete");
+        // generate safe config
     }
 }

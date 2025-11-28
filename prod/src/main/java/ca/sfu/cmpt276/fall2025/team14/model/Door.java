@@ -84,4 +84,8 @@ public class Door extends Prop implements IUpdateable {
      * @return the linked {@link Button}, or null if not yet attached
      */
     public Button getButton() { return button; }
+
+    public void setButton(Button b) {
+        this.button = b;
+    }
 }

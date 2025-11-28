@@ -19,7 +19,7 @@ public class LaserButtonIntegrationTest extends IntegrationTestBase {
         laser.setButton(button);
 
         // initially button is unpressed and laser is active
-        assertFalse(button.pressed());
+        assertFalse(button.isPressed());
         assertTrue(laser.isActive());
 
         button.pressButton();
@@ -27,13 +27,13 @@ public class LaserButtonIntegrationTest extends IntegrationTestBase {
         // pressing button disables laser
         button.pressButton();
         laser.update(); // triggers deactivation
-        if (button.pressed()) {
+        if (button.isPressed()) {
             laser.setActive(false);
         }
 
         assertFalse(laser.isActive());
 
         button.releaseButton();
-        assertFalse(button.pressed()); // button should return to unpressed after release
+        assertFalse(button.isPressed()); // button should return to unpressed after release
     }
 }

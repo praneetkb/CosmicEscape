@@ -1,10 +1,7 @@
 package ca.sfu.cmpt276.fall2025.team14.unit;
 
 import ca.sfu.cmpt276.fall2025.team14.model.Button;
-import ca.sfu.cmpt276.fall2025.team14.model.Door;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,7 +11,7 @@ public class ButtonTest {
     @Test
     void testInitialPressedState() {
         Button btn = new Button("button");
-        assertFalse(btn.pressed());
+        assertFalse(btn.isPressed());
     }
 
     // button pressed
@@ -22,12 +19,12 @@ public class ButtonTest {
     void testPressButton() {
         Button btn = new Button("button");
         btn.pressButton();
-        assertTrue(btn.pressed());
+        assertTrue(btn.isPressed());
     }
 
     // button collision
     @Test
-    void testUpdateTurnsOffCollisionWhenPressed() {
+    void testUpdateTurnsOffCollisionWhenisPressed() {
         Button btn = new Button("button");
 
         // press, then update
