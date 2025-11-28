@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39716957-d2cc-4819-b5f8-1855e34ef994" name="Changes" comment="" />
+    <list default="true" id="39716957-d2cc-4819-b5f8-1855e34ef994" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,7 +84,7 @@
       <recent name="ca.sfu.cmpt276.fall2025.team14" />
     </key>
   </component>
-  <component name="RunManager" selected="Maven.cosmic-escape [install]">
+  <component name="RunManager" selected="Application.CosmicEscape">
     <configuration name="CosmicEscape" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../Library/Java/JavaVirtualMachines/openjdk-25.0.1/Contents/Home" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -215,7 +218,7 @@
       <workItem from="1763786757909" duration="1634000" />
       <workItem from="1763788464301" duration="13221000" />
       <workItem from="1763802443703" duration="28748000" />
-      <workItem from="1764285861766" duration="19046000" />
+      <workItem from="1764285861766" duration="20992000" />
     </task>
     <servers />
   </component>

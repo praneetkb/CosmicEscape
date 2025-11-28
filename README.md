@@ -26,6 +26,12 @@ mvn package
 ```
 This command cleans previous builds and compiles the code.
 
+If the game isn't building due to test failures, run:
+
+```
+ mvn clean compile package -DskipTests
+```
+
 ## Running the Game
 Option 1: Using Maven (Command Line)
 
