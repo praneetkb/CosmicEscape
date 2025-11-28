@@ -12,17 +12,31 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * The main gameplay screen used to render the world, background,
+ * HUD components, and radiation hazard effects. Handles scaling,
+ * background selection, updating game state visuals, and pause display.
+ */
 public class InGameScreen extends GameScreen implements IUpdateable {
     //Screen name
+     /** Internal screen name identifier. */
     public final String NAME = "INGAME-SCREEN";
     // Background list for random backgrounds
+    /** Collection of loaded background images. */
     private static final ArrayList<BufferedImage> backgrounds = new ArrayList<>();
+    /** Cached scaled background image. */
     private static BufferedImage bgScaled;
+    /** Index of currently selected background. */
     private static int chosenBgIndex = -1;
+    /** Last known width and height used for scaling. */
     private static int lastW = -1, lastH = -1;
-
+    /** Heads-up display instance. */
     private GameHUD hud;
-
+    
+    /**
+     * Creates a new in-game screen and loads available background images.
+     * A random background is selected once during construction.
+     */
     public InGameScreen() {
         super("INGAME-SCREEN");
         Game.loop().attach(this);
@@ -38,14 +52,23 @@ public class InGameScreen extends GameScreen implements IUpdateable {
             chosenBgIndex = Game.random().nextInt(backgrounds.size());
         }
     }
-
+    
+    /**
+     * Initializes display components, including the in-game HUD.
+     */
     @Override
     protected void initializeComponents() {
         super.initializeComponents();
         hud = new GameHUD();
         this.getComponents().add(hud);
     }
-
+   
+    /**
+     * Renders the gameplay world, scaled background, overlays,
+     * and radiation effects when active. Also draws HUD elements.
+     *
+     * @param g the graphics context to render with
+     */    
     @Override
     public void render(Graphics2D g) {
         // Set width and height based on current window size
@@ -86,16 +109,30 @@ public class InGameScreen extends GameScreen implements IUpdateable {
             endGame();
         }
     }
-
+   
+    /**
+     * Updates the screen each tick. Currently empty but required for the
+     * interface and future extension of gameplay updates.
+     */
     @Override
     public void update() { }
-
+    
+    /**
+     * Ends the game by disabling screen input and detaching update callbacks.
+     * Used when transitioning away from gameplay.
+     */
     private void endGame() {
         // Disable components
         setEnabled(false);
         Game.loop().detach(this);
     }
-
+   
+    /**
+     * Renders the pause overlay, displaying a centered pause message
+     * and flashing prompt for continuing.
+     *
+     * @param g graphics context used for drawing
+     */
     private void displayPause(Graphics2D g) {
         // Set width and height based on current window size
         int width = (int) Game.window().getResolution().getWidth();
@@ -135,7 +172,11 @@ public class InGameScreen extends GameScreen implements IUpdateable {
             g.drawString(prompt, promptX, promptY + promptTextH);
         }
     }
-
+    
+    /**
+     * Selects a new random background and resets scaling.
+     * Called when refreshing level visuals.
+     */
     public static void pickNewBackground() {
         if (!backgrounds.isEmpty()) {
             chosenBgIndex = Game.random().nextInt(backgrounds.size());

@@ -7,15 +7,35 @@ import de.gurkenlabs.litiengine.entities.Creature;
 import de.gurkenlabs.litiengine.entities.Rotation;
 import java.awt.geom.Point2D;
 
+/**
+ * Utility class for attaching and synchronizing {@link Vision} components
+ * with different types of enemies, such as {@link Enemy}, {@link Alien}, or {@link Turret}.
+ * Handles positioning, rotation, and size adjustments based on the entity type.
+ */
 public final class VisionAttacher {
 
     private VisionAttacher() {}
 
+    /**
+     * Attaches the specified {@link Vision} to an {@link Enemy} and registers it
+     * within the current game environment.
+     *
+     * @param enemy the enemy to attach the vision to
+     * @param vision the vision object that will be linked to the enemy
+     */
     public static void attach(Enemy enemy, Vision vision) {
         Game.world().environment().add(vision);
         vision.setAttachedEnemy(enemy);
     }
 
+    /**
+     * Synchronizes an alien's vision with the enemy's current position and facing
+     * direction. Adjusts size, collision box, coordinates, and rotation based on
+     * the enemy's orientation.
+     *
+     * @param enemy the creature whose vision area should be synchronized
+     * @param vision the vision object to update
+     */
     public static void syncAlienVision(Creature enemy, Vision vision) {
         // Get enemy and vision information
         Direction d = enemy.getFacingDirection();
@@ -47,6 +67,15 @@ public final class VisionAttacher {
         }
     }
 
+    /**
+     * Synchronizes a turret's vision area based on the turret's center and the
+     * specified upward angle. Computes the correct offset using trigonometric
+     * rotation around a fixed radius.
+     *
+     * @param turret the turret whose vision should be updated
+     * @param vision the vision to reposition
+     * @param degUp the upward-facing angle in degrees
+     */
     public static void syncTurretVision(Turret turret, Vision vision, double degUp) {
         // Radius from turret center
         double r = 24.0;
@@ -62,3 +91,4 @@ public final class VisionAttacher {
     }
 
 }
+

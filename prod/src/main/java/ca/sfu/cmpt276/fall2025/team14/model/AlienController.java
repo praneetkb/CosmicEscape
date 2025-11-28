@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * The {@code AlienController} class manages the behavior of an {@link Alien}
- * entity using the LITIengine {@link StateController} framework.
+ * entity using the LITIengine StateController framework.
  * <p>
  * This controller allows an alien to follow a predefined movement path
  * in the game world by assigning it a {@link FollowPathState}.
@@ -17,7 +17,6 @@ import java.util.List;
  *
  * @see Alien
  * @see FollowPathState
- * @see de.gurkenlabs.litiengine.entities.behavior.StateController
  */
 
 public class AlienController extends StateController<Alien> {

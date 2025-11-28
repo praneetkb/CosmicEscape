@@ -4,10 +4,27 @@ import de.gurkenlabs.litiengine.graphics.animation.PropAnimationController;
 import de.gurkenlabs.litiengine.resources.Resources;
 import java.awt.image.BufferedImage;
 
+/**
+ * Animation controller for {@link Button} entities.  
+ * Determines which sprite to display based on whether the button is pressed
+ * and whether it is a {@link DoorButton} or another type of button.
+ */
 public class ButtonAnimationController extends PropAnimationController<Button> {
 
+    /**
+     * Creates a new animation controller for the specified button.
+     *
+     * @param prop the button whose animation controller is being created
+     */
     public ButtonAnimationController(Button prop) { super(prop); }
 
+    /**
+     * Determines the current sprite image for the button.  
+     * Selects from door-button or laser-button sprite sheets depending on the
+     * button type, and chooses between pressed or unpressed variants.
+     *
+     * @return the current button sprite image
+     */
     @Override
     public BufferedImage getCurrentImage() {
         BufferedImage image = null;
@@ -24,3 +41,4 @@ public class ButtonAnimationController extends PropAnimationController<Button> {
         return image;
     }
 }
+

@@ -15,8 +15,20 @@ import de.gurkenlabs.litiengine.environment.Environment;
 import de.gurkenlabs.litiengine.environment.PropMapObjectLoader;
 import de.gurkenlabs.litiengine.resources.Resources;
 
+/**
+ * Entry point for the Cosmic Escape game.  
+ * Initializes the LITIengine framework, registers custom game object types,
+ * loads resources, sets up screens, and starts the game loop.
+ */
 public class CosmicEscape {
 
+    /**
+     * The main method responsible for initializing and launching the game.  
+     * Sets game metadata, loads resources, registers custom loaders, initializes
+     * game logic, and finally starts the engine's main loop.
+     *
+     * @param args command-line arguments passed to the application
+     */
     public static void main(String[] args) {
         // set meta information about the game
         Game.info().setName("Cosmic Escape");
