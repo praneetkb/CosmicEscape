@@ -46,10 +46,13 @@ Option 2: Using an IDE (VSCode/IntelliJ/Others)
 
 This project uses JUnit 5 for automated testing. To run all unit and integration tests and generate a Jacoco coverage report:
 ```
-mvn test
+mvn clean test
+mvn jacoco:report
 ```
 
-The coverage report can be found in target/site/jacoco/index.html after the tests complete.
+The coverage report can be found in target/site/jacoco/index.html after the tests complete. 
+
+Note: There are some tests that fail but the report can still be generated and viewed using the steps above.
 
 **Manual Testing / Gameplay Verification**
 
