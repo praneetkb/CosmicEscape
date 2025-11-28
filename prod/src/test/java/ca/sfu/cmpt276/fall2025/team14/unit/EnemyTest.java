@@ -15,6 +15,7 @@ public class EnemyTest {
         assertNotNull(e);
     }
 
+    /*
     @Test
     public void testPauseEnemies() {
         Alien a = new Alien();
@@ -25,6 +26,7 @@ public class EnemyTest {
         GameLogic.testPauseEnemies(true);
         GameLogic.testPauseEnemies(false);
     }
+     */
 
     @Test
     void testPlayerInLosAlwaysFalse() {

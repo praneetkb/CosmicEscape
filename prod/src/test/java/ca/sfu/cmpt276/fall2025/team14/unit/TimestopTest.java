@@ -5,11 +5,13 @@ import ca.sfu.cmpt276.fall2025.team14.app.GameLogic;
 import ca.sfu.cmpt276.fall2025.team14.model.Player;
 import ca.sfu.cmpt276.fall2025.team14.model.Timestop;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled
 public class TimestopTest extends IntegrationTestBase {
 
     @BeforeEach

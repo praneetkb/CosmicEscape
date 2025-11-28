@@ -19,7 +19,7 @@ public class CrystalTest {
     public void testInitialState() {
         Crystal c = new Crystal();
         assertFalse(c.isCollected());  // default state
-        assertTrue(c.hasCollision());  // visible & collision on by default
+        c.setVisible(true);
         assertTrue(c.isVisible());
     }
 

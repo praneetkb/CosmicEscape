@@ -498,4 +498,8 @@ public final class GameLogic {
             Game.world().environment().add(enemy);
         }
     }
+
+    public static void testRestartLevel() {
+        restartLevel();
+    }
 }

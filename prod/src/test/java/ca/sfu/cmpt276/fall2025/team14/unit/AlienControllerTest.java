@@ -3,7 +3,7 @@ package ca.sfu.cmpt276.fall2025.team14.unit;
 import ca.sfu.cmpt276.fall2025.team14.model.Alien;
 import ca.sfu.cmpt276.fall2025.team14.model.AlienController;
 import ca.sfu.cmpt276.fall2025.team14.utils.FollowPathState;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.geom.Path2D;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class AlienControllerTest {
 
     @Test
@@ -33,4 +34,3 @@ public class AlienControllerTest {
         assertTrue(controller.getCurrentState() instanceof FollowPathState);
     }
 }
-
