@@ -7,6 +7,16 @@
     <list default="true" id="39716957-d2cc-4819-b5f8-1855e34ef994" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/main/java/ca/sfu/cmpt276/fall2025/team14/app/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/main/java/ca/sfu/cmpt276/fall2025/team14/app/GameLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/integration/GameLogicIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/integration/GameLogicIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/integration/InvisibilityIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/integration/InvisibilityIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/integration/TeleporterIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/integration/TeleporterIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/AlienControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/AlienControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/CrystalTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/CrystalTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/EnemyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/EnemyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/LasersTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/LasersTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/TeleporterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/TeleporterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/TimestopTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/prod/src/test/java/ca/sfu/cmpt276/fall2025/team14/unit/TimestopTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,43 +49,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.CosmicEscape.executor&quot;: &quot;Debug&quot;,
-    &quot;JAR Application.cosmic-escape-1.0.0-tests.jar.executor&quot;: &quot;Run&quot;,
-    &quot;JAR Application.cosmic-escape-1.0.0.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.cosmic-escape [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.cosmic-escape [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.cosmic-escape [org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.cosmic-escape [org.apache.maven.plugins:maven-jar-plugin:3.4.1:help].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.cosmic-escape [org.apache.maven.plugins:maven-jar-plugin:3.4.1:jar].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.cosmic-escape [org.apache.maven.plugins:maven-jar-plugin:3.4.1:test-jar].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;praneet&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/PraneetKaur/ProjectTeam14&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/PraneetKaur/ProjectTeam14/src/main/java/ca/sfu/cmpt276/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CosmicEscape.executor": "Run",
+    "JAR Application.cosmic-escape-1.0.0-tests.jar.executor": "Run",
+    "JAR Application.cosmic-escape-1.0.0.jar.executor": "Run",
+    "Maven.cosmic-escape [clean].executor": "Run",
+    "Maven.cosmic-escape [install].executor": "Run",
+    "Maven.cosmic-escape [org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile].executor": "Run",
+    "Maven.cosmic-escape [org.apache.maven.plugins:maven-jar-plugin:3.4.1:help].executor": "Run",
+    "Maven.cosmic-escape [org.apache.maven.plugins:maven-jar-plugin:3.4.1:jar].executor": "Run",
+    "Maven.cosmic-escape [org.apache.maven.plugins:maven-jar-plugin:3.4.1:test-jar].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "praneet",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/PraneetKaur/ProjectTeam14",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/Users/PraneetKaur/ProjectTeam14/src/main/java/ca/sfu/cmpt276/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/prod/src/main/resources" />
@@ -218,7 +228,7 @@
       <workItem from="1763786757909" duration="1634000" />
       <workItem from="1763788464301" duration="13221000" />
       <workItem from="1763802443703" duration="28748000" />
-      <workItem from="1764285861766" duration="20992000" />
+      <workItem from="1764285861766" duration="23989000" />
     </task>
     <servers />
   </component>

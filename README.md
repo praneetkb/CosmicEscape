@@ -26,12 +26,6 @@ mvn package
 ```
 This command cleans previous builds and compiles the code.
 
-If the game isn't building due to test failures, run:
-
-```
- mvn clean compile package -DskipTests
-```
-
 ## Running the Game
 Option 1: Using Maven (Command Line)
 
@@ -58,7 +52,6 @@ mvn jacoco:report
 
 The coverage report can be found in target/site/jacoco/index.html after the tests complete. 
 
-Note: There are some tests that fail but the report can still be generated and viewed using the steps above.
 
 **Manual Testing / Gameplay Verification**
 
