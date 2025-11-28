@@ -10,18 +10,39 @@ import de.gurkenlabs.litiengine.util.Imaging;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Heads-up display component for showing player information such as
+ * remaining time and collected crystals. Scales and renders UI elements
+ * based on the current game window resolution.
+ */
+
 public class GameHUD extends GuiComponent {
 
+    /** Base font size used as a reference for scaling. */
     private static final float BASE_FONT_PT = 48f;
+    /** Reference design width for proportional scaling. */
     private static final int DESIGN_W = 1920;
+    /** Reference design height for proportional scaling. */
     private static final int DESIGN_H = 1080;
+    /** Base HUD background width before scaling. */
     private static final int HUD_W0   = 672;   // 96
+    /** Base HUD background height before scaling. */
     private static final int HUD_H0   = 98;   //14
 
+    /**
+     * Creates a new HUD component positioned at the top-left corner.
+     */
     public GameHUD() {
         super(0, 0);
     }
 
+
+    /**
+     * Renders the HUD, including scaled background, time remaining,
+     * and the number of remaining crystals.
+     *
+     * @param g the graphics context for drawing
+     */
     @Override
     public void render(Graphics2D g) {
         super.render(g);

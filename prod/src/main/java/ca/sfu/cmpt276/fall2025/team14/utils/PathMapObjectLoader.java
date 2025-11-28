@@ -14,12 +14,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Loads map objects of type "PATH" and constructs an {@link Alien} that follows
+ * the path defined by the polyline in the map object. The loader converts the
+ * polyline into a {@link Path2D}, extracts all points, optionally reverses or
+ * closes the path, and sets up the alien with an {@link AlienController}.
+ */
 public class PathMapObjectLoader extends MapObjectLoader {
 
+    /**
+     * Creates a new loader for map objects of type "PATH".
+     */
     public PathMapObjectLoader() {
         super("PATH");
     }
 
+    /**
+     * Loads an alien path from the given map object. If the object is a valid
+     * "alien-path" polyline, the method creates a path, extracts its points,
+     * determines whether it should close or reverse, initializes an {@link Alien},
+     * and attaches an {@link AlienController} to handle movement along the path.
+     *
+     * @param environment the environment into which entities are being loaded
+     * @param mapObject the map object defining the polyline path
+     * @return a collection containing the created alien, or an empty collection if invalid
+     */
     @Override
     public Collection<IEntity> load(Environment environment, IMapObject mapObject) {
         // Get path
@@ -61,3 +80,4 @@ public class PathMapObjectLoader extends MapObjectLoader {
         return entities;
     }
 }
+

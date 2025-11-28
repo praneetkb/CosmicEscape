@@ -10,35 +10,66 @@ import de.gurkenlabs.litiengine.resources.Resources;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Main menu screen containing the title screen, transition animation,
+ * scrolling background, logo, and interactive buttons for starting
+ * the game or exiting. Handles transitions between the title prompt
+ * and the visible Play/Exit menu.
+ */
 public class MainMenuScreen extends GameScreen implements IUpdateable {
     //Screen name
+    /** Internal screen identifier name. */
     public final String NAME = "MAIN-MENU";
     // Scrolling background index
+    /** Index of the currently displayed scrolling background frame. */
     private int bgIndex = 0;
 
     // Buttons
+    /** Play button displayed in the main menu. */
     private MenuButton playButton;
+    /** Exit button displayed in the main menu. */
     private MenuButton exitButton;
 
     // --- Caches to avoid per-frame allocations & scaling  ---
+    /** Cached previously used screen dimensions for background scaling. */
     private int lastWBg = -1, lastHBg = -1, lastBgIndex = -1;
+    
+    /** Base and scaled versions of the background. */
     private BufferedImage bgBase, bgScaled;
+    
+    /** Cached logo scaling values. */
     private int lastWLogo = -1, lastHLogo = -1;
     private boolean lastShowTitle = true;
     private BufferedImage logoBase, logoScaled;
     private int logoScaledW, logoScaledH, xMargin;
 
     // --- Transition State ---
+    /** Whether the screen is showing the title rather than the menu. */
     private boolean showTitle = true;
+    
+    /** Whether a transition animation is happening. */
     private boolean transitioning = false;
+    
+    /** Transition animation timer in milliseconds. */
     private float transMs = 0f;
+
+    /** Time in ms for the flash to brighten. */
     private static final float FLASH_UP_MS = 100f;   // ramp up to white
+      
+    /** Time in ms for the flash to fade. */
     private static final float FLASH_DOWN_MS = 250f; // fade back to game
 
+    /**
+     * Creates a new main menu screen.
+     */    
     public MainMenuScreen() {
         super("MAIN-MENU");
     }
 
+
+    /**
+     * Initializes the menu buttons and base logo image.
+     */    
     @Override
     protected void initializeComponents() {
         super.initializeComponents();
@@ -51,6 +82,11 @@ public class MainMenuScreen extends GameScreen implements IUpdateable {
         this.logoBase = Resources.spritesheets().get("logo.png").getImage();
     }
 
+    /**
+     * Prepares the main menu by attaching update loops, loading music,
+     * setting button click handlers, and controlling transitions from
+     * the title screen to the menu.
+     */    
     @Override
     public void prepare() {
         super.prepare();
@@ -71,6 +107,12 @@ public class MainMenuScreen extends GameScreen implements IUpdateable {
         Game.window().getRenderComponent().fadeIn(500);
     }
 
+    /**
+     * Renders the background, title prompt, transition animation,
+     * or the Play/Exit menu depending on the screen's state.
+     *
+     * @param g the graphics context used for drawing
+     */
     @Override
     public void render(Graphics2D g) {
         super.render(g);
@@ -113,6 +155,11 @@ public class MainMenuScreen extends GameScreen implements IUpdateable {
         }
     }
 
+
+    /**
+     * Updates the animated background and manages the timing of
+     * the screen transition between the title and main menu.
+     */
     @Override
     public void update() {
         if (Game.loop().getTicks() % 4 == 0) {
@@ -134,12 +181,21 @@ public class MainMenuScreen extends GameScreen implements IUpdateable {
         }
     }
 
+
+    /**
+     * Detaches the menu's update loop when suspended.
+     */
     @Override
     public void suspend() {
         super.suspend();
         Game.loop().detach(this);
     }
 
+
+    /**
+     * Starts the game by fading out the menu, switching screens,
+     * loading the level, and starting music.
+     */
     private void startGame() {
         // Disable components
         setEnabled(false);
@@ -156,12 +212,22 @@ public class MainMenuScreen extends GameScreen implements IUpdateable {
         });
     }
 
+    /**
+     * Begins the transition from title screen to main menu.
+     */
     private void startTitleToMenuTransition() {
         if (transitioning || !showTitle) return;
         transitioning = true;
         transMs = 0f;
     }
 
+
+    /**
+     * Renders the title screen showing the logo and “Press any key”
+     * flashing prompt.
+     *
+     * @param g the graphics context used for drawing
+     */
     private void showTitle(Graphics2D g) {
         // Disable buttons
         playButton.setVisible(false);
@@ -213,6 +279,12 @@ public class MainMenuScreen extends GameScreen implements IUpdateable {
         }
     }
 
+    /**
+     * Renders the main menu layout including scaled logo and
+     * Play/Exit buttons.
+     *
+     * @param g the graphics context used for drawing
+     */
     private void showMenu(Graphics2D g) {
         // Set width and height based on current window size
         int w = (int) Game.window().getResolution().getWidth();

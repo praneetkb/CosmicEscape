@@ -11,26 +11,53 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+
+/**
+ * Win screen displayed after the player completes the game.
+ * Shows an animated scrolling background, the game logo,
+ * and a flashing end message. Also listens for user input
+ * to exit the game.
+ */
 public class WinScreen extends GameScreen implements IUpdateable {
 
     //Screen name
+    /** Name identifier for the win screen. */
     public final String NAME = "WIN-SCREEN";
 
     // Scrolling background index
+    /** Current background animation frame index. */
     private int bgIndex = 0;
 
     // --- Caches to avoid per-frame allocations & scaling  ---
+    /** Cached values for efficiently scaling the background. */
     private int lastWBg = -1, lastHBg = -1, lastBgIndex = -1;
+
+    /** Base and scaled background images. */
     private BufferedImage bgBase, bgScaled;
+
+    /** Cached values for efficiently scaling the logo. */
     private int lastWLogo = -1, lastHLogo = -1;
+
+    /** Tracks when the logo needs to be refreshed. */
     private boolean lastShowTitle = true;
+
+    /** Base and scaled logo images. */
     private BufferedImage logoBase, logoScaled;
+
+    /** Scaled logo width and height. */
     private int logoScaledW, logoScaledH;
 
+    /**
+     * Creates a win screen instance.
+     */
     public WinScreen() {
         super("WIN-SCREEN");
     }
 
+    /**
+     * Initializes screen components including the logo image and
+     * the initial background frame.
+     */
     @Override
     protected void initializeComponents() {
         super.initializeComponents();
@@ -38,6 +65,10 @@ public class WinScreen extends GameScreen implements IUpdateable {
         this.bgBase = Resources.spritesheets().get("scrolling_bg.png").getSprite(bgIndex);
     }
 
+    /**
+     * Prepares the win screen by attaching update logic, fading in,
+     * and binding ESC to exit the game.
+     */
     @Override
     public void prepare() {
         super.prepare();
@@ -47,6 +78,12 @@ public class WinScreen extends GameScreen implements IUpdateable {
         Game.loop().perform(1000, () -> Input.keyboard().onKeyReleased(KeyEvent.VK_ESCAPE, e-> System.exit(0)));
     }
 
+    /**
+     * Renders the animated background, scaled logo, and flashing
+     * end-game message centered beneath the logo.
+     *
+     * @param g the graphics context used for drawing
+     */
     @Override
     public void render(Graphics2D g) {
         // Set width and height based on current window size
@@ -108,6 +145,10 @@ public class WinScreen extends GameScreen implements IUpdateable {
         }
     }
 
+    /**
+     * Update method required by {@link IUpdateable}.  
+     * Currently unused but kept for future expansion.
+     */
     @Override
     public void update() {
 

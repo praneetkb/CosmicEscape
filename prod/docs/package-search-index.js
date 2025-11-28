@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"ca.sfu.cmpt276.fall2025.team14.app"},{"l":"ca.sfu.cmpt276.fall2025.team14.model"},{"l":"ca.sfu.cmpt276.fall2025.team14.screens"},{"l":"ca.sfu.cmpt276.fall2025.team14.utils"}];updateSearchResults();
