@@ -73,3 +73,9 @@ mvn javadoc:javadoc
 ```
 3. Once the process completes, the documentation can be found at: `target/reports/apidocs/index.html`
 4. Open the index.html file in any web browser to view the Javadocs.
+
+## Artifacts
+Artifacts can be found in the Artifacts folder or can be generated as mentioned above
+* **Jar file:** `Artifacts/cosmic-escape-1.0.0.jar`
+* **Javadocs:** `Artifacts/reports/apidocs/index.html`
+* **Jacoco Report:** `Artifacts/site/jacoco/index.html`
