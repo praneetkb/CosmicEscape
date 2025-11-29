@@ -18,7 +18,7 @@ import de.gurkenlabs.litiengine.Game;
  * The {@code Turret} class represents a stationary enemy in the game that can rotate
  * within a limited angle range and detect players using its {@link Vision} component.
  * <p>
- * This class extends {@link Creature} and implements {@link IUpdateable}, allowing
+ * This class extends Creature and implements IUpdateable, allowing
  * it to perform continuous updates at every tick of the game.
  * </p>
  *
