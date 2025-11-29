@@ -1,0 +1,37 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Punishment,0,4,0,0,0,2,0,1,0,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Lasers,4,38,2,2,1,15,2,7,0,7
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,DoorButton,0,13,0,0,0,7,0,4,0,4
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Jetpack,0,6,0,0,0,3,0,2,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,AlienController,16,0,0,0,4,0,1,0,1,0
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Powerup,0,5,0,0,0,3,0,2,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Invisibility,0,6,0,0,0,3,0,2,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,TeleporterAnimationController,0,26,0,2,0,7,0,3,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Button,13,42,4,4,5,16,5,6,1,6
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Door,8,45,4,2,3,17,4,7,1,7
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Teleporter,0,33,0,4,0,13,0,8,0,6
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Turret,78,361,28,27,10,68,25,19,4,11
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,LaserButton,0,13,0,0,0,7,0,4,0,4
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Slime,0,7,0,0,0,4,0,3,0,3
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Timestop,0,6,0,0,0,3,0,2,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Alien,9,49,4,2,1,13,4,5,1,5
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Enemy,0,7,0,0,0,4,0,3,0,3
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Player,13,87,1,3,2,28,3,16,2,15
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Vision,3,21,0,0,1,8,1,6,1,6
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Radiation,7,57,2,6,2,25,2,14,0,12
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,AlienCharm,0,6,0,0,0,3,0,2,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,ButtonAnimationController,2,47,1,3,0,11,1,3,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,DoorAnimationController,8,69,2,6,2,17,2,4,0,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,PlayerAnimationController,40,5,8,0,9,2,5,1,1,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,PunishmentType,0,21,0,0,0,4,0,1,0,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,VisionAnimationController,39,20,6,2,7,6,4,3,1,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,Crystal,0,24,1,1,0,10,1,4,0,4
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.model,PowerUpType,0,27,0,0,0,5,0,1,0,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.app,GameLogic.GameState,0,33,0,0,0,6,0,1,0,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.app,GameLogic.new EnvironmentListener() {...},0,79,2,6,0,21,2,5,0,3
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.app,GameLogic,146,493,41,68,46,166,44,61,13,35
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.app,CosmicEscape,95,3,0,0,34,1,1,1,1,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.utils,ButtonAttacher,3,10,0,0,1,2,1,1,1,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.utils,PathMapObjectLoader,121,4,14,0,24,2,8,1,1,1
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.utils,FollowPathState,37,26,5,1,9,6,4,2,1,2
+Cosmic Escape,ca.sfu.cmpt276.fall2025.team14.utils,VisionAttacher,33,149,7,7,4,28,7,6,0,3

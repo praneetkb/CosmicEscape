@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameLogic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.app</a> &gt; <span class="el_source">GameLogic.java</span></div><h1>GameLogic.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.app;
+
+import ca.sfu.cmpt276.fall2025.team14.model.Alien;
+import ca.sfu.cmpt276.fall2025.team14.model.Button;
+import ca.sfu.cmpt276.fall2025.team14.model.Player;
+import ca.sfu.cmpt276.fall2025.team14.model.Powerup;
+import ca.sfu.cmpt276.fall2025.team14.model.PowerUpType;
+import ca.sfu.cmpt276.fall2025.team14.model.Turret;
+import ca.sfu.cmpt276.fall2025.team14.model.Teleporter;
+import ca.sfu.cmpt276.fall2025.team14.model.*;
+import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.entities.IEntity;
+import de.gurkenlabs.litiengine.entities.Spawnpoint;
+import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.environment.EnvironmentListener;
+import de.gurkenlabs.litiengine.graphics.Camera;
+import de.gurkenlabs.litiengine.graphics.LocationLockCamera;
+import de.gurkenlabs.litiengine.input.Input;
+import de.gurkenlabs.litiengine.resources.Resources;
+import ca.sfu.cmpt276.fall2025.team14.model.Crystal;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
+/**
+ * Core game logic handler for Cosmic Escape.
+ * &lt;p&gt;
+ * This class manages:
+ * &lt;ul&gt;
+ *   &lt;li&gt;Game state transitions (menu, in-game, pause, win)&lt;/li&gt;
+ *   &lt;li&gt;Level loading and restarting&lt;/li&gt;
+ *   &lt;li&gt;Player interactions and collisions&lt;/li&gt;
+ *   &lt;li&gt;Timers, power-ups, and punishments&lt;/li&gt;
+ *   &lt;li&gt;Enemy pausing and behavior logic&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * All methods and fields are static, as this class acts as a global
+ * controller invoked by the LITIengine game loop.
+ */
+<span class="nc" id="L40">public final class GameLogic {</span>
+
+    // ----------------------- GAME STATE -----------------------
+
+    /**
+     * All possible states the game can be in.
+     */
+<span class="fc" id="L47">    public enum GameState {</span>
+<span class="fc" id="L48">        LOADING,</span>
+<span class="fc" id="L49">        MENU,</span>
+<span class="fc" id="L50">        INGAME,</span>
+<span class="fc" id="L51">        PAUSE,</span>
+<span class="fc" id="L52">        WIN</span>
+    }
+
+    /**
+     * Current active game state. Defaults to the MENU state.
+     */
+<span class="fc" id="L58">    private static GameState STATE = GameState.MENU;</span>
+
+    /**
+     * Whether test mode is active. When true, certain logic may be bypassed.
+     */
+<span class="fc" id="L63">    public static boolean TEST_MODE = false; // for tests</span>
+
+    // ----------------------- FIELDS -----------------------
+
+    // --- LEVELS ---
+
+    /**
+     * List of all playable level names in order.
+     */
+<span class="fc" id="L72">    private static final ArrayList&lt;String&gt; LEVELS = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * The index of the currently loaded level inside {@link #LEVELS}.
+     */
+<span class="fc" id="L77">    private static int currentLevelIndex = 0;</span>
+
+    /**
+     * Number of crystals remaining in the level.
+     * When it reaches 0, the teleporter can be used.
+     */
+<span class="fc" id="L83">    private static int remainingCrystals = 1;</span>
+
+    // --- TIMER ---
+
+    /**
+     * Maximum allowed level time in seconds.
+     */
+    private static final int TIMER_MAX = 60;
+
+    /**
+     * Remaining time before the player is forced to restart.
+     */
+<span class="fc" id="L95">    private static int remainingTime = TIMER_MAX;</span>
+
+    /**
+     * Timestamp of the last time update, used for 1-second countdown logic.
+     */
+<span class="fc" id="L100">    private static long lastTimeUpdate = System.currentTimeMillis();</span>
+
+    // --- POWER-UPS ---
+
+    /**
+     * Whether the TIMESTOP power-up is currently active.
+     */
+<span class="fc" id="L107">    private static boolean isTimeStopped = false;</span>
+
+    /**
+     * Duration of the TIMESTOP power-up in milliseconds.
+     */
+    private static final int TIMESTOP_DURATION = 5000; // 5 seconds
+
+    /**
+     * The increased movement speed when the Jetpack power-up is active.
+     */
+<span class="fc" id="L117">    private static final float JETPACK_VELOCITY = Player.getPlayerDefaultVelocity() * 1.5f; // 1.5x speed boost</span>
+
+    /**
+     * Duration for the Jetpack power-up in milliseconds.
+     */
+    private static final int JETPACK_DURATION = 5000; // 5 seconds
+
+    /**
+     * Duration for the Invisibility power-up in milliseconds.
+     */
+    private static final int INVISIBILITY_DURATION = 5000; // 5 seconds
+
+    /**
+     * Duration for the temporary invulnerability after using Alien Charm in milliseconds.
+     */
+    private static final int CHARM_INVULNERABILITY_DURATION = 2000;
+
+    // --- PUNISHMENTS ---
+
+    /**
+     * Whether the player is currently inside slime (slowed).
+     */
+<span class="fc" id="L139">    private static boolean inSlime = false;</span>
+
+    // ----------------------- MAIN METHODS -----------------------
+
+    // ----------- Initialization -----------
+
+    /**
+     * Initializes all game logic:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Registers level list&lt;/li&gt;
+     *   &lt;li&gt;Sets up environment listeners&lt;/li&gt;
+     *   &lt;li&gt;Attaches update loop&lt;/li&gt;
+     *   &lt;li&gt;Configures pause keybind&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    public static void init() {
+        // Add levels
+<span class="fc" id="L156">        LEVELS.add(&quot;tutorial&quot;);</span>
+<span class="fc" id="L157">        LEVELS.add(&quot;level1&quot;);</span>
+<span class="fc" id="L158">        LEVELS.add(&quot;level2&quot;);</span>
+        // Add default game logic for when a level is loaded
+<span class="fc" id="L160">        Game.world().addListener(new EnvironmentListener() {</span>
+            @Override
+            public void initialized(Environment environment) {
+                /**
+                 * Initializes the camera each time the environment starts.
+                 * Locks onto the Player and clamps to map boundaries.
+                 */
+<span class="fc" id="L167">                Camera camera = new LocationLockCamera(Player.instance());</span>
+<span class="fc" id="L168">                camera.setClampToMap(true);</span>
+<span class="fc" id="L169">                camera.setZoom(3, 0); // default zoom is 3</span>
+<span class="fc" id="L170">                Game.world().setCamera(camera);</span>
+<span class="fc" id="L171">            }</span>
+
+            @Override
+            public void loaded(Environment environment) {
+                /**
+                 * Called once the map has fully loaded.
+                 * Spawns player and turrets and counts initial crystals.
+                 */
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                if (environment != null) {</span>
+                    // Set crystal amounts
+<span class="fc" id="L181">                    remainingCrystals = Game.world().environment().getEntities(Crystal.class).size();</span>
+                    //--- Load player and turrets from spawn points when loaded ---
+                    // Aliens are spawned with path, so no need to check
+                    // Player
+<span class="fc" id="L185">                    Spawnpoint playerSpawn = environment.getSpawnpoint(&quot;player-spawn&quot;);</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                    if (playerSpawn != null) {</span>
+<span class="fc" id="L187">                        playerSpawn.spawn(Player.instance());</span>
+                    }
+                    // Turret
+<span class="fc bfc" id="L190" title="All 2 branches covered.">                    for (Spawnpoint spawnpoint : environment.getSpawnpoints()) {</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">                        if (spawnpoint.getName().equals(&quot;turret-spawn&quot;)) {</span>
+<span class="fc" id="L192">                            Turret turret = new Turret();</span>
+                            // Rotation set in utiLITI
+<span class="fc" id="L194">                            double minRot = spawnpoint.getProperties().getDoubleValue(&quot;minRotation&quot;);</span>
+<span class="fc" id="L195">                            double maxRot = spawnpoint.getProperties().getDoubleValue(&quot;maxRotation&quot;);</span>
+                            // Rotations
+<span class="fc" id="L197">                            turret.setMinRotation(minRot);</span>
+<span class="fc" id="L198">                            turret.setMaxRotation(maxRot);</span>
+<span class="fc" id="L199">                            spawnpoint.spawn(turret);</span>
+                        }
+<span class="fc" id="L201">                    }</span>
+                }
+<span class="fc" id="L203">            }</span>
+        });
+
+        // Attach main update to LITI game loop
+<span class="fc" id="L207">        Game.loop().attach(GameLogic::update);</span>
+        // Pause with Esc key
+<span class="fc" id="L209">        Input.keyboard().onKeyReleased(KeyEvent.VK_ESCAPE, e -&gt; {</span>
+<span class="nc bnc" id="L210" title="All 4 branches missed.">            if (STATE == GameState.PAUSE || STATE == GameState.INGAME) {</span>
+<span class="nc" id="L211">                pauseGame();</span>
+            }
+<span class="nc" id="L213">        });</span>
+<span class="fc" id="L214">    }</span>
+
+    // ----------- Main Game Loop -----------
+
+    /**
+     * Main game update loop, attached to LITIengine.
+     * &lt;p&gt;
+     * This method:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Runs collision handling&lt;/li&gt;
+     *   &lt;li&gt;Updates countdown timer&lt;/li&gt;
+     *   &lt;li&gt;Triggers level restarts when time expires&lt;/li&gt;
+     *   &lt;li&gt;Checks win condition when final level is passed&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    private static void update() {
+<span class="fc bfc" id="L230" title="All 4 branches covered.">        if (Game.world().environment() == null || STATE != GameState.INGAME) {</span>
+<span class="fc" id="L231">            return;</span>
+        }
+        // Handle collisions
+<span class="fc" id="L234">        handleCollisions();</span>
+
+        // Countdown Timer
+<span class="pc bpc" id="L237" title="1 of 4 branches missed.">        if ((!Game.world().environment().getMap().getName().equals(&quot;tutorial&quot;)) &amp;&amp; STATE != GameState.PAUSE) {</span>
+            // timer countdown for every second
+<span class="fc" id="L239">            long now = System.currentTimeMillis();</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            if (now - lastTimeUpdate &gt;= 1000) {</span>
+<span class="fc" id="L241">                remainingTime = Math.max(remainingTime - 1, 0); // to prevent negative time</span>
+<span class="fc" id="L242">                lastTimeUpdate = now;</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">                if (remainingTime == 0) {</span>
+<span class="nc" id="L244">                    restartLevel();</span>
+                }
+            }
+        }
+        // Win condition
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (currentLevelIndex &gt;= LEVELS.size()) {</span>
+<span class="fc" id="L250">            endGame();</span>
+        }
+<span class="fc" id="L252">    }</span>
+
+    /**
+     * Toggles between PAUSE and INGAME states.
+     * &lt;p&gt;
+     * Pausing sets time scale to zero, freezing all update-driven entities.
+     * Unpausing restores time scale to normal.
+     */
+    private static void pauseGame() {
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        if (STATE == GameState.INGAME) {</span>
+<span class="fc" id="L262">            Game.loop().setTimeScale(0);</span>
+<span class="fc" id="L263">            STATE = GameState.PAUSE;</span>
+        } else {
+<span class="fc" id="L265">            Game.loop().setTimeScale(1);</span>
+<span class="fc" id="L266">            STATE = GameState.INGAME;</span>
+        }
+<span class="fc" id="L268">    }</span>
+
+    /**
+     * Handles ending the game.
+     * &lt;ul&gt;
+     *   &lt;li&gt;Sets WIN state&lt;/li&gt;
+     *   &lt;li&gt;Detaches update loop&lt;/li&gt;
+     *   &lt;li&gt;Fades out screen&lt;/li&gt;
+     *   &lt;li&gt;Plays victory sound&lt;/li&gt;
+     *   &lt;li&gt;Transitions to win screen&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    private static void endGame() {
+        // Set game state
+<span class="fc" id="L282">        STATE = GameState.WIN;</span>
+        // Detach from loop
+<span class="fc" id="L284">        Game.loop().detach(GameLogic::update);</span>
+        // Fade out
+<span class="fc" id="L286">        Game.window().getRenderComponent().fadeOut(1000);</span>
+        // Audio cue
+<span class="fc" id="L288">        Game.audio().playSound(&quot;level-up&quot;).setVolume(0.5f);</span>
+        // Transition to game
+<span class="pc" id="L290">        Game.loop().perform(1000, () -&gt; Game.screens().display(&quot;WIN-SCREEN&quot;));</span>
+<span class="fc" id="L291">    }</span>
+
+    // ----------- Collision -----------
+
+    /**
+     * Central collision management function.
+     * &lt;p&gt;
+     * Loops through all entities in the environment and:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Checks if they intersect with the player&lt;/li&gt;
+     *   &lt;li&gt;Handles enemy LOS (line-of-sight) detection&lt;/li&gt;
+     *   &lt;li&gt;Delegates collision responses to helper methods&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    private static void handleCollisions() {
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (Game.world().environment() == null) {</span>
+<span class="nc" id="L307">            return;</span>
+        }
+        // for loop will get every entity and check it against player
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        for (IEntity entity : Game.world().environment().getEntities()) {</span>
+<span class="fc" id="L311">            boolean isColliding = isCollidingWithPlayer(entity);</span>
+            // Enemies
+<span class="fc bfc" id="L313" title="All 2 branches covered.">            if (entity instanceof Enemy) {</span>
+<span class="pc bpc" id="L314" title="2 of 4 branches missed.">                if (( (Enemy) entity).playerInLos() || isColliding) {</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">                    if (!isPlayerProtected()) {</span>
+<span class="nc" id="L316">                        restartLevel();</span>
+                    }
+                    continue;
+                }
+                continue;
+            }
+            // All other entities
+<span class="fc bfc" id="L323" title="All 2 branches covered.">            if (isColliding) {</span>
+<span class="fc" id="L324">                collisionHelper(entity);</span>
+            }
+<span class="fc" id="L326">        }</span>
+<span class="fc" id="L327">    }</span>
+
+    /**
+     * Resolves specific interactions when the player collides with an entity.
+     * Handles:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Button presses&lt;/li&gt;
+     *   &lt;li&gt;Teleporter activation&lt;/li&gt;
+     *   &lt;li&gt;Crystal pickups&lt;/li&gt;
+     *   &lt;li&gt;Power-up pickups&lt;/li&gt;
+     *   &lt;li&gt;Punishment effects&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param entity the entity colliding with the player
+     */
+    private static void collisionHelper(IEntity entity) {
+        // Button
+<span class="fc bfc" id="L344" title="All 2 branches covered.">        if (entity instanceof Button) {</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">            if (!((Button) entity).isPressed()) {</span>
+<span class="fc" id="L346">                ((Button) entity).pressButton();</span>
+<span class="fc" id="L347">                Game.audio().playSound(&quot;button&quot;).setVolume(0.5f);</span>
+            }
+        }
+        // Teleporter (only activated when all crystals collected)
+<span class="fc bfc" id="L351" title="All 2 branches covered.">        if (entity instanceof Teleporter) {</span>
+            // teleporter will open only if player collides and all crystals are collected
+<span class="pc bpc" id="L353" title="2 of 4 branches missed.">            if (getRemainingCrystals() == 0 &amp;&amp; STATE == GameState.INGAME) {</span>
+<span class="fc" id="L354">                Game.loop().perform(1, () -&gt; {</span>
+<span class="fc" id="L355">                    currentLevelIndex++;</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">                    if (currentLevelIndex &gt;= LEVELS.size()) {</span>
+<span class="fc" id="L357">                        return;</span>
+                    }
+<span class="fc" id="L359">                    loadLevel();</span>
+<span class="fc" id="L360">                    Game.audio().playSound(&quot;level-up&quot;).setVolume(0.5f);</span>
+<span class="fc" id="L361">                });</span>
+            }
+        }
+        // Crystals
+<span class="fc bfc" id="L365" title="All 2 branches covered.">        if (entity instanceof Crystal) {</span>
+<span class="fc" id="L366">            Game.audio().playSound(&quot;crystal-pickup&quot;).setVolume(0.5f);</span>
+<span class="fc" id="L367">            Game.world().environment().remove(entity);</span>
+<span class="fc" id="L368">            remainingCrystals = Game.world().environment().getEntities(Crystal.class).size();</span>
+        }
+        // Powerups
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (entity instanceof Powerup) {</span>
+<span class="fc" id="L372">            applyPowerUpEffect((Powerup)  entity);</span>
+            // Remove the powerup from the world after it's collected
+<span class="fc" id="L374">            Game.world().environment().remove(entity);</span>
+        }
+        // Punishments
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        if (entity instanceof Punishment) {</span>
+<span class="fc" id="L378">            applyPunishmentEffect((Punishment) entity);</span>
+        }
+<span class="fc" id="L380">    }</span>
+
+    /**
+     * Determines whether the player avoids enemy collision effects due to:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Invisibility&lt;/li&gt;
+     *   &lt;li&gt;Invulnerability&lt;/li&gt;
+     *   &lt;li&gt;Alien Charm (consumed on use)&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return true if protected, false otherwise
+     */
+    private static boolean isPlayerProtected() {
+<span class="fc" id="L393">        Player p = Player.instance();</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">        if (p.isInvulnerable()) return true;</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (p.isInvisible())    return true;</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">        if (p.hasAlienCharm()) {</span>
+<span class="fc" id="L397">            p.setHasAlienCharm(false);</span>
+            // Apply brief invulnerability to prevent immediate double-kill
+<span class="fc" id="L399">            p.setInvulnerable(true);</span>
+<span class="pc" id="L400">            Game.loop().perform(CHARM_INVULNERABILITY_DURATION, () -&gt; p.setInvulnerable(false));</span>
+<span class="fc" id="L401">            return true;</span>
+        }
+<span class="nc" id="L403">        return false;</span>
+    }
+
+    /**
+     * Returns whether the given entity’s bounding box intersects the player.
+     *
+     * @param entity any world entity
+     * @return true if colliding, false otherwise
+     */
+    private static boolean isCollidingWithPlayer(IEntity entity) {
+<span class="fc" id="L413">        return Player.instance().getCollisionBox().intersects(entity.getBoundingBox());</span>
+    }
+
+    // ----------- Level Handling -----------
+
+    /**
+     * Loads the current level:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Sets LOADING state&lt;/li&gt;
+     *   &lt;li&gt;Resets player power-up state&lt;/li&gt;
+     *   &lt;li&gt;Handles paused enemies if TIMESTOP was active&lt;/li&gt;
+     *   &lt;li&gt;Fades screen&lt;/li&gt;
+     *   &lt;li&gt;Loads environment&lt;/li&gt;
+     *   &lt;li&gt;Stops player movement&lt;/li&gt;
+     *   &lt;li&gt;Begins INGAME state&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    public static void loadLevel() {
+<span class="fc" id="L431">        STATE = GameState.LOADING;</span>
+<span class="fc" id="L432">        InGameScreen.pickNewBackground();</span>
+        // --- NEW: Reset power-up states ---
+<span class="fc" id="L434">        Player.instance().resetPowerUps();</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        if (isTimeStopped) {</span>
+            // Ensure enemies are unpaused if level restarts during a timestop
+<span class="fc" id="L437">            isTimeStopped = false;</span>
+<span class="fc" id="L438">            pauseEnemies(false);</span>
+        }
+        // Fade in
+<span class="fc" id="L441">        Game.window().getRenderComponent().fadeIn(1000);</span>
+        // Load environment
+<span class="fc" id="L443">        Game.world().loadEnvironment(LEVELS.get(currentLevelIndex));</span>
+<span class="fc" id="L444">        remainingTime = TIMER_MAX;</span>
+        // Stop player movement
+<span class="fc" id="L446">        Player.instance().stopMovement();</span>
+<span class="fc" id="L447">        STATE = GameState.INGAME;</span>
+<span class="fc" id="L448">    }</span>
+
+    /**
+     * Restarts the current level:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Plays game-over sound&lt;/li&gt;
+     *   &lt;li&gt;Resets the environment&lt;/li&gt;
+     *   &lt;li&gt;Reloads the same level&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    private static void restartLevel() {
+<span class="pc bpc" id="L459" title="1 of 2 branches missed.">        if (STATE != GameState.INGAME) {</span>
+<span class="fc" id="L460">            return;</span>
+        }
+<span class="nc" id="L462">        Game.audio().playSound(&quot;game-over&quot;);</span>
+<span class="nc" id="L463">        Game.world().reset(Resources.maps().get(LEVELS.get(currentLevelIndex)));</span>
+<span class="nc" id="L464">        loadLevel();</span>
+<span class="nc" id="L465">    }</span>
+
+    // ----------- Powerups &amp; Punishments -----------
+    /**
+     * Applies the gameplay effect of a collected power-up.
+     * &lt;p&gt;
+     * Handles:
+     * &lt;ul&gt;
+     *   &lt;li&gt;TIMESTOP — freezes all enemies temporarily&lt;/li&gt;
+     *   &lt;li&gt;JETPACK — boosts player speed temporarily&lt;/li&gt;
+     *   &lt;li&gt;INVISIBILITY — player cannot be seen by enemies&lt;/li&gt;
+     *   &lt;li&gt;ALIEN_CHARM — single-use protection against alien detection&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param powerup the power-up entity picked up by the player
+     */
+    private static void applyPowerUpEffect(Powerup powerup) {
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">        if (Game.world().environment() == null) {</span>
+<span class="nc" id="L483">            return;</span>
+        }
+        // Get powerup type
+<span class="fc" id="L486">        PowerUpType type = powerup.getType();</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">        if (type == null) return; // Invalid powerup from map</span>
+        // Play audio cue
+<span class="fc" id="L489">        Game.audio().playSound(&quot;powerup-pickup&quot;).setVolume(0.5f);</span>
+        // Apply effects
+<span class="fc" id="L491">        Player p = Player.instance();</span>
+<span class="pc bpc" id="L492" title="1 of 5 branches missed.">        switch (type) {</span>
+            case TIMESTOP -&gt; {
+<span class="pc bpc" id="L494" title="1 of 2 branches missed.">                if (!isTimeStopped) { // Prevent stacking durations</span>
+<span class="fc" id="L495">                    isTimeStopped = true;</span>
+<span class="fc" id="L496">                    pauseEnemies(true);</span>
+
+                    // Set timer to unpause enemies
+<span class="fc" id="L499">                    Game.loop().perform(TIMESTOP_DURATION, () -&gt; {</span>
+<span class="nc" id="L500">                        isTimeStopped = false;</span>
+<span class="nc" id="L501">                        pauseEnemies(false);</span>
+<span class="nc" id="L502">                    });</span>
+                }
+            }
+            case JETPACK -&gt; {
+                // Apply speed boost
+<span class="fc" id="L507">                p.getVelocity().setBaseValue(JETPACK_VELOCITY);</span>
+                // Set a timer to remove the speed boost after the duration
+<span class="fc" id="L509">                Game.loop().perform(JETPACK_DURATION, () -&gt; {</span>
+                    // Check if another jetpack was picked up in the meantime.
+                    // Only reset to default if the current velocity is still the jetpack velocity.
+<span class="nc bnc" id="L512" title="All 2 branches missed.">                    if (p.getVelocity().get() == JETPACK_VELOCITY) {</span>
+<span class="nc" id="L513">                        p.getVelocity().setBaseValue(Player.getPlayerDefaultVelocity());</span>
+                    }
+<span class="nc" id="L515">                });</span>
+<span class="fc" id="L516">            }</span>
+            case INVISIBILITY -&gt; {
+                // Make player invisible
+<span class="fc" id="L519">                p.setInvisible(true);</span>
+                // Set a timer to become visible again
+<span class="pc" id="L521">                Game.loop().perform(INVISIBILITY_DURATION, () -&gt; p.setInvisible(false));</span>
+<span class="fc" id="L522">            }</span>
+<span class="fc" id="L523">            case ALIEN_CHARM -&gt; p.setHasAlienCharm(true);</span>
+        }
+<span class="fc" id="L525">    }</span>
+
+    /**
+     * Pauses or unpauses all relevant enemies.
+     * &lt;p&gt;
+     * Used during the TIMESTOP power-up. This method:
+     * &lt;ul&gt;
+     *   &lt;li&gt;Freezes/unfreezes alien animations&lt;/li&gt;
+     *   &lt;li&gt;Stops/starts alien movement&lt;/li&gt;
+     *   &lt;li&gt;Freezes/unfreezes turret rotation speed&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param paused true to pause all enemies, false to resume them
+     */
+    private static void pauseEnemies(boolean paused) {
+<span class="pc bpc" id="L540" title="1 of 2 branches missed.">        if (Game.world().environment() == null) {</span>
+<span class="nc" id="L541">            return;</span>
+        }
+        // Pause/unpause all Aliens
+<span class="pc bpc" id="L544" title="1 of 2 branches missed.">        for (Alien alien : Game.world().environment().getEntities(Alien.class)) {</span>
+            // Pause animation
+<span class="nc bnc" id="L546" title="All 2 branches missed.">            if (paused) alien.animations().getCurrent().pause();</span>
+<span class="nc" id="L547">            else alien.animations().getCurrent().unpause();</span>
+            // Stop movement
+<span class="nc bnc" id="L549" title="All 2 branches missed.">            alien.setTurnOnMove(!paused);</span>
+<span class="nc bnc" id="L550" title="All 2 branches missed.">            alien.getVelocity().setBaseValue(paused ? 0 : Alien.getDefaultVelocity());</span>
+<span class="nc" id="L551">        }</span>
+
+        // Pause/unpause all Turrets
+<span class="fc bfc" id="L554" title="All 2 branches covered.">        for (Turret turret : Game.world().environment().getEntities(Turret.class)) {</span>
+            // Animations and movement handled in class
+<span class="fc bfc" id="L556" title="All 2 branches covered.">            turret.setDegPerSec(paused ? 0: Turret.getDefaultDegPerSec());</span>
+<span class="fc" id="L557">        }</span>
+<span class="fc" id="L558">    }</span>
+
+    /**
+     * Applies the effects of various punishment zones (Slime, Radiation, Laser).
+     * &lt;p&gt;
+     * Slime:
+     * &lt;ul&gt;&lt;li&gt;Slows the player until they exit slime tiles&lt;/li&gt;&lt;/ul&gt;
+     * Radiation:
+     * &lt;ul&gt;&lt;li&gt;Starts a countdown that kills the player if fully exposed&lt;/li&gt;&lt;/ul&gt;
+     * Laser:
+     * &lt;ul&gt;&lt;li&gt;Instantly restarts the level&lt;/li&gt;&lt;/ul&gt;
+     *
+     * @param punishment the punishment entity the player has collided with
+     */
+    private static void applyPunishmentEffect(Punishment punishment) {
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">        if (Game.world().environment() == null) {</span>
+<span class="nc" id="L574">            return;</span>
+        }
+        // Get punishment type
+<span class="fc" id="L577">        PunishmentType type = punishment.getPunishmentType();</span>
+<span class="pc bpc" id="L578" title="1 of 2 branches missed.">        if (type == null) return;</span>
+        // Apply punishment
+<span class="pc bpc" id="L580" title="1 of 4 branches missed.">        switch (type) {</span>
+            case SLIME -&gt; {
+<span class="fc" id="L582">                inSlime = true;</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">                Player.instance().getVelocity().setBaseValue(inSlime ? 20 : Player.getPlayerDefaultVelocity());</span>
+<span class="fc" id="L584">                Game.loop().perform(500, () -&gt; {</span>
+<span class="nc" id="L585">                    if (Game.world().environment().getEntities(Slime.class)</span>
+<span class="nc" id="L586">                            .stream()</span>
+<span class="nc bnc" id="L587" title="All 2 branches missed.">                            .noneMatch(GameLogic::isCollidingWithPlayer)){</span>
+<span class="nc" id="L588">                        inSlime = false;</span>
+<span class="nc" id="L589">                        Player.instance().getVelocity().setBaseValue(Player.getPlayerDefaultVelocity());</span>
+                    }
+<span class="nc" id="L591">                });</span>
+<span class="fc" id="L592">            }</span>
+            case RADIATION -&gt;  {
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">                if (!Radiation.isCountdownStarted()) {</span>
+<span class="fc" id="L595">                    Radiation.startCountdown();</span>
+                }
+<span class="pc bpc" id="L597" title="1 of 2 branches missed.">                if (Radiation.getCountdownTimer() &lt;= 0) {</span>
+<span class="nc" id="L598">                    restartLevel();</span>
+                }
+<span class="fc" id="L600">                Game.loop().perform(500, () -&gt; {</span>
+<span class="nc" id="L601">                    if (Game.world().environment().getEntities(Radiation.class)</span>
+<span class="nc" id="L602">                            .stream()</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">                            .noneMatch(GameLogic::isCollidingWithPlayer)) {</span>
+<span class="nc" id="L604">                        Radiation.stopCountdown();</span>
+                    }
+<span class="nc" id="L606">                });</span>
+<span class="fc" id="L607">            }</span>
+<span class="fc" id="L608">            case LASER -&gt; restartLevel();</span>
+        }
+<span class="fc" id="L610">    }</span>
+
+    // ----------- Getters &amp; Setters -----------
+    // HELPERS FOR TESTING
+
+    public static int getCurrentLevelIndex() {
+<span class="fc" id="L616">        return currentLevelIndex;</span>
+    }
+
+    public static void setCurrentLevelIndex(int currentLevelIndex) {
+<span class="fc" id="L620">        GameLogic.currentLevelIndex = currentLevelIndex;</span>
+<span class="fc" id="L621">    }</span>
+
+<span class="fc" id="L623">    public static void testHandleCollisions() { handleCollisions(); }</span>
+
+<span class="fc" id="L625">    public static void setRemainingTime(int time) { remainingTime = time; }</span>
+
+<span class="nc" id="L627">    public static Environment getEnvironment() { return Game.world().environment(); }</span>
+
+    public static void TestApplyPunishment(Punishment p) {
+<span class="fc" id="L630">        GameLogic.applyPunishmentEffect(p);</span>
+<span class="fc" id="L631">    }</span>
+
+    public static void TestApplyPowerup(Powerup pu) {
+<span class="fc" id="L634">        GameLogic.applyPowerUpEffect(pu);</span>
+<span class="fc" id="L635">    }</span>
+
+    public static boolean isInSlime() {
+<span class="fc" id="L638">        return inSlime;</span>
+    }
+
+    public static boolean isTimeStopped() {
+<span class="fc" id="L642">        return isTimeStopped;</span>
+    }
+
+    public static void setTimeStopped(boolean value) {
+<span class="fc" id="L646">        isTimeStopped = value;</span>
+<span class="fc" id="L647">    }</span>
+
+    public static void testUpdate() {
+<span class="fc" id="L650">        update();</span>
+<span class="fc" id="L651">    }</span>
+
+<span class="fc" id="L653">    public static int getRemainingCrystals() { return remainingCrystals; }</span>
+
+<span class="fc" id="L655">    public static void setRemainingCrystals(int value) { remainingCrystals = value; }</span>
+
+    public static void decrementCrystalCount() {
+<span class="fc" id="L658">        remainingCrystals--;</span>
+<span class="fc" id="L659">    }</span>
+
+<span class="nc" id="L661">    public static int getRemainingTime() { return remainingTime; }</span>
+
+    public static GameState getState() {
+<span class="fc" id="L664">        return STATE;</span>
+    }
+
+    public static void setState(GameState state) {
+<span class="fc" id="L668">        GameLogic.STATE = state;</span>
+<span class="fc" id="L669">    }</span>
+
+    public static void testPauseGame() {
+<span class="fc" id="L672">        pauseGame();</span>
+<span class="fc" id="L673">    }</span>
+
+    public static void testEndGame() {
+<span class="fc" id="L676">        endGame();</span>
+<span class="fc" id="L677">    }</span>
+
+    public static void testCollisionHelper(IEntity entity) {
+<span class="fc" id="L680">        collisionHelper(entity);</span>
+<span class="fc" id="L681">    }</span>
+
+    public static boolean testIsPlayerProtected() {
+<span class="fc" id="L684">        return isPlayerProtected();</span>
+    }
+
+    public static void testPauseEnemies(boolean paused) {
+<span class="nc" id="L688">        pauseEnemies(paused);</span>
+<span class="nc" id="L689">    }</span>
+
+    public static void testAddEnemy(IEntity enemy) {
+<span class="nc bnc" id="L692" title="All 2 branches missed.">        if (Game.world().environment() != null) {</span>
+<span class="nc" id="L693">            Game.world().environment().add(enemy);</span>
+        }
+<span class="nc" id="L695">    }</span>
+
+    public static void testRestartLevel() {
+<span class="fc" id="L698">        restartLevel();</span>
+<span class="fc" id="L699">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

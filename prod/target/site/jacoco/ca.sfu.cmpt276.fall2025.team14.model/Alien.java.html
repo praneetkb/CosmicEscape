@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Alien.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.model</a> &gt; <span class="el_source">Alien.java</span></div><h1>Alien.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.model;
+
+import ca.sfu.cmpt276.fall2025.team14.utils.VisionAttacher;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.Valign;
+import de.gurkenlabs.litiengine.entities.*;
+import de.gurkenlabs.litiengine.physics.Collision;
+import java.awt.geom.Rectangle2D;
+import static de.gurkenlabs.litiengine.Align.CENTER;
+
+/**
+ * Represents an Alien enemy in the game world.
+ * Aliens include a vision component that tracks the player's presence
+ * within their line of sight, and synchronize that vision with movement
+ * and facing direction each frame.
+ */
+@EntityInfo(width = 16, height = 16)
+@MovementInfo(velocity = 20)
+@CollisionInfo(collisionBoxWidth = 12, collisionBoxHeight = 12, collision = true, align = CENTER, valign = Valign.MIDDLE)
+public class Alien extends Enemy {
+
+    private final static float ALIEN_DEFAULT_VELOCITY = 20;
+    private final Vision vision;
+
+    /**
+     * Constructs a new Alien, initializes its vision component,
+     * adds it to the environment, and synchronizes its positioning.
+     */
+    public Alien() {
+<span class="fc" id="L30">        super(&quot;alien&quot;);</span>
+        // Attach vision
+<span class="fc" id="L32">        vision = new Vision();</span>
+<span class="fc" id="L33">        Game.world().environment().add(vision);</span>
+<span class="fc" id="L34">        VisionAttacher.attach(this, vision);</span>
+<span class="fc" id="L35">        VisionAttacher.syncAlienVision(this, vision);</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Determines collision behavior for the alien.
+     * Aliens may collide only with the player, ensuring that
+     * other entity types are ignored.
+     *
+     * @param otherEntity the entity attempting to collide with the alien
+     * @return true only if the other entity is the player and collision is valid
+     */
+    @Override
+    public boolean canCollideWith(ICollisionEntity otherEntity) {
+        // Can only collide with player
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (!(otherEntity instanceof Player)) return false;</span>
+<span class="pc bpc" id="L50" title="3 of 4 branches missed.">        return otherEntity.getCollisionType() == Collision.STATIC || super.canCollideWith(otherEntity);</span>
+    }
+
+    /**
+     * Updates the alien each frame.
+     * Ensures the alien's vision remains synchronized with movement
+     * and facing direction.
+     */
+    @Override
+    public void update() {
+        // Sync vision with current facing direction
+<span class="fc" id="L61">        VisionAttacher.syncAlienVision(this, vision);</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Checks whether the player is inside the alien's line of sight.
+     * This is determined by checking intersection between the player's
+     * collision box and the alien’s vision bounding box.
+     *
+     * @return true if the player is within the alien's vision area
+     */
+    @Override
+    public boolean playerInLos() {
+<span class="fc" id="L73">        Rectangle2D playerCB = Player.instance().getCollisionBox();</span>
+<span class="fc" id="L74">        return playerCB.intersects(vision.getBoundingBox());</span>
+    }
+
+    /**
+     * Returns the default velocity for alien movement.
+     *
+     * @return the default alien velocity
+     */
+    public static float getDefaultVelocity() {
+
+<span class="nc" id="L84">        return ALIEN_DEFAULT_VELOCITY;</span>
+    }
+
+    public Vision getVision() {
+<span class="fc" id="L88">        return vision;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

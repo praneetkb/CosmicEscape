@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CosmicEscape.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.app</a> &gt; <span class="el_source">CosmicEscape.java</span></div><h1>CosmicEscape.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.app;
+
+import ca.sfu.cmpt276.fall2025.team14.model.*;
+import ca.sfu.cmpt276.fall2025.team14.model.Door;
+import ca.sfu.cmpt276.fall2025.team14.model.Vision;
+import ca.sfu.cmpt276.fall2025.team14.model.Invisibility;
+import ca.sfu.cmpt276.fall2025.team14.model.Jetpack;
+import ca.sfu.cmpt276.fall2025.team14.model.Timestop;
+import ca.sfu.cmpt276.fall2025.team14.screens.InGameScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.MainMenuScreen;
+import ca.sfu.cmpt276.fall2025.team14.screens.WinScreen;
+import ca.sfu.cmpt276.fall2025.team14.utils.PathMapObjectLoader;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.environment.Environment;
+import de.gurkenlabs.litiengine.environment.PropMapObjectLoader;
+import de.gurkenlabs.litiengine.resources.Resources;
+
+/**
+ * Entry point for the Cosmic Escape game.  
+ * Initializes the LITIengine framework, registers custom game object types,
+ * loads resources, sets up screens, and starts the game loop.
+ */
+<span class="fc" id="L23">public class CosmicEscape {</span>
+
+    /**
+     * The main method responsible for initializing and launching the game.  
+     * Sets game metadata, loads resources, registers custom loaders, initializes
+     * game logic, and finally starts the engine's main loop.
+     *
+     * @param args command-line arguments passed to the application
+     */
+    public static void main(String[] args) {
+        // set meta information about the game
+<span class="nc" id="L34">        Game.info().setName(&quot;Cosmic Escape&quot;);</span>
+<span class="nc" id="L35">        Game.info().setVersion(&quot;v1.0.0&quot;);</span>
+<span class="nc" id="L36">        Game.info().setDescription(&quot;A top-down 2D escape game! Watch out for the aliens!&quot;);</span>
+
+        // initialize LITIengine
+<span class="nc" id="L39">        Game.init(args);</span>
+
+        // set base render scale
+<span class="nc" id="L42">        Game.graphics().setBaseRenderScale(4f);</span>
+<span class="nc" id="L43">        Game.config().graphics().setEnableResolutionScale(true);</span>
+
+        // load resources from utiLITI file
+<span class="nc" id="L46">        Resources.load(&quot;cosmic-escape.litidata&quot;);</span>
+<span class="nc" id="L47">        Resources.spritesheets().load(&quot;sprites/scrolling_bg.png&quot;, 960,540);</span>
+
+        //set title and icon for the window
+<span class="nc" id="L50">        Game.window().setTitle(&quot;Cosmic Escape&quot;);</span>
+<span class="nc" id="L51">        Game.window().setIcon(Resources.images().get(&quot;sprites/icon.png&quot;));</span>
+
+        // Register custom object loaders
+<span class="nc" id="L54">        PropMapObjectLoader.registerCustomPropType(Button.class);</span>
+<span class="nc" id="L55">        PropMapObjectLoader.registerCustomPropType(DoorButton.class);</span>
+<span class="nc" id="L56">        PropMapObjectLoader.registerCustomPropType(LaserButton.class);</span>
+<span class="nc" id="L57">        PropMapObjectLoader.registerCustomPropType(Door.class);</span>
+<span class="nc" id="L58">        PropMapObjectLoader.registerCustomPropType(Crystal.class);</span>
+<span class="nc" id="L59">        PropMapObjectLoader.registerCustomPropType(Teleporter.class);</span>
+<span class="nc" id="L60">        PropMapObjectLoader.registerCustomPropType(Jetpack.class);</span>
+<span class="nc" id="L61">        PropMapObjectLoader.registerCustomPropType(Invisibility.class);</span>
+<span class="nc" id="L62">        PropMapObjectLoader.registerCustomPropType(Timestop.class);</span>
+<span class="nc" id="L63">        PropMapObjectLoader.registerCustomPropType(Punishment.class);</span>
+<span class="nc" id="L64">        PropMapObjectLoader.registerCustomPropType(Lasers.class);</span>
+<span class="nc" id="L65">        PropMapObjectLoader.registerCustomPropType(Slime.class);</span>
+<span class="nc" id="L66">        PropMapObjectLoader.registerCustomPropType(Radiation.class);</span>
+<span class="nc" id="L67">        PropMapObjectLoader.registerCustomPropType(AlienCharm.class);</span>
+<span class="nc" id="L68">        PropMapObjectLoader.registerCustomPropType(Vision.class);</span>
+<span class="nc" id="L69">        Environment.registerMapObjectLoader(new PathMapObjectLoader());</span>
+
+        // initialize game logic
+<span class="nc" id="L72">        GameLogic.init();</span>
+
+        // add screens
+<span class="nc" id="L75">        Game.screens().add(new MainMenuScreen());</span>
+<span class="nc" id="L76">        Game.screens().add(new InGameScreen());</span>
+<span class="nc" id="L77">        Game.screens().add(new WinScreen());</span>
+
+        // Initialize sound
+<span class="nc" id="L80">        Game.config().sound().setMusicVolume(0.5f);</span>
+<span class="nc" id="L81">        Game.config().sound().setSoundVolume(0.5f);</span>
+
+        // start the game loop
+<span class="nc" id="L84">        Game.start();</span>
+<span class="nc" id="L85">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

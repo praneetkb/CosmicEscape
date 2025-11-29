@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Radiation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.model</a> &gt; <span class="el_source">Radiation.java</span></div><h1>Radiation.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.model;
+
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.IUpdateable;
+import de.gurkenlabs.litiengine.entities.AnimationInfo;
+
+/**
+ * Represents a radiation-based punishment that uses a shared static countdown
+ * timer across all radiation tiles. The countdown ticks globally, ensuring that
+ * walking across multiple radiation tiles does not reset the timer.
+ */
+@AnimationInfo(spritePrefix = &quot;prop-radiation&quot;)
+public class Radiation extends Punishment{
+
+    private static final int COUNTDOWN_MAX = 800;
+<span class="fc" id="L16">    private static int countdownTimer = COUNTDOWN_MAX;</span>
+<span class="fc" id="L17">    private static boolean countdownStarted = false;</span>
+<span class="fc" id="L18">    private static boolean tickerAttached = false;</span>
+
+    /**
+     * Static ticker shared across all instances of Radiation so countdown
+     * is not reset when moving from one Radiation tile to another Radiation tile.
+     * This ticker is attached to the game loop once and decrements the timer
+     * when the countdown has started.
+     */
+<span class="fc" id="L26">    private static final IUpdateable TICKER = () -&gt; {</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (countdownStarted) {</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">            if (countdownTimer &gt; 0) {</span>
+<span class="nc" id="L29">                countdownTimer--;</span>
+            }
+        }
+<span class="nc" id="L32">        else { countdownTimer = COUNTDOWN_MAX; }</span>
+<span class="fc" id="L33">    };</span>
+
+    /**
+     * Constructs a new Radiation punishment instance using the &quot;radiation&quot; sprite.
+     */
+    public Radiation() {
+<span class="fc" id="L39">        super(&quot;radiation&quot;);</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Returns the punishment type associated with radiation.
+     *
+     * @return {@link PunishmentType#RADIATION}
+     */
+    @Override
+    public PunishmentType getPunishmentType() {
+<span class="fc" id="L49">        return PunishmentType.RADIATION;</span>
+    }
+
+    /**
+     * Updates the radiation state each tick.  
+     * Ensures the static ticker is attached to the game loop exactly once and
+     * manages the shared countdown behavior.
+     */
+    @Override
+    public void update() {
+        // Attach ticker to loop
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (!tickerAttached) {</span>
+<span class="fc" id="L61">            Game.loop().attach(TICKER);</span>
+<span class="fc" id="L62">            tickerAttached = true;</span>
+        }
+        // Countdown timer
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (countdownStarted) {</span>
+<span class="fc" id="L66">            countdownTimer--;</span>
+        } else {
+            // Reset countdown
+<span class="fc" id="L69">            countdownTimer = COUNTDOWN_MAX;</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Returns the maximum countdown duration.
+     *
+     * @return the maximum countdown value
+     */
+<span class="fc" id="L78">    public static int getCountdownMax() { return COUNTDOWN_MAX; }</span>
+
+    /**
+     * Starts the global radiation countdown.
+     */
+<span class="fc" id="L83">    public static void startCountdown() { countdownStarted = true; }</span>
+
+    /**
+     * Stops the global radiation countdown and resets behavior.
+     */
+<span class="fc" id="L88">    public static void stopCountdown() { countdownStarted = false; }</span>
+
+    /**
+     * Indicates whether the countdown is currently active.
+     *
+     * @return true if the countdown is running, false otherwise
+     */
+<span class="fc" id="L95">    public static boolean isCountdownStarted() { return countdownStarted; }</span>
+
+    /**
+     * Returns the current value of the shared countdown timer.
+     *
+     * @return the remaining countdown time
+     */
+<span class="fc" id="L102">    public static int getCountdownTimer() { return countdownTimer; }</span>
+
+    // for tests
+    public static void setCountdownTimer(int countdownTimer) {
+<span class="fc" id="L106">        Radiation.countdownTimer = countdownTimer;</span>
+<span class="fc" id="L107">    }</span>
+
+<span class="fc" id="L109">    public static void decrementTimer() { countdownTimer--; }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

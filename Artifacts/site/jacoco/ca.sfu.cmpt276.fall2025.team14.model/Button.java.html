@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Button.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.model</a> &gt; <span class="el_source">Button.java</span></div><h1>Button.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.model;
+
+import de.gurkenlabs.litiengine.IUpdateable;
+import de.gurkenlabs.litiengine.entities.Prop;
+import de.gurkenlabs.litiengine.graphics.animation.IEntityAnimationController;
+
+/**
+ * Represents a generic button prop that can be pressed or released.
+ * Buttons can optionally be linked to a {@link Door} for testing or gameplay,
+ * allowing the button to open or close the door when interacted with.
+ */
+public class Button extends Prop implements IUpdateable {
+
+<span class="fc" id="L14">    private boolean isPressed = false;</span>
+    private Door linkedDoor; // added for unit tests
+
+    /**
+     * Constructs a new Button using the specified spritesheet name.
+     *
+     * @param spritesheetName the name of the spritesheet for this button
+     */
+    public Button(String spritesheetName) {
+<span class="fc" id="L23">        super(&quot;&quot;);</span>
+<span class="fc" id="L24">    }</span>
+
+    /**
+     * Updates the button each tick.
+     * When pressed, the button disables its collision.
+     */
+    @Override
+    public void update() {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (isPressed) {</span>
+<span class="fc" id="L33">            this.setCollision(false);</span>
+        }
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Links this button to a door, typically for unit testing.
+     *
+     * @param door the door to associate with this button
+     */
+    public void setLinkedDoor(Door door) {
+<span class="nc" id="L43">        this.linkedDoor = door;</span>
+<span class="nc" id="L44">    }</span>
+
+    /**
+     * Presses the button, disables its collision,
+     * and opens the linked door if one is set.
+     */
+    public void pressButton() {
+<span class="fc" id="L51">        isPressed = true;</span>
+<span class="fc" id="L52">        setCollision(false);</span>
+
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (linkedDoor != null) {</span>
+<span class="nc" id="L55">            linkedDoor.open();</span>
+        }
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Releases the button and closes the linked door if present.
+     * (Used primarily for unit tests.)
+     */
+    public void releaseButton() {
+<span class="fc" id="L64">        isPressed = false;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (linkedDoor != null) {</span>
+<span class="nc" id="L66">            linkedDoor.close();</span>
+        }
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (linkedDoor != null) {</span>
+<span class="nc" id="L69">            linkedDoor.open();</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    public boolean isPressed() {
+<span class="fc" id="L74">        return isPressed;</span>
+    }
+
+    /**
+     * Creates the animation controller responsible for this button's visual behavior.
+     *
+     * @return a new {@link ButtonAnimationController} instance
+     */
+    @Override
+    protected IEntityAnimationController&lt;?&gt; createAnimationController() {
+<span class="fc" id="L84">        return new ButtonAnimationController(this);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

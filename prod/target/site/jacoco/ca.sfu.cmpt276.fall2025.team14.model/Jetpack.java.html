@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Jetpack.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.model</a> &gt; <span class="el_source">Jetpack.java</span></div><h1>Jetpack.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.model;
+
+import de.gurkenlabs.litiengine.entities.AnimationInfo;
+
+/**
+ * Represents the Jetpack power-up, which grants a speed boost.
+ * &lt;p&gt;
+ * This class is automatically loaded by the {@link de.gurkenlabs.litiengine.environment.PropMapObjectLoader}
+ * when a Prop with the type &quot;jetpack&quot; is found in the Tiled map.
+ * &lt;/p&gt;
+ */
+@AnimationInfo(spritePrefix = &quot;prop-jetpack&quot;)
+public class Jetpack extends Powerup {
+
+    /**
+     * Default constructor.
+     * This is required by the {@link de.gurkenlabs.litiengine.environment.PropMapObjectLoader}
+     * to create an instance of this class.
+     */
+    public Jetpack() {
+<span class="fc" id="L21">        super(&quot;jetpack&quot;);</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@link PowerUpType#JETPACK}
+     */
+    @Override
+    public PowerUpType getType() {
+<span class="fc" id="L31">        return PowerUpType.JETPACK;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

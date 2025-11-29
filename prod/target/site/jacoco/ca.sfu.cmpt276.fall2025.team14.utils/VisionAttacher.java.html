@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VisionAttacher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.utils</a> &gt; <span class="el_source">VisionAttacher.java</span></div><h1>VisionAttacher.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.utils;
+
+import ca.sfu.cmpt276.fall2025.team14.model.*;
+import de.gurkenlabs.litiengine.Direction;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.entities.Creature;
+import de.gurkenlabs.litiengine.entities.Rotation;
+import java.awt.geom.Point2D;
+
+/**
+ * Utility class for attaching and synchronizing {@link Vision} components
+ * with different types of enemies, such as {@link Enemy}, {@link Alien}, or {@link Turret}.
+ * Handles positioning, rotation, and size adjustments based on the entity type.
+ */
+public final class VisionAttacher {
+
+    private VisionAttacher() {}
+
+    /**
+     * Attaches the specified {@link Vision} to an {@link Enemy} and registers it
+     * within the current game environment.
+     *
+     * @param enemy the enemy to attach the vision to
+     * @param vision the vision object that will be linked to the enemy
+     */
+    public static void attach(Enemy enemy, Vision vision) {
+<span class="fc" id="L27">        Game.world().environment().add(vision);</span>
+<span class="fc" id="L28">        vision.setAttachedEnemy(enemy);</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Synchronizes an alien's vision with the enemy's current position and facing
+     * direction. Adjusts size, collision box, coordinates, and rotation based on
+     * the enemy's orientation.
+     *
+     * @param enemy the creature whose vision area should be synchronized
+     * @param vision the vision object to update
+     */
+    public static void syncAlienVision(Creature enemy, Vision vision) {
+        // Get enemy and vision information
+<span class="fc" id="L41">        Direction d = enemy.getFacingDirection();</span>
+<span class="fc" id="L42">        double enemyX = enemy.getX(), enemyY = enemy.getY(), enemyW = enemy.getWidth(), enemyH = enemy.getHeight();</span>
+<span class="fc" id="L43">        double visionW = Vision.getDefaultWidth(),  visionH = Vision.getDefaultHeight();</span>
+        // Swap sizes for left or right since sprite is 16x32
+<span class="pc bpc" id="L45" title="1 of 4 branches missed.">        if (d == Direction.LEFT || d == Direction.RIGHT) {</span>
+<span class="fc" id="L46">            vision.setSize(visionH, visionW);</span>
+<span class="fc" id="L47">            vision.setCollisionBoxHeight(visionW - 2);</span>
+<span class="fc" id="L48">            vision.setCollisionBoxWidth(visionH - 2);</span>
+        } else {
+<span class="fc" id="L50">            vision.setSize(visionW, visionH);</span>
+<span class="fc" id="L51">            vision.setCollisionBoxHeight(visionH - 2);</span>
+<span class="fc" id="L52">            vision.setCollisionBoxWidth(visionW - 2);</span>
+        }
+        // Set location based on enemy
+<span class="pc bpc" id="L55" title="3 of 5 branches missed.">        switch (d) {</span>
+<span class="nc" id="L56">            case UP -&gt;    vision.setLocation(enemyX + (enemyW - visionW) / 2, enemyY - visionH);</span>
+<span class="fc" id="L57">            case DOWN -&gt;  vision.setLocation(enemyX + (enemyW - visionW) / 2, enemyY + enemyH);</span>
+<span class="nc" id="L58">            case LEFT -&gt;  vision.setLocation(enemyX - visionH, enemyY + (enemyH - visionW) / 2);</span>
+<span class="fc" id="L59">            case RIGHT -&gt; vision.setLocation(enemyX + enemyW,enemyY + (enemyH - visionW) / 2);</span>
+        }
+        // Set rotation based on direction enemy is facing
+<span class="pc bpc" id="L62" title="3 of 5 branches missed.">        switch (d) {</span>
+<span class="nc" id="L63">            case UP -&gt;    vision.setSpriteRotation(Rotation.NONE);</span>
+<span class="fc" id="L64">            case RIGHT -&gt; vision.setSpriteRotation(Rotation.ROTATE_90);</span>
+<span class="fc" id="L65">            case DOWN -&gt;  vision.setSpriteRotation(Rotation.ROTATE_180);</span>
+<span class="nc" id="L66">            case LEFT -&gt;  vision.setSpriteRotation(Rotation.ROTATE_270);</span>
+        }
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Synchronizes a turret's vision area based on the turret's center and the
+     * specified upward angle. Computes the correct offset using trigonometric
+     * rotation around a fixed radius.
+     *
+     * @param turret the turret whose vision should be updated
+     * @param vision the vision to reposition
+     * @param degUp the upward-facing angle in degrees
+     */
+    public static void syncTurretVision(Turret turret, Vision vision, double degUp) {
+        // Radius from turret center
+<span class="fc" id="L81">        double r = 24.0;</span>
+        // Convert Java AWT degree based
+<span class="fc" id="L83">        double aRight = degUp - 90.0;</span>
+        // convert to radians
+<span class="fc" id="L85">        double rad = Math.toRadians(aRight);</span>
+<span class="fc" id="L86">        Point2D c = turret.getCenter();</span>
+<span class="fc" id="L87">        double cx = c.getX() + r * Math.cos(rad);</span>
+<span class="fc" id="L88">        double cy = c.getY() + r * Math.sin(rad);</span>
+        // Set location
+<span class="fc" id="L90">        vision.setLocation(cx - vision.getWidth() / 2.0, cy - vision.getHeight() / 2.0);</span>
+<span class="fc" id="L91">    }</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

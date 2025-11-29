@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Enemy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.model</a> &gt; <span class="el_source">Enemy.java</span></div><h1>Enemy.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.model;
+
+import de.gurkenlabs.litiengine.IUpdateable;
+import de.gurkenlabs.litiengine.entities.Creature;
+
+/**
+ * Base class for all enemy creatures in the game.  
+ * Provides update capability and a placeholder method for line-of-sight checks.
+ */
+public class Enemy extends Creature implements IUpdateable {
+
+    /**
+     * Creates a new Enemy using the specified spritesheet name.
+     *
+     * @param spritesheetName the spritesheet used to render the enemy
+     */
+    public Enemy(String spritesheetName) {
+
+<span class="fc" id="L19">        super(spritesheetName);</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * Called once per update tick.  
+     * Enemies do not implement internal update behavior by default.
+     */
+    @Override
+<span class="fc" id="L27">    public void update() { }</span>
+
+    /**
+     * Determines whether the player is currently within the enemy's line of sight.  
+     * This base implementation always returns false and should be overridden by subclasses.
+     *
+     * @return false by default, until implemented by child classes
+     */
+<span class="fc" id="L35">    public boolean playerInLos() { return false; }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

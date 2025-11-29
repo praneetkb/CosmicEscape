@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VisionAnimationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cosmic Escape</a> &gt; <a href="index.source.html" class="el_package">ca.sfu.cmpt276.fall2025.team14.model</a> &gt; <span class="el_source">VisionAnimationController.java</span></div><h1>VisionAnimationController.java</h1><pre class="source lang-java linenums">package ca.sfu.cmpt276.fall2025.team14.model;
+
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.animation.PropAnimationController;
+import de.gurkenlabs.litiengine.resources.Resources;
+import de.gurkenlabs.litiengine.util.Imaging;
+import java.awt.image.BufferedImage;
+
+/**
+ * Animation controller for {@link Vision} props.  
+ * Handles animation playback and dynamically rotates the vision sprite
+ * when attached to a {@link Turret}, while defaulting to standard animations
+ * for {@link Alien}-based vision.
+ */
+public class VisionAnimationController extends PropAnimationController&lt;Vision&gt; {
+
+    Turret enemy;
+
+    /**
+     * Constructs a VisionAnimationController for the given vision prop and
+     * attaches it to the game loop to receive update ticks.
+     *
+     * @param prop the vision entity whose animations this controller manages
+     */
+    public VisionAnimationController(Vision prop) {
+<span class="fc" id="L26">        super(prop);</span>
+<span class="fc" id="L27">        Game.loop().attach(this);</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Retrieves the current rendered image for the vision prop.  
+     * If attached to an {@link Alien}, standard animation behavior is used.
+     * If attached to a {@link Turret}, the base sprite is rotated based on
+     * the turret's current facing angle before rendering.
+     *
+     * @return the current frame image for the vision prop
+     */
+    @Override
+    public BufferedImage getCurrentImage() {
+        // Return if Alien
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (getEntity().getAttachedEnemy() instanceof Alien) {</span>
+<span class="nc" id="L42">            return super.getCurrentImage();</span>
+        }
+        // Set enemy to turret and rotate image
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if (getEntity().getAttachedEnemy() instanceof Turret &amp;&amp; enemy == null) {</span>
+<span class="nc" id="L46">            enemy = (Turret) getEntity().getAttachedEnemy();</span>
+        }
+<span class="nc" id="L48">        BufferedImage image = Resources.spritesheets().get(&quot;prop-vision&quot;).getImage();</span>
+<span class="nc" id="L49">        image = Imaging.rotate(image, Math.toRadians(enemy.getCurrentDegree()));</span>
+<span class="nc" id="L50">        return image;</span>
+    }
+
+    /**
+     * Ensures that a default animation (&quot;intact&quot;) is always playing
+     * if no animation is currently active for the vision prop.
+     */
+    @Override
+    public void update() {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (getEntity().animations().getCurrent() == null) {</span>
+<span class="fc" id="L60">            getEntity().animations().play(&quot;intact&quot;);</span>
+        }
+<span class="fc" id="L62">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
