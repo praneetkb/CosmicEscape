@@ -29,14 +29,14 @@ The `design` folder contains materials from the initial planning and design phas
 
 This phase focuses on conceptual design and system planning prior to implementation.
 
-### Implementation & Reporting Phases (Phases 2–4)
+### Implementation & Testing Phases (Phases 2–4)
 The `documents` folder contains formal reports corresponding to each project phase:
 
 - **Phase 2 – Implementation (Coding Phase)**  
   Covers division of work, implementation details, and challenges encountered during development.
 
 - **Phase 3 – Testing Phase**  
-  Documents the testing strategy, test cases, and results used to validate the game.
+  Documents the testing strategy and test cases.
 
 - **Phase 4 – Final Project Overview**  
   Provides a complete overview of the final product, including gameplay description, final design decisions, and team reflection.
