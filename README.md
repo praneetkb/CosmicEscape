@@ -12,7 +12,7 @@ Original repository owned by the course instructor.
 
 ## Project Summary
 This repository contains a maze-style arcade game developed as part of a group project at SFU.
-The project followed a structured software development lifecycle, with 4 phases progressing from design and planning to implementation, testing, and final presentation.
+The project followed a structured software development lifecycle, comprising four phases that progressed from design and planning to implementation, testing, and final presentation.
 
 The goal of the project was to develop a playable arcade-style game featuring a single main player, at least one stationary enemy, at least one moving enemy, and collectible rewards, as specified by the course requirements.
 
@@ -45,11 +45,11 @@ For a comprehensive understanding of the completed project and gameplay, refer t
 **`documents/Phase4Report`**
 
 ## Team Members
-* **Gonzales, Michael** - mga150@sfu.ca
-* **Tatla, Jugraj** - jst21@sfu.ca
-* **Bhasin, Praneet Kaur** - pkb19@sfu.ca
-* **Wang, Zihan** - zwa171@sfu.ca
-* **Dalsaniya, Palash** - pjd5@sfu.ca
+* **Gonzales, Michael**
+* **Tatla, Jugraj** 
+* **Bhasin, Praneet Kaur** 
+* **Wang, Zihan** 
+* **Dalsaniya, Palash** 
 
 ## Prerequisites
 To build and run this project, ensure you have the following installed:
