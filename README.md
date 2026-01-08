@@ -1,15 +1,48 @@
 # Cosmic Escape
 
-**Team 14 - CMPT 276 Fall 2025**
+**Introduction to Software Engineering (CMPT 276) Fall 2025**
 
 A 2D top-down game built using **LitiEngine**.
 
 **Game Demo:** https://youtu.be/d250ylmZjH8
 
 ## Acknowledgement
-This project was originally completed as part of a group project at SFU.
 This repository is a personal copy for portfolio and demonstration purposes.
 Original repository owned by the course instructor.
+
+## Project Summary
+This repository contains a maze-style arcade game developed as part of a group project at SFU.
+The project followed a structured software development lifecycle, with 4 phases progressing from design and planning to implementation, testing, and final presentation.
+
+The goal of the project was to develop a playable arcade-style game featuring a single main player, at least one stationary enemy, at least one moving enemy, and collectible rewards, as specified by the course requirements.
+
+This README focuses on build and test instructions. Detailed design artifacts, reports, and reflections are organized in the `design` and `documents` folders as outlined below.
+
+## Documentation Overview
+
+### Design Phase (Phase 1)
+The `design` folder contains materials from the initial planning and design phase, including:
+- Project description and requirements analysis
+- Game mockups
+- UML diagrams
+- Use case diagrams
+
+This phase focuses on conceptual design and system planning prior to implementation.
+
+### Implementation & Reporting Phases (Phases 2–4)
+The `documents` folder contains formal reports corresponding to each project phase:
+
+- **Phase 2 – Implementation (Coding Phase)**  
+  Covers division of work, implementation details, and challenges encountered during development.
+
+- **Phase 3 – Testing Phase**  
+  Documents the testing strategy, test cases, and results used to validate the game.
+
+- **Phase 4 – Final Project Overview**  
+  Provides a complete overview of the final product, including gameplay description, final design decisions, and team reflection.
+
+For a comprehensive understanding of the completed project and gameplay, refer to:  
+**`documents/Phase4Report`**
 
 ## Team Members
 * **Gonzales, Michael** - mga150@sfu.ca
