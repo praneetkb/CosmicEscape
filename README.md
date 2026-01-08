@@ -6,6 +6,11 @@ A 2D top-down game built using **LitiEngine**.
 
 **Game Demo:** https://youtu.be/d250ylmZjH8
 
+## Acknowledgement
+This project was originally completed as part of a group project at SFU.
+This repository is a personal copy for portfolio and demonstration purposes.
+Original repository owned by the course instructor.
+
 ## Team Members
 * **Gonzales, Michael** - mga150@sfu.ca
 * **Tatla, Jugraj** - jst21@sfu.ca
